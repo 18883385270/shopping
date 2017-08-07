@@ -1,0 +1,11 @@
+{
+  "presets": [
+    ["es2015", {
+      "modules": false,
+      "loose": true
+    }],
+    "stage-2"
+  ],          //解决swiper 报错保持清空
+  "plugins": [/*"transform-runtime", "syntax-dynamic-import"*/],
+  "comments": false
+}

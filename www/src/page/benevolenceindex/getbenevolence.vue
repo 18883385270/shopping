@@ -1,0 +1,151 @@
+<template>
+  <div class="warp">
+    <div class="head">
+      <div class="title">获取善心</div>
+    </div>
+    <div class="body">
+      <div class="item" @click="goPage('/bindex/consumer')">
+        <div class="icon_warp">
+          <svg>
+            <use xlink:href="#consumer"></use>
+          </svg>
+        </div>
+        <div class="content_warp">
+          <h3>善心使者</h3>
+          <p>注册即成为善心使者，每消费100元获得一颗善心</p>
+        </div>
+        <div class="open_warp ok">
+          <svg>
+            <use xlink:href="#ok"></use>
+          </svg>已加入</div>
+      </div>
+      <div class="item" @click="goPage('/bindex/passer')">
+        <div class="icon_warp">
+          <svg>
+            <use xlink:href="#consumer"></use>
+          </svg>
+        </div>
+        <div class="content_warp">
+          <h3>传递使者</h3>
+          <p>消费满99元或者推荐10个善心使者，即可成为传递使者</p>
+        </div>
+        <div class="open_warp ok">
+          <svg>
+            <use xlink:href="#ok"></use>
+          </svg>已加入</div>
+      </div>
+      <div class="item" @click="goPage('/bindex/ambassador')">
+        <div class="icon_warp">
+          <svg>
+            <use xlink:href="#consumer"></use>
+          </svg>
+        </div>
+        <div class="content_warp">
+          <h3>传递大使</h3>
+          <p>缴纳365元年费即可成为传递大使，享有直接或间接顾客消费激励</p>
+        </div>
+        <div class="open_warp">
+        </div>
+      </div>
+      <div class="item" @click="goPage('/bindex/regionpartner')">
+        <div class="icon_warp">
+          <svg>
+            <use xlink:href="#consumer"></use>
+          </svg>
+        </div>
+        <div class="content_warp">
+          <h3>善心联盟</h3>
+          <p>善心大使可申请成为区域合伙人，享有所在区域的顾客消费激励</p>
+        </div>
+        <div class="open_warp">
+        </div>
+      </div>
+      <div class="item" @click="goPage('/bindex/storeowner')">
+        <div class="icon_warp">
+          <svg>
+            <use xlink:href="#consumer"></use>
+          </svg>
+        </div>
+        <div class="content_warp">
+          <h3>公益商家</h3>
+          <p>认同公益事业并愿为公益做贡献的商家，销售产品即可获得善心激励</p>
+        </div>
+        <div class="open_warp">
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    goPage(page) {
+      this.$router.push({ path: page });
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.warp {
+  padding: 0;
+  background: white;
+  border-top: 1px solid #ddd;
+  margin-top: 1.6rem;
+  .head {
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    width: 100%;
+    .title {
+      font-size: 1.3rem;
+      line-height: 2rem;
+      width: 50%;
+      padding: 1rem;
+    }
+  }
+  .body {
+    width: 100%;
+    .item {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      .icon_warp {
+        padding: 1.5rem;width:10%;
+        svg {
+          width: 2.5rem;
+          height: 2.5rem;
+          fill: #c66;
+        }
+      }
+      
+      .content_warp {
+        width: 70%;
+        padding-top: 1rem;
+        h3 {
+          font-size: 1.3rem;
+          font-weight: 400;padding-bottom:0.3rem;
+        }
+        p {
+          padding-bottom: 1rem;
+        }
+      }
+      .open_warp {
+        padding: 2rem 0;width:20%;
+        text-align: center;
+        svg {
+          display: block;
+          width: 1.3rem;
+          height: 1.3rem;
+          margin: auto;
+          fill: green;
+        }
+      }
+      .ok{
+        color:green;
+      }
+    }
+  }
+}
+</style>
+
+

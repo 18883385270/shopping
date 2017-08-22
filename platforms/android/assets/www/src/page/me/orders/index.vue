@@ -22,7 +22,7 @@ export default {
   },
   data(){
     return {
-      categorys:['全部订单','待付款','待收货','待评价','售后']
+      categorys:['全部订单','待发货','待收货','待评价']
     }
   }
 }

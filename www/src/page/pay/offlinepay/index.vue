@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mi-header title="线下转账"></mi-header>
+        <mi-header title="线下转账" rightext="转账记录"@rightNavBarClicked="goPage('/pay/offlinepay/log')"></mi-header>
         <div class="tltcntbox2">
             <div class="head">
                 <div class="title">使用场景</div>
@@ -40,11 +40,11 @@
                 <div class="more"></div>
             </div>
             <div class="body">
-                <div class="shuoming text-md">
+                <div class="shuoming">
                     <ul>
                         <li>【收款单位】：江苏悟行电子商务有限公司</li>
-                        <li>【开户银行】：江苏银行</li>
-                        <li>【收款账号】：<span class="text-lg text-red"> 23373438 3473847 34873843b</span></li>
+                        <li>【开户银行】：中国建设银行股份有限公司宿迁宿豫支行</li>
+                        <li>【收款账号】：<span class="text-lg text-red"> 3205 0177 4800 0000 0252</span></li>
                     </ul>
                 </div>
     
@@ -52,7 +52,6 @@
         </div>
         <div class="pd1">
             <button class="button err" @click="goPage('/pay/offlinepay/addpayinfo')">提交转账凭证</button>
-            <button class="button info">联系客服</button>
         </div>
     </div>
 </template>

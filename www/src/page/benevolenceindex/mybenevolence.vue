@@ -4,7 +4,7 @@
       我的善心
     </div>
     <div class="right">
-      {{this.$store.state.global.walletinfo.benevolence|currency('',4)}}
+      {{this.$store.state.global.walletinfo.Benevolence|currency('',4)}}
     </div>
   </div>
 </template>

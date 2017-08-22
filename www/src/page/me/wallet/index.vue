@@ -3,32 +3,25 @@
         <mi-header title="我的钱包"></mi-header>
         <div class="wallettop">
             <div @click="goPage('/wallet/benevolence')">
-                <svg><use xlink:href="#integralline"></use></svg>善心
-                <p>{{this.$store.state.global.walletinfo.benevolence |currency('#',4)}}</p>
+                <svg><use xlink:href="#integral"></use></svg>善心
+                <p>{{this.$store.state.global.walletinfo.Benevolence |currency('#',4)}}</p>
             </div>
             <div @click="goPage('/wallet/cash')">
                 <svg><use xlink:href="#cash"></use></svg>余额
-                <p>{{this.$store.state.global.walletinfo.cash|currency('￥',2)}}</p>
+                <p>{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}</p>
             </div>
         </div>
 
         <div class="tablerow mg-top20" @click="goPage('/wallet/setpaypassword')">
-            <div class="tlt">重置支付密码</div>
+            <div class="tlt">设置支付密码</div>
             <div class="cnt">
-                <span class="warning" v-if="this.$store.state.global.walletinfo.accesscode.length==0">您还未设置支付密码</span>
+                <span class="warning" v-if="!this.$store.state.global.walletinfo.AccessCode">您还未设置支付密码</span>
                 <svg>
                     <use xlink:href="#rightarrowsline"></use>
                 </svg>
             </div>
         </div>
-        <div class="tablerow" @click="goPage('/wallet')">
-            <div class="tlt">忘记支付密码</div>
-            <div class="cnt">
-                <svg>
-                    <use xlink:href="#rightarrowsline"></use>
-                </svg>
-            </div>
-        </div>
+        
         <div class="tablerow mg-top20" @click="goPage('/wallet/cardsmgr')">
             <div class="tlt">银行卡管理</div>
             <div class="cnt">
@@ -59,12 +52,12 @@ export default {
                             //更新本地钱包信息
                             self.$store.dispatch('update_walletinfo',{
                                 walletinfo:{
-                                    id:res.data.WalletInfo.Id,
-                                    accesscode:res.data.WalletInfo.AccessCode,
-                                    cash:res.data.WalletInfo.Cash,
-                                    benevolence:res.data.WalletInfo.Benevolence,
-                                    earnings:res.data.WalletInfo.Earnings,
-                                    yesterdayEarnings:res.data.WalletInfo.YesterdayEarnings
+                                    Id:res.data.WalletInfo.Id,
+                                    AccessCode:res.data.WalletInfo.AccessCode,
+                                    Cash:res.data.WalletInfo.Cash,
+                                    Benevolence:res.data.WalletInfo.Benevolence,
+                                    Earnings:res.data.WalletInfo.Earnings,
+                                    YesterdayEarnings:res.data.WalletInfo.YesterdayEarnings
                                 }
                             });
                         } else {

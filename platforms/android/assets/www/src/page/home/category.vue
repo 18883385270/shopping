@@ -43,12 +43,12 @@
           <use xlink:href="#oldman"></use>
         </svg>受助人
       </div>
-      <div>
+      <div @click="goPage('/bindex')">
         <svg>
           <use xlink:href="#heart"></use>
-        </svg>善心
+        </svg>善心指数
       </div>
-      <div @click="goPage('/me/classroom')">
+      <div @click="goPage('/classroom')">
         <svg>
           <use xlink:href="#classroom"></use>
         </svg>莱乾讲堂

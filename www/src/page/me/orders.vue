@@ -2,7 +2,7 @@
     <div class="tltcntbox">
         <div class="head">
             <div class="title">我的订单</div>
-            <div class="more" @click="toPage('/orders')">查看全部订单</div>
+            <div class="more" @click="toPage('/orders')">全部订单</div>
         </div>
         <div class="body">
             <div>

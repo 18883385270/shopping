@@ -1,6 +1,6 @@
 <template>
     <div class="page_warp">
-        <mi-benevolencetop></mi-benevolencetop>
+        <mi-benevolencetop :BenevolenceIndex="BenevolenceIndex"></mi-benevolencetop>
         <mi-mybenevolence></mi-mybenevolence>
         <mi-getbenevolence></mi-getbenevolence>
 
@@ -13,8 +13,8 @@
 import benevolencetop from './benevolencetop.vue';
 import mybenevolence from './mybenevolence.vue';
 import getbenevolence from './getbenevolence.vue';
-
 import tabbar from '../../components/tabbar.vue';
+import * as api from '../../api/benevolenceindex';
 
 export default {
   components: {
@@ -23,8 +23,39 @@ export default {
         'mi-getbenevolence': getbenevolence,
         'mi-tabbar': tabbar
     },
+    data(){
+        return{
+            BenevolenceIndex:{
+                CurrentBenevolenceIndex:0,
+                StoreCount:0,
+                ConsumerCount:0,
+                PasserCount:0,
+            }
+        }
+    },
+    mounted(){
+        this.GetInfo();
+    },
     methods:{
-       
+       GetInfo(){
+            let params = {};
+            api.InfoApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        this.BenevolenceIndex.CurrentBenevolenceIndex=res.data.CurrentBenevolenceIndex;
+                        this.BenevolenceIndex.StoreCount=res.data.StoreCount;
+                        this.BenevolenceIndex.ConsumerCount=res.data.ConsumerCount;
+                        this.BenevolenceIndex.PasserCount=res.data.PasserCount;
+                        this.BenevolenceIndex.AmbassadorCount=res.data.AmbassadorCount;
+                    } else {
+                        console.log(res.data.Message);
+                    }
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
+       }
     }
 }
 </script>

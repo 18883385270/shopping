@@ -8,9 +8,9 @@
                 <img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1733071988,3600838707&fm=117&gp=0.jpg" />
             </div>
             <div class="name" @click="goPage('/me/profile')">
-                <h3>夏天的风
+                <h3>{{this.$store.state.global.userinfo.NickName}}
                 </h3>
-                <span class="phone">Id:13561962764</span>
+                <span class="phone">{{this.$store.state.global.userinfo.Mobile|mobilehide}}</span>
             </div>
             <div class="qrCode">
                 <svg @click="openMyQrCode">
@@ -22,9 +22,8 @@
             </div>
         </div>
         <div class="rolelist">
-            <span class="primary">传递大使</span>
-            <span class="warning">店主</span>
-            <span class="success">运营中心负责人【宿迁】</span>
+            <span class="primary">{{this.$store.state.global.userinfo.Role}}</span>
+            <span class="warning" v-if="this.$store.state.global.userinfo.StoreId">店主</span>
         </div>
     </div>
 </template>

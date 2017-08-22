@@ -5,26 +5,50 @@
     <div class="exppage">
         <mi-header title="物流信息"></mi-header>
         <div class="exinfo">
+            <!-- <p>
+                <span>订单编号：</span>234353468934</p> -->
             <p>
-                <span>订单编号：</span>234353468934</p>
+                <span>物流公司：</span>{{ExpressInfo.showapi_res_body.expTextName}}</p>
             <p>
-                <span>物流公司：</span>顺丰速运</p>
-            <p>
-                <span>货运单号：</span>2456678865445</p>
+                <span>货运单号：</span>{{ExpressInfo.showapi_res_body.mailNo}}</p>
         </div>
-        <mi-vstepindicator></mi-vstepindicator>
+        <mi-vstepindicator :ExpressSteps="ExpressInfo.showapi_res_body.data"></mi-vstepindicator>
     </div>
 </template>
 
 <script>
 import header from '../../../../../components/header.vue';
 import vstepindicator from '../../../../../components/vstepindicator.vue';
+import * as api from '../../../../../api/storeorder';
 
 
 export default {
     components: {
         'mi-header': header,
         'mi-vstepindicator': vstepindicator
+    },
+    data(){
+        return{
+            ExpressInfo:{}
+        }
+    },
+    mounted(){
+        this.GetExpressSchedule();
+    },
+    methods:{
+        GetExpressSchedule(){
+            let params = {
+                ExpressNumber:'9891011779787'
+            };
+            api.ExpressScheduleApi(params).then(
+                res => {
+                    this.ExpressInfo=JSON.parse(res.data);
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
+        }
     }
 }
 </script>

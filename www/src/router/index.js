@@ -21,11 +21,12 @@ router.beforeEach((to, from, next) => {
     && to.name !== 'msglogin'
     && to.name !== 'userprotocol'
 
+    && to.name !=='jumppage'
+
     && to.name !== 'section'
     && to.name !== 'goodslist'
     && to.name !== 'goodsinfo'
 
-    && to.name !== 'cart'
     && to.name !== 'store'
 
     && to.name !== 'bindex'

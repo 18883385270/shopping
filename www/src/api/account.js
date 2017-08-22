@@ -1,9 +1,13 @@
-import {request} from '../utils/httpconfig.js'
+import {request} from './httpconfig.js'
 
 //注册
 export const MeInfoApi = (params) => {
   return request({method: 'post', url: '/User/MeInfo', data: params})
 }
+export const InfoApi = (params) => {
+  return request({method: 'post', url: '/User/Info', data: params})
+}
+
 //注册
 export const RegisterApi = (params) => {
   return request({method: 'post', url: '/User/Register', data: params})
@@ -37,6 +41,9 @@ export const VerifyMsgCodeApi=(params)=>{
 //改名
 export const SetNickNameApi=(params)=>{
   return request({method:'post',url:'User/SetNickName',data:params})
+}
+export const ChangePasswordApi=(params)=>{
+  return request({method:'post',url:'User/ChangePassword',data:params})
 }
 //改地区
 export const SetRegionApi=(params)=>{

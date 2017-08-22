@@ -1,7 +1,4 @@
-/**
- * 判断字符串是否为空
- * @param  val
- */
+
 export const isNullOrEmpty = (val) => {
   if(val === '' ||
 	val === 0 ||
@@ -29,9 +26,23 @@ export const orderTimeout = () => {
  * @param  val
  */
 export const isPhone = (val) => {
-	console.log(val);
 	var mobileCheck=/^1[2|3|4|5|6|7|8|9]\d{9}$/;
 	return mobileCheck.test(val)
+}
+export const isPayPassword = (val) => {
+	var mobileCheck=/^\d{6}$/;
+	return mobileCheck.test(val)
+}
+export const isBankCard = (val) => {
+	var bankcardCheck=/^\d{19}|\d{16}$/;
+	return bankcardCheck.test(val)
+}
+
+
+//判断是否是邮编
+export const isZip = (val) => {
+	var zipCheck=/[1-9]\d{5}(?!\d)/;
+	return zipCheck.test(val)
 }
 
 /**
@@ -43,6 +54,22 @@ export const encryptedPassword =(pwd) => {
   let pwdkey = md5(pwd);
   return pwdkey;
 }
+
+//判断是否是平台用户二维码并返回用户id
+export const GetUserId=(value)=>{
+	// if( !value || typeof value !== 'string' ) return ''
+	// var userId= value.match(/^http:\/\/www.wftx666.com\/user\/(\S*)$/)[1];
+	var match = value.match(/^http:\/\/www.wftx666.com\/user\/(\S*)$/);
+	if(match!=null && match.length==2)
+	{
+		return match[1];
+	}
+	else{
+		return '';
+	}
+}
+
+
 
 
 

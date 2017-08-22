@@ -5,14 +5,14 @@
             <div class="more"></div>
         </div>
         <div class="body">
-            <div @click="goPage('/me/storemgr')">
-                <svg><use xlink:href="#store"></use></svg>店铺管理</div>
-            <div @class="goPage('/me/partnermgr')">
-                <svg><use xlink:href="#bankcardline"></use></svg>善心联盟管理</div>
-            <div @click="goPage('/me/classroom')">
-                <svg><use xlink:href="#classroom"></use></svg>五福课堂</div>
-            <div @click="goPage('/me/about')">
-                <svg><use xlink:href="#bankcardline"></use></svg>关于我们</div>
+            <div @click="goPage('/storemgr')">
+                <svg><use xlink:href="#storeline"></use></svg>店铺管理</div>
+            <div @class="goPage('/partnermgr')">
+                <svg><use xlink:href="#partnerline"></use></svg>联盟管理</div>
+            <div @click="goPage('/classroom')">
+                <svg><use xlink:href="#classroomline"></use></svg>五福课堂</div>
+            <div @click="goPage('/about')">
+                <svg><use xlink:href="#aboutline"></use></svg>关于我们</div>
         </div>
     </div>
 </template>

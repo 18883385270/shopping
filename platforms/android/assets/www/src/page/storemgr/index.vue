@@ -1,0 +1,221 @@
+<template>
+  <div>
+    <mi-header title="店铺管理"></mi-header>
+    <div class="tip error" v-if="storeinfo.Status && storeinfo.Status!='正常'">
+      <svg>
+        <use xlink:href="#ok"></use>
+      </svg>
+      您的店铺未上线，因为店铺资料在审核中
+    </div>
+  
+    <div class="emptybox" v-if="storeinfo.Name.length==0">
+      <svg>
+        <use xlink:href="#emptyline"></use>
+      </svg>
+      <p> 您还未开通店铺，现在开通?</p>
+      <button class="button success" @click="goPage('/bindex/storeowner')">现在开店</button>
+    </div>
+  
+    <div v-if="storeinfo.Name.length">
+      <div class="storeinfo">
+        <div class="storename">
+          <svg @click="goPage('/storemgr/setting')">
+            <use xlink:href="#ok" />
+          </svg>
+          <p class="name"> {{storeinfo.Name}}</p>
+          <p>{{storeinfo.Region}}{{storeinfo.Address}}</p>
+        </div>
+        <div class="tongjiinfo">
+          <div>
+            <span>{{statisticsinfo.TodayOrder}}</span>
+            <p>今日订单</p>
+          </div>
+          <div>
+            <span>{{statisticsinfo.TodaySale|currency('￥',2)}}</span>
+            <p>今日销售额</p>
+          </div>
+          <div>
+            <span>{{statisticsinfo.TotalOrder}}</span>
+            <p>累计订单</p>
+          </div>
+          <div>
+            <span>{{statisticsinfo.TotalSale|currency('￥',2)}}</span>
+            <p>累计销售</p>
+          </div>
+        </div>
+      </div>
+      <div style="height:1rem;"></div>
+      <div class="newordertip" v-for="StoreOrder in StoreOrders" @click="goInfoPage(StoreOrder)">
+        <div class="title">
+          <p class="tiplabel">新订单，提醒</p>
+          <p>订单号：{{StoreOrder.Number}}</p>
+          <p v-if="StoreOrder.Remark">备注：{{StoreOrder.Remark}}</p>
+        </div>
+        <div class="ordergoodses">
+          <div class="goods" v-for="Goods in StoreOrder.StoreOrderGoodses">
+            <div class="pic">
+              <img src="https://i8.mifile.cn/v1/a1/1fbd6d1f-05bf-f22e-cba8-250dfade437d.webp?width=360&heihgt=256" alt="">
+            </div>
+            <div class="cnt">
+              <p>{{Goods.GoodsName}}</p>
+              <p>{{Goods.SpecificationName}}</p>
+              <p>数量：x{{Goods.Quantity}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="expressaddress text-gray">
+          <p>
+            {{StoreOrder.ExpressRegion}}{{StoreOrder.ExpressAddress}}
+          </p>
+          <p>
+            {{StoreOrder.ExpressName}} {{StoreOrder.ExpressMobile}}
+          </p>
+        </div>
+      </div>
+  
+      <div class="tablerow marg-top1" @click="goPage('/storemgr/ordermgr')">
+        <div class="tlt">订单管理</div>
+        <div class="cnt">
+          <svg>
+            <use xlink:href="#rightarrowsline"></use>
+          </svg>
+        </div>
+      </div>
+  
+      <div class="tablerow" @click="goPage('/storemgr/goodsmgr')">
+        <div class="tlt">商品管理</div>
+        <div class="cnt">
+          <svg>
+            <use xlink:href="#rightarrowsline"></use>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div style="height:2rem;"></div>
+  </div>
+</template>
+
+<script>
+import header from '../../components/header.vue';
+import * as api from '../../api/store'
+
+export default {
+  components: {
+    'mi-header': header
+  },
+  data() {
+    return {
+      storeinfo: {
+        Name: ''
+      },
+      statisticsinfo: {},
+      StoreOrders: []
+    }
+  },
+  mounted() {
+    this.GetMyStoreInfo();
+  },
+  methods: {
+    GetMyStoreInfo() {
+      //加载店铺信息
+      let params = {};
+      api.InfoApi(params).then(
+        res => {
+          if (res.data.Code == 200) {
+            this.storeinfo = res.data.StoreInfo;
+            this.statisticsinfo = res.data.StatisticsInfo;
+            this.StoreOrders = res.data.StoreOrders;
+          } else {
+
+          }
+        },
+        err => {
+          console.log('网络错误');
+        }
+      )
+    },
+    goPage(page) {
+      //未开店，进入开店
+      this.$router.push({ path: page })
+    },
+    goInfoPage(order) {
+      this.$router.push({ name: 'orderinfomgr', params: { StoreOrder: order } });
+    }
+  }
+}
+</script>
+
+
+<style lang="less" scoped>
+.newordertip {
+  border-top: 2px solid #096;
+  background: #fff;
+  .title {
+    padding: 1rem;
+    .tiplabel {
+      color: #fff;
+      float: right;
+      background: #096;
+      padding: 0.2rem 0.4rem;
+      margin-top: -1rem;
+      margin-right: -1rem;
+    }
+  }
+  .ordergoodses {
+    padding-top: 1rem;
+    .goods {
+      display: flex;
+      border-bottom: 1px dashed #eee;
+      .pic {
+        width: 30%;
+        padding: 0 1rem 0 1rem;
+        img {
+          width: 100%;
+        }
+      }
+      .cnt {
+        width: 70%;
+      }
+    }
+  }
+  .expressaddress {
+    padding: 1rem;
+  }
+}
+
+.storeinfo {
+  background: #fff;
+  .storename {
+    font-size: 1rem;
+    border-bottom: 1px solid #eee;
+    padding: 1rem;
+    .name {
+      font-size: 1.3rem;
+      padding: 0.8rem 0;
+    }
+    svg{
+      width:2rem;
+      height:2rem;
+      fill:#333;
+      float:right;
+    }
+  }
+  .tongjiinfo {
+
+    display: flex;
+    div {
+      text-align: center;
+      width: 25%;
+      padding: 0.5rem 0;
+      border-left: 1px solid #eee;
+      p {
+        padding-top: 0.3rem;
+      }
+      &:first-child {
+        border-left: none;
+      }
+    }
+  }
+}
+</style>
+

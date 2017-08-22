@@ -4,20 +4,28 @@
 <template>
     <div class="page_warp">
         <mi-profile @openmyqrcode="openMyQrCodeHandle"></mi-profile>
+        <div class="tip error" v-if="!this.$store.state.global.walletinfo.AccessCode" @click="goPage('/wallet')">
+            <svg>
+                <use xlink:href="#x" />
+            </svg>
+            您还未设置钱包的支付密码，现在设置？
+        </div>
+
+        <div class="tablerow mg-top20" @click="goPage('/me/invote')">
+            <div class="tlt">邀请好友</div>
+            <div class="cnt">
+                <svg>
+                    <use xlink:href="#rightarrowsline"></use>
+                </svg>
+            </div>
+        </div>
+
         <mi-orders></mi-orders>
         <mi-wallet></mi-wallet>
         <mi-collect></mi-collect>
         <mi-sundry></mi-sundry>
         <div style="width: 100%;height: 7rem;"></div>
         <mi-tabbar :selected="4"></mi-tabbar>
-    
-        <!--弹出框-->
-        <mi-modal ref="alert" type="pop" :isHeadShow="true" title="我的二维码">
-            <div slot="modalbody" class="qrCodeWarp">
-                <vue-q-art :config="qrcodeconfig" :downloadButton="false"></vue-q-art>
-                <p>扫描二维码，进入商城</p>
-            </div>
-        </mi-modal>
     </div>
 </template>
 
@@ -30,7 +38,6 @@ import collect from './collect.vue';
 import sundry from './sundry.vue';
 import modal from '../../components/modal.vue';
 import tabbar from '../../components/tabbar.vue';
-import VueQArt from 'vue-qart'
 import * as api from '../../api/account'
 
 export default {
@@ -41,20 +48,21 @@ export default {
         'mi-collect': collect,
         'mi-sundry': sundry,
         'mi-modal': modal,
-        'mi-tabbar': tabbar,
-        VueQArt
+        'mi-tabbar': tabbar
     },
-    data() {
-        return {
-            qrcodeconfig: {
-                value: 'https://www.lq319.com',
-                imagePath: './src/img/logo.png',
-                filter: 'color'
-            }
-        }
-    },
+    
     mounted(){
-        //请求用户数据
+        this.getMeInfo();
+    },
+    methods: {
+        openMyQrCodeHandle(){
+            this.$router.push({path:'/me/profile/myqrcode'});
+        },
+        goPage(page){
+            this.$router.push({path:page})
+        },
+        getMeInfo(){
+            //请求用户数据
         let self=this;
         let params={};
         api.MeInfoApi(params).then(
@@ -63,24 +71,26 @@ export default {
                             //更新本地信息
                             self.$store.dispatch('update_userinfo',{
                                 userinfo:{
-                                    nickname:res.data.UserInfo.NickName,
-                                    portrait:res.data.UserInfo.Portrait,
-                                    gender:res.data.UserInfo.Gender,
-                                    region:res.data.UserInfo.Region,
-                                    mobile:res.data.UserInfo.Mobile,
-                                    role:res.data.UserInfo.Role,
-                                    storeid:res.data.UserInfo.StoreId
+                                    Id:res.data.UserInfo.Id,
+                                    NickName:res.data.UserInfo.NickName,
+                                    Portrait:res.data.UserInfo.Portrait,
+                                    Gender:res.data.UserInfo.Gender,
+                                    Region:res.data.UserInfo.Region,
+                                    Mobile:res.data.UserInfo.Mobile,
+                                    Role:res.data.UserInfo.Role,
+                                    StoreId:res.data.UserInfo.StoreId,
+                                    CartGoodsCount:res.data.UserInfo.CartGoodsCount
                                 }
                             });
                             //钱包信息
                             self.$store.dispatch('update_walletinfo',{
                                 walletinfo:{
-                                    id:res.data.WalletInfo.Id,
-                                    accesscode:res.data.WalletInfo.AccessCode,
-                                    cash:res.data.WalletInfo.Cash,
-                                    benevolence:res.data.WalletInfo.Benevolence,
-                                    earnings:res.data.WalletInfo.Earnings,
-                                    yesterdayEarnings:res.data.WalletInfo.YesterdayEarnings
+                                    Id:res.data.WalletInfo.Id,
+                                    AccessCode:res.data.WalletInfo.AccessCode,
+                                    Cash:res.data.WalletInfo.Cash,
+                                    Benevolence:res.data.WalletInfo.Benevolence,
+                                    Earnings:res.data.WalletInfo.Earnings,
+                                    YesterdayEarnings:res.data.WalletInfo.YesterdayEarnings
                                 }
                             });
                         } else {
@@ -91,10 +101,6 @@ export default {
                         console.log('网络错误');
                     }
                 )
-    },
-    methods: {
-        openMyQrCodeHandle() {
-            this.$refs.alert.modalOpen();
         }
     }
 }
@@ -105,17 +111,7 @@ export default {
     height: 100%;
 }
 
-.qrCodeWarp {
-    padding: 3rem;
-    text-align: center;
-    img {
-        width: 100%;
-    }
-    p {
-        font-size: 1.3rem;
-        margin-top: 1rem;
-    }
-}
+
 </style>
 
 

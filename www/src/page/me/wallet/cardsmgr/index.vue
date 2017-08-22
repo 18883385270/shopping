@@ -1,12 +1,18 @@
 <template>
   <div class="cardspage">
     <mi-header title="银行卡管理"></mi-header>
+    <div class="emptybox" v-if="!BankCards.length">
+            <svg>
+                <use xlink:href="#empty"></use>
+            </svg>
+            <p> 未添加任何银行卡</p>
+        </div>
     <div class="cardsls">
-      <div class="cardwp" v-for="(bankcard,index) in bankcards">
+      <div class="cardwp" v-for="(BankCard,index) in BankCards">
         <p>
-         <svg @click="del(index)"><use xlink:href="#delline"></use></svg>{{bankcard.BankName}}</p>
-        <p>{{bankcard.OwnerName}}</p>
-        <p class="cardnum">{{bankcard.Number}}</p>
+         <svg @click="del(index)"><use xlink:href="#delline"></use></svg>{{BankCard.BankName}}</p>
+        <p>{{BankCard.OwnerName}}</p>
+        <p class="cardnum">{{BankCard.Number}}</p>
       </div>
       <div class="addcard" @click="goPage('/wallet/cardsmgr/add')">
         + 添加银行卡
@@ -25,7 +31,7 @@ export default {
   },
   data(){
     return {
-      bankcards:[]
+      BankCards:[]
     }
   },
   mounted(){
@@ -34,7 +40,7 @@ export default {
     api.BankCardsApi(params).then(
                 res => {
                     if (res.data.Code == 200) {
-                        this.bankcards=res.data.BankCards;
+                        this.BankCards=res.data.BankCards;
                     } else {
                         console.log("返回错误码："+res.data.Code);
                     }
@@ -47,13 +53,13 @@ export default {
   methods:{
     del(index){
       let params={
-        bankCardId:this.bankcards[index].Id
+        bankCardId:this.BankCards[index].Id
       }
       api.DeleteBankCardApi(params).then(
         res=>{
           if(res.data.Code==200){
             //删除本地数据
-            this.bankcards.splice(index,1);
+            this.BankCards.splice(index,1);
           }else{
             console.log("返回错误码："+res.data.Code);
           }

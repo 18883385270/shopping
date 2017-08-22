@@ -34,7 +34,7 @@ export default {
 <style lang="less" scoped>
 .toast {
     position: fixed;
-    max-width: 80%;
+    max-width: 90%;
     border-radius: 3rem;
     background: rgba(0, 0, 0, 0.7);
     color: white;

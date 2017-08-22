@@ -18,14 +18,15 @@
   import Swiper from '../../../utils/swiper-3.4.2.min.js';
   import data from '../../../../../data.json';
   export default {
+    props:['bannerList'],
     data () {
       return {
-        bannerList: []
+        //bannerList: []
       };
     },
     components: {},
     created () {
-      this.bannerList = data.detail.img;
+      //this.bannerList = data.detail.img;
     },
     methods: {
       goBackEvent () {
@@ -42,7 +43,6 @@
         pagination: '.swiper-pagination',
         autoplayDisableOnInteraction: false
       });
-      console.log(mySwiper);
     }
   };
 </script>

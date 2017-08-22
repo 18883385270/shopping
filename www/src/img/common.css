@@ -1,6 +1,6 @@
 .button {
   width: 100%;
-  padding: 1.3rem 0;
+  padding: 1rem 0;
   text-align: center;
   margin-top: 1rem;
   color: #fff;
@@ -59,6 +59,9 @@
 .text-xlg {
   font-size: 1.5rem;
 }
+.text-gray {
+  color: #666;
+}
 .marg1 {
   margin: 1rem;
 }
@@ -76,7 +79,7 @@
   align-items: center;
 }
 .tablerow .tlt {
-  width: 50%;
+  width: 30%;
   font-size: 1.3rem;
   font-weight: 400;
   padding: 1.2rem 0;
@@ -84,7 +87,7 @@
   vertical-align: center;
 }
 .tablerow .cnt {
-  width: 50%;
+  width: 70%;
   text-align: right;
   padding: 1.2rem 0;
   margin-right: 1rem;
@@ -110,18 +113,101 @@
   float: right;
   margin-left: 1rem;
 }
+.tablerow .cnt input[type='text'],
+.tablerow .cnt input[type='password'],
+.tablerow .cnt input[type='number'] {
+  width: 100%;
+  border: 0;
+  font-size: 1.3rem;
+  padding: 0.6rem 0;
+}
+.tablerow .cnt input[type='text']:focus,
+.tablerow .cnt input[type='password']:focus,
+.tablerow .cnt input[type='number']:focus {
+  outline: none;
+}
+.tablerow .cnt select {
+  width: 100%;
+  border: 1px solid #eee;
+  font-size: 1.3rem;
+  padding: 0.6rem 0;
+}
+.tablerow .cnt textarea {
+  width: 100%;
+  height: 6rem;
+  border: 0;
+  font-size: 1.3rem;
+}
+.tablerow2 {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+}
+.tablerow2 .tlt {
+  font-size: 1.3rem;
+  font-weight: 400;
+  padding: 1.2rem 0;
+  text-indent: 1rem;
+  vertical-align: center;
+}
+.tablerow2 .cnt {
+  padding: 0 1.2rem 1.2rem 1.2rem;
+  margin-right: 1rem;
+  font-size: 1.3rem;
+  color: #999;
+}
+.tablerow2 .cnt .txt {
+  display: inline-block;
+  margin-top: 0.4rem;
+  margin-right: 1rem;
+}
+.tablerow2 .cnt .swch {
+  float: right;
+}
+.tablerow2 .cnt svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: #999;
+  float: right;
+  margin-left: 1rem;
+}
+.tablerow2 .cnt input[type='text'],
+.tablerow2 .cnt input[type='password'],
+.tablerow2 .cnt input[type='number'] {
+  width: 100%;
+  border: 0;
+  font-size: 1.4rem;
+  padding: 0.6rem 0;
+}
+.tablerow2 .cnt input[type='text']:focus,
+.tablerow2 .cnt input[type='password']:focus,
+.tablerow2 .cnt input[type='number']:focus {
+  outline: none;
+}
+.tablerow2 .cnt select {
+  width: 100%;
+  border: 1px solid #eee;
+  font-size: 1.4rem;
+  padding: 0.6rem 0;
+}
+.tablerow2 .cnt textarea {
+  width: 100%;
+  height: 6rem;
+  border: 0;
+}
 .mg-top20 {
   margin-top: 1rem;
 }
 .tltcntbox {
   padding: 0;
   background: white;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
   margin-top: 1.2rem;
 }
 .tltcntbox .head {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
   display: flex;
   width: 100%;
 }
@@ -168,12 +254,12 @@
 .tltcntbox2 {
   padding: 0;
   background: white;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
   margin-top: 1.2rem;
 }
 .tltcntbox2 .head {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
   display: flex;
   width: 100%;
 }
@@ -291,4 +377,30 @@
 .noaddress {
   padding-top: 1rem;
   text-align: right;
+}
+.tip {
+  padding: 1rem;
+}
+.tip svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  fill: #fff;
+  float: left;
+  margin-right: 1rem;
+}
+.tip.error {
+  background: #c33;
+  color: #fff;
+}
+.emptybox {
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.3rem;
+  margin-top: 4rem;
+}
+.emptybox svg {
+  width: 6rem;
+  height: 6rem;
+  fill: #666;
+  margin-bottom: 3rem;
 }

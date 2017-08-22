@@ -7,13 +7,13 @@
         </div>
 
         <div class="youhuiwarp">
-            <div class="tablerow">
+            <div class="tablerow" v-if="this.$store.state.global.walletinfo.Cash>0">
                 <div class="tlt">余额付款</div>
                 <div class="cnt">
                     <span class="swch">
                         <mi-switch @switchEvent="switchEventHandle"></mi-switch>
                     </span>
-                    <span class="txt"> 可用余额{{this.$store.state.global.walletinfo.cash}}</span>
+                    <span class="txt"> 可用余额{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}</span>
                 </div>
             </div>
             <div v-if="isCashPay">
@@ -35,7 +35,7 @@
         <div class="paytype">
             <div class="total">
                 剩余待支付：
-                <span>￥{{leftamount}}</span>
+                <span>{{leftamount|currency('￥',2)}}</span>
                 <p>{{remark}}</p>
             </div>
             <div v-if="leftamount==0">
@@ -55,7 +55,7 @@
                 <div class="desc">什么时候使用线下转账？</div>
             </div>
     
-            <button class="button err" @click="goPage('/pay/offlinepay')">线下转账</button>
+            <button class="button err" @click="replacePage('/pay/offlinepay')">线下转账</button>
         </div>
 
         <mi-toast ref="toast"></mi-toast>
@@ -68,6 +68,7 @@ import vswitch from '../../components/switch.vue';
 import toast from '../../components/toast.vue';
 import * as api from '../../api/wallet'
 import * as userapi from '../../api/account'
+import * as paymentapi from '../../api/payment'
 import * as checkJs from '../../utils/pubfunc'
 
 export default {
@@ -79,7 +80,8 @@ export default {
     data(){
         return{
             orderid:'',
-            ordernumber:'27824728824728',
+            paymentid:'',
+            ordernumber:'',
             type:'',
             amount:0,
             remark:'',
@@ -89,22 +91,23 @@ export default {
         }
     },
     mounted(){
-        this.orderid=this.$route.params.orderid;
-        this.type=this.$route.params.type;
-        this.amount=this.$route.params.amount? this.$route.params.amount:0;
-        this.ordernumber=this.$route.params.ordernumber;
-        this.remark=this.$route.params.remark;
+        this.orderid=this.$route.params.orderid || '';
+        this.paymentid=this.$route.params.paymentid||'';
+        this.type=this.$route.params.type || '';
+        this.amount=this.$route.params.amount || 0;
+        this.ordernumber=this.$route.params.ordernumber || '';
+        this.remark=this.$route.params.remark || '';
         this.leftamount=this.amount;
     },
     methods:{
         switchEventHandle(isOn) {
             this.isCashPay = isOn;
             if (isOn) {
-                if (this.$store.state.global.walletinfo.cash > this.amount) {//如果余额大于待支付金额
+                if (this.$store.state.global.walletinfo.Cash > this.amount) {//如果余额大于待支付金额
                     this.leftamount = 0;
 
                 } else {
-                    this.leftamount = this.amount - this.$store.state.global.walletinfo.cash;
+                    this.leftamount = this.amount - this.$store.state.global.walletinfo.Cash;
                 }
             }
             else {
@@ -113,7 +116,6 @@ export default {
         },
         walletPay() {
             //钱包支付
-
             let alertFuc = (msg) => {
                 const toast = this.$refs.toast;
                 toast.show(msg);
@@ -154,8 +156,7 @@ export default {
             //支付宝支付
         },
         paySuccess(){
-            //支付成功回调
-
+            //支付成功回调处理函数
             let alertFuc = (msg) => {
                 const toast = this.$refs.toast;
                 toast.show(msg);
@@ -170,8 +171,39 @@ export default {
                 userapi.SetUserGiftPayedApi(params).then(
                     res => {
                         if (res.data.Code == 200) {
-                            //转到支付成功页面
-                            this.$router.replace({name:'paysuccess',params:{amount:this.amount,orderid:this.orderid,type:this.type}})
+                            //转到成功页面
+                            this.$router.replace({
+                                name:'success',
+                                params:{
+                                    type:'tip',
+                                    message:'支付成功'}})
+                        } else {
+                            alertFuc(res.data.Message);
+                        }
+                    },
+                    err => {
+                        console.log('网络错误');
+                    }
+                )
+            }else{
+                //订单付款
+                //设置付款项目成功
+                let params = {
+                    PaymentId:this.paymentid,
+                }
+                paymentapi.PaymentAcceptedApi(params).then(
+                    res => {
+                        if (res.data.Code == 200) {
+                            //转到成功页面
+                            this.$router.replace({
+                                name:'success',
+                                params:{
+                                    type:'pay',
+                                    payinfo:{
+                                        amount:this.amount,
+                                        orderid:this.orderid
+                                    },
+                                    message:'支付成功'}})
                         } else {
                             alertFuc(res.data.Message);
                         }
@@ -181,9 +213,13 @@ export default {
                     }
                 )
             }
+
         },
         goPage(page){
             this.$router.push({path:page});
+        },
+        replacePage(page){
+            this.$router.replace({path:page});
         }
     }
 

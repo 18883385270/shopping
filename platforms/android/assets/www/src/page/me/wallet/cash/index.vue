@@ -6,11 +6,11 @@
                 <use xlink:href="#cash"></use>
             </svg>
             <h2>我的现金</h2>
-            <h1>￥2233</h1>
+            <h1>{{this.$store.state.global.walletinfo.cash|currency('￥',2)}}</h1>
     
             <div class="btns">
-                <button>充值</button>
-                <button class="gray" @click="goPage('/wallet/cash/withdraw')">提现</button>
+                <button type="button" class="button success" @click="goPage('/wallet/cash/recharge')">充值</button>
+                <button type="button" class="button gray" @click="goPage('/wallet/cash/withdraw')">提现</button>
             </div>
         </div>
     </div>
@@ -23,6 +23,7 @@ export default {
     components: {
         'mi-header': header
     },
+    
     methods: {
         rightNavBarClickedHandle() {
             this.goPage('/wallet/cash/transfer');
@@ -30,6 +31,7 @@ export default {
         goPage(page) {
             this.$router.push({ path: page });
         }
+        
     }
 }
 </script>
@@ -48,9 +50,6 @@ export default {
         height: 6rem;
         margin: 2rem auto 1rem auto;
         fill: #f93;
-        padding: 0.8rem;
-        border: 2px solid #f93;
-        border-radius: 50%;
         display: block;
     }
     h2 {
@@ -63,22 +62,6 @@ export default {
     .btns {
         padding: 3rem 0;
         width: 100%;
-        button {
-            display: block;
-            width: 100%;
-            border-radius: 3px;
-            padding: 1.3rem 0;
-            font-size: 1.3rem;
-            background: #096;
-            color: #fff;
-            border: 0;
-            margin-bottom: 1.3rem;
-            &.gray {
-                background: #eee;
-                border: 1px solid #aaa;
-                color: #333;
-            }
-        }
     }
 }
 </style>

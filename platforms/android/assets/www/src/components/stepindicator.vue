@@ -6,11 +6,14 @@
     <div class="stepwarp">
         <table class="steptable">
             <tr>
-                <td class="steptd" v-for="step in steps">
+                <td class="steptd" :class="{current:index<=currentstep}" v-for="(step,index) in steps">
                     <div class="stepcnt">
                         <p>{{step}}</p>
-                        <i>
+                        <i v-if="index<=currentstep">
                             <svg><use xlink:href="#ok"></use></svg>
+                        </i>
+                        <i v-if="index>currentstep">
+                            <svg><use xlink:href="#delline"></use></svg>
                         </i>
                     </div>
                     <div class="bgline"></div>
@@ -22,10 +25,10 @@
 
 <script>
 export default {
+    props:['currentstep','steps'],
     data() {
         return {
-            steps: ['提交订单', '配送中', '交易完成'],
-            currentstep: 1
+            
         }
     }
 }
@@ -59,15 +62,15 @@ export default {
                     background:#fff;
                     z-index: 2;
                     svg{
-                        width:1.5rem;height:1.5rem;fill:#06c;
+                        width:1.5rem;height:1.5rem;fill:#666;
                     }
                 }
             }
             .bgline {
                 height: 1px;
                 width: 100%;
-                background: #06c;
                 border: 2px solid #eee;
+                background:#eee;
                 border-left: 0;
                 border-right: 0;
                 position: absolute;
@@ -90,6 +93,14 @@ export default {
                 .bgline {
                     right: 3rem;
                 }
+            }
+        }
+        .current{
+            svg{
+                fill:#06c !important;
+            }
+            .bgline{
+                background: #06c;
             }
         }
     }

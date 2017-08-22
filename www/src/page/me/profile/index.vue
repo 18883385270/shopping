@@ -10,18 +10,18 @@
         <div class="tablerow" @click="goPage('/me/profile/setnickname')">
             <div class="tlt">昵称</div>
             <div class="cnt">
-                {{this.$store.state.global.userinfo.nickname}}
+                {{this.$store.state.global.userinfo.NickName}}
                 <svg>
                     <use xlink:href="#rightarrowsline"></use>
                 </svg>
             </div>
         </div>
-        <div class="tablerow" @click="openSetGender">
+        <!-- <div class="tablerow" @click="openSetGender">
             <div class="tlt">性别</div>
             <div class="cnt">
                 {{this.$store.state.global.userinfo.gender}}
             </div>
-        </div>
+        </div> -->
         <div class="tablerow" @click="openMyQrCodeHandle">
             <div class="tlt">二维码名片</div>
             <div class="cnt">
@@ -33,7 +33,7 @@
         <div class="tablerow mg-top20">
             <div class="tlt">手机号</div>
             <div class="cnt">
-                {{this.$store.state.global.userinfo.mobile}}
+                {{this.$store.state.global.userinfo.Mobile|mobilehide}}
             </div>
         </div>
         <div class="tablerow" @click="goPage('/me/profile/expressaddress')">
@@ -44,25 +44,21 @@
                 </svg>
             </div>
         </div>
-        <div class="tablerow mg-top20">
-            <div class="tlt">登录密码</div>
+        <div class="tablerow mg-top20" @click="goPage('/me/profile/changepassword')">
+            <div class="tlt">修改登录密码</div>
             <div class="cnt">
                 <svg>
                     <use xlink:href="#rightarrowsline"></use>
                 </svg>
             </div>
         </div>
-        <div class="tablerow">
-            <div class="tlt">支付密码</div>
+        <div class="tablerow mg-top20" @click="logout">
+            <div class="tlt">退出登录</div>
             <div class="cnt">
-                <svg>
-                    <use xlink:href="#rightarrowsline"></use>
-                </svg>
+                
             </div>
         </div>
-        <div class="pd1">
-            <button type="button" class="button err" @click="logout">退出登录</button>
-        </div>
+        
         <!--弹出框-->
         <mi-modal ref="confirm" type="confirm" @confirmEvent="confirmLogout">
             <div slot="confirm" class="confirm">
@@ -74,7 +70,7 @@
         <mi-modal ref="alert" type="pop" :isHeadShow="true" title="我的二维码">
             <div slot="modalbody" class="qrCodeWarp">
                 <vue-q-art :config="config" :downloadButton="downloadButton"></vue-q-art>
-                <p>扫描二维码，进入商城</p>
+                <p>扫描二维码，推荐朋友加入商城</p>
             </div>
         </mi-modal>
         <mi-popup ref="popup" title="更改性别">
@@ -130,7 +126,6 @@ export default {
         },
         openMyQrCodeHandle() {
             this.$refs.alert.modalOpen();
-            console.log(this.$store.state.global.token);
         },
         openSetGender() {
             this.$refs.popup.modalOpen();
@@ -139,7 +134,10 @@ export default {
             //退出modal
             this.$refs.confirm.modalOpen();
         },
-        confirmLogout() {
+        confirmLogout(num) {
+            if(num==0){
+                return false;
+            }
             let alertFuc = (msg) => {
                 const toast = this.$refs.toast;
                 toast.show(msg);
@@ -147,6 +145,11 @@ export default {
             }
             let params = {};
             let self = this;
+			self.$store.dispatch('remove_token', { token: '' });
+            self.$store.dispatch('remove_userinfo', { userinfo: ''  });
+            self.$store.dispatch('remove_walletinfo', { walletinfo: '' });
+            self.$router.replace('/');
+			/*
             api.LogoutApi(params).then(
                 res => {
                     if (res.data.Code == 200) {
@@ -160,7 +163,7 @@ export default {
                     self.$store.dispatch('remove_token', { token: '' });
                     alertFuc("网络访问错误~");
                 }
-            )
+            )*/
         }
     }
 }

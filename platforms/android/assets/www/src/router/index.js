@@ -12,51 +12,50 @@ const router = new Router({
   routes
 });
 
-// router.beforeEach((to, from, next) => {
-//   //未登录 允许访问页面
-//   if (!window.localStorage.getItem('token') 
-//     && to.name !== 'home' 
-//     && to.name !== 'register' 
-//     && to.name !== 'login'
-//     && to.name !== 'msglogin'
-//     && to.name !== 'userprotocol'
+router.beforeEach((to, from, next) => {
+  //未登录 允许访问页面
+  if (!window.localStorage.getItem('token') 
+    && to.name !== 'home' 
+    && to.name !== 'register' 
+    && to.name !== 'login'
+    && to.name !== 'msglogin'
+    && to.name !== 'userprotocol'
 
-//     && to.name !== 'section'
-//     && to.name !== 'goodslist'
-//     && to.name !== 'goodsinfo'
+    && to.name !=='jumppage'
 
-//     && to.name !== 'cart'
-//     && to.name !== 'store'
+    && to.name !== 'section'
+    && to.name !== 'goodslist'
+    && to.name !== 'goodsinfo'
 
-//     && to.name !== 'bindex'
-//     && to.name !== 'consumer'
-//     && to.name !== 'passer'
-//     && to.name !== 'ambassador'
-//     && to.name !== 'regionpartner'
-//     && to.name !== 'storeowner'
+    && to.name !== 'store'
 
-//     && to.name !== 'foundation'
-//     && to.name !== 'classroom'
-//     && to.name !== 'offlinestore'
+    && to.name !== 'bindex'
+    && to.name !== 'consumer'
+    && to.name !== 'passer'
+    && to.name !== 'ambassador'
+    && to.name !== 'regionpartner'
+    && to.name !== 'storeowner'
 
-//     && to.name !== 'grantee'
-//     && to.name !== 'granteeinfo'
+    && to.name !== 'foundation'
+    && to.name !== 'classroom'
+    && to.name !== 'offlinestore'
+
+    && to.name !== 'grantee'
+    && to.name !== 'granteeinfo'
     
-//   ) {
-//     next({ path: '/login' });
-//   } else {
-//     //已经登录并且是首页 
-//     if (window.localStorage.getItem('token') && to.name === 'home') {
-//       next({
-//         path: '/me'
-//       });
-//     } else {
-//       next();
-//     }
-//   }
-// });
+  ) {
+    next({ path: '/login' });
+  } else {
+    //已经登录并且是首页 
+    if (window.localStorage.getItem('token') && to.name === 'home') {
+      next();
+    } else {
+      next();
+    }
+  }
+});
 
-// router.afterEach(transition => {
-// });
+router.afterEach(transition => {
+});
 
 export default router

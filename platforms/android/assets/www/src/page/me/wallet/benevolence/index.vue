@@ -6,8 +6,8 @@
                 <use xlink:href="#consumer"></use>
             </svg>
             <h2>您的当前善心值为</h2>
-            <h1>2233</h1>
-            <p>当前已超越23353534人 | 善心值实时更新</p>
+            <h1>{{this.$store.state.global.walletinfo.Benevolence}}</h1>
+            <p> 善心值实时更新</p>
             <div class="utils">
                 <div>
                     <svg><use xlink:href="#bankcard"></use></svg>

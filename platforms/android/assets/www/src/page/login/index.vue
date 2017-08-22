@@ -14,10 +14,10 @@
         </div>
     
         <div class="loginbtn">
-            <button @click="login">登录</button>
+            <button class="button success" @click="login">登录</button>
         </div>
         <div class="bottomlink">
-            <router-link to="/login/msglogin" replace>免密登录</router-link>
+            <router-link to="" replace>免密登录</router-link>
             <router-link to="/login/getpwd">忘记密码</router-link>
             <router-link to="/register">注册账号</router-link>
         </div>
@@ -34,7 +34,7 @@ import toast from '../../components/toast.vue';
 
 import * as api from '../../api/account';
 import * as checkJs from '../../utils/pubfunc';
-import util from '../../utils/util.js';
+import * as util from '../../utils/util.js';
 
 export default {
     components: {
@@ -75,23 +75,48 @@ export default {
                 Mobile: this.mobile,
                 Password: this.password
             }
-            api.loginApi(params).then(
+            api.LoginApi(params).then(
                 res => {
                     if (res.data.Code == 200) {
-                        const token = res.data.result;
+                        //保存登录凭证
                         self.$store.dispatch('update_token', {
-                            token: res.data.Result.Token
+                            token: res.data.UserInfo.Token
                         }).then(() => {
-                            //存储用户信息到本地
-                            //window.localStorage.setItem('token', JSON.stringify(token));
-                            self.$router.go(-1);
+                            //存储用户信息
+                            self.$store.dispatch('update_userinfo',{
+                                userinfo:{
+                                    Id:res.data.UserInfo.Id,
+                                    NickName:res.data.UserInfo.NickName,
+                                    Portrait:res.data.UserInfo.Portrait,
+                                    Gender:res.data.UserInfo.Gender,
+                                    Region:res.data.UserInfo.Region,
+                                    Mobile:res.data.UserInfo.Mobile,
+                                    Role:res.data.UserInfo.Role,
+                                    StoreId:res.data.UserInfo.StoreId,
+                                }
+                            });
+                            //存储钱包信息
+                            self.$store.dispatch('update_walletinfo',{
+                                walletinfo:{
+                                    Id:res.data.WalletInfo.Id,
+                                    AccessCode:res.data.WalletInfo.AccessCode,
+                                    Cash:res.data.WalletInfo.Cash,
+                                    Benevolence:res.data.WalletInfo.Benevolence,
+                                    Earnings:res.data.WalletInfo.Earnings,
+                                    YesterdayEarnings:res.data.WalletInfo.YesterdayEarnings
+                                }
+                            }).then(()=>{
+                                self.$router.replace('/me');
+                            });
+
+                            
                         });
                     } else {
                         alertFuc(res.data.Message)
                     }
                 },
                 err => {
-                    alertFuc(err.response.data.error.details);
+                    alertFuc('网络错误，请稍后再试');
                 }
             )
         }
@@ -132,18 +157,7 @@ h1 {
 
 .loginbtn {
     margin-top: 3rem;
-    button {
-        width: 100%;
-        padding: 1.3rem 0;
-        font-size: 1.3rem;
-        color: #fff;
-        background: #096;
-        border: 0;
-        border-radius: 3px;
-        &:disabled {
-            background: #999;
-        }
-    }
+    
 }
 
 .bottomlink {

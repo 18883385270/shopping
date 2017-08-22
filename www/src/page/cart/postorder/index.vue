@@ -1,8 +1,22 @@
 <template>
     <div>
         <mi-header title="确认订单"></mi-header>
-        <mi-selectexpressaddress></mi-selectexpressaddress>
-        <mi-ordergoods></mi-ordergoods>
+        <div class="exadd" @click="showpicker">
+            <div class="tlt">收货地址</div>
+            <div class="cnt">
+                <div v-if="ExpressAddress">
+                    <p> {{ExpressAddress.Region}} {{ExpressAddress.Address}}</p>
+                    <p>{{ExpressAddress.Name}} {{ExpressAddress.Mobile|mobilehide}}</p>
+                </div>
+                <div class="noaddress" v-if="!ExpressAddress">选择收货地址</div>
+            </div>
+            <div class="change">
+                <svg>
+                    <use xlink:href="#rightarrowsline"></use>
+                </svg>
+            </div>
+        </div>
+        <mi-ordergoods :StoreCartGoods="StoreCartGoods"></mi-ordergoods>
         <div class="youhuiwarp">
             <div class="tablerow">
                 <div class="tlt">发票信息</div>
@@ -21,38 +35,102 @@
         <div class="paytype">
             <div class="total">
                 总价：
-                <span>￥50.5</span>
+                <span>￥{{CalTotalAmount()}}</span>
                 <p>包含运费:4.5元</p>
+                
             </div>
-            <button class="button warning">提交订单</button>
+            <button class="button warning" @click="PostOrderEvent">提交订单</button>
         </div>
+        <expressaddresspicker ref="expressaddresspicker" @expressaddressPickerEvent="expressaddressPickerHandle"></expressaddresspicker>
+        <mi-toast ref="toast"></mi-toast>
+
     </div>
 </template>
 
 <script>
 import header from '../../../components/header.vue';
 import vswitch from '../../../components/switch.vue';
-import paypassword from '../../../components/paypassword.vue';
-import selectexpressaddress from './selectexpressaddress.vue';
+import expressaddresspicker from '../../pickers/expressaddresspicker.vue'
+import toast from '../../../components/toast.vue'
 import ordergoods from './ordergoods.vue';
+import * as api from '../../../api/order'
+import * as checkJs from '../../../utils/pubfunc'
 
 
 export default {
     components: {
         'mi-header': header,
         'mi-switch': vswitch,
-        'mi-paypassword': paypassword,
-        'mi-selectexpressaddress': selectexpressaddress,
-        'mi-ordergoods': ordergoods
+        'mi-ordergoods': ordergoods,
+        'expressaddresspicker':expressaddresspicker,
+        'mi-toast':toast
     },
     data() {
         return {
-            isCashPay: false
+            ExpressAddress: {},
+            StoreCartGoods:[]
         }
     },
+    mounted(){
+        this.StoreCartGoods=this.$route.params.StoreCartGoods;
+    },
     methods: {
-        switchEventHandle(isOn) {
-            this.isCashPay = isOn;
+        showpicker() {
+            this.$refs.expressaddresspicker.show();
+        },
+        expressaddressPickerHandle(expressaddress) {
+            this.ExpressAddress = expressaddress;
+        },
+        CalTotalAmount(){
+            var amount=0;
+            this.StoreCartGoods.forEach(function (store, index) {
+                store.CartGoodses.forEach(function (goods) {
+                    amount+=(goods.Price*goods.Quantity)
+                });
+            });
+            return amount;
+        },
+        toPage(page,params){
+            this.$router.replace({name:page,params:params});
+        },
+        PostOrderEvent(){
+            let alertFuc = (msg) => {
+                const toast = this.$refs.toast;
+                toast.show(msg);
+                return false
+            }
+            
+            if(checkJs.isNullOrEmpty(this.ExpressAddress)){
+                alertFuc('请选择收货地址')
+	            return;
+            }
+            var cartGoodses=[];
+            this.StoreCartGoods.forEach(function (store, index) {
+                store.CartGoodses.forEach(function (goods) {
+                    cartGoodses.push(goods);
+                });
+            });
+            let totalamount=this.CalTotalAmount();
+            let params = {
+                ExpressAddress:this.ExpressAddress,
+                CartGoodses:cartGoodses
+            };
+            //提交订单
+            api.AddApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        var orderId=res.data.OrderId;
+                        var paymentId=res.data.PaymentId;
+                        //提交订单成功并且创建好待付款项目 进入支付页面
+                        this.toPage('pay',{amount:totalamount,orderid:orderId,paymentid:paymentId,type:'order',ordernumber:'',remark:''});
+                    } else {
+                        console.log(res.data.Message);
+                    }
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
         }
     }
 }

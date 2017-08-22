@@ -24,11 +24,12 @@
         <input type="text" placeholder="详细地址精确到门牌号" v-model="address" />
       </div>
     </div>
-    <div class="pd1">主体信息</div>
+    
+    <div class="pd1">主体信息（有营业执照请填写执照信息，否则填写店主身份证信息）</div>
     <div class="tablerow">
       <div class="tlt">主体名称</div>
       <div class="cnt">
-        <input type="text" placeholder="营业执照主体名称 / 身份证姓名" v-model="subjectname" />
+        <input type="text" placeholder="主体名称 / 身份证姓名" v-model="subjectname" />
       </div>
     </div>
     <div class="tablerow">
@@ -38,9 +39,11 @@
       </div>
     </div>
     <div class="tablerow">
-      <div class="tlt">主体照片</div>
-      <div class="cnt">
-        
+      <div class="tlt">证件照片</div>
+      <div>
+        <div style="padding:1rem 0;">
+                <imginputer placeholder="选择证件照片" size="small" @onChange="OnFileChangeHandle"></imginputer>
+            </div>
       </div>
     </div>
     <div class="btnwarp">
@@ -58,15 +61,18 @@
 
 <script>
 import header from '../../../../components/header.vue';
+import imginputer from '../../../../components/imginputer.vue'
 import regionpicker from '../../../../components/regionpicker.vue'
 import toast from '../../../../components/toast.vue'
 import * as api from '../../../../api/store'
 import * as checkJs from '../../../../utils/pubfunc'
+import * as util from '../../../../utils/util'
 
 export default {
   components: {
     'mi-header': header,
     'mi-regionpicker': regionpicker,
+    'imginputer':imginputer,
     'mi-toast': toast
   },
   data() {
@@ -75,12 +81,23 @@ export default {
       name:'',
       region: '',
       address:'',
+      accesscode:'',
       subjectname:'',
       subjectnumber:'',
       subjectpic:''
     }
   },
+  mounted(){
+    //检查用户身份，如果不是传递使者进入到开通传递大使页面
+    if(this.$store.state.global.userinfo.Role!='店主'){
+      this.$router.replace({path:'/bindex/ambassador'});
+    }
+  },
   methods: {
+    OnFileChangeHandle(file){
+            var ossfilename=util.uploadToOss(file,'subject');
+            this.subjectpic=ossfilename;
+        },
     selectRegion() {
       this.$refs.regionpicker.show();
     },
@@ -118,22 +135,33 @@ export default {
         alertFuc('请完善主体信息')
         return;
       }
+      if (checkJs.isNullOrEmpty(this.subjectpic)) {
+        alertFuc('请上传主体证件照片')
+        return;
+      }
       			
       let params = {
         Name:this.name,
         Description:'',
         Region:this.region,
         Address:this.address,
+        AccessCode:this.accesscode,
         Subject:{
           Name:this.subjectname,
           Number:this.subjectnumber,
-          Pic:''
+          Pic:this.subjectpic
         }
       };
       api.ApplyStoreApi(params).then(
         res => {
           if (res.data.Code == 200) {
             console.log('申请成功');
+            //转到成功页面
+            this.$router.replace({
+                name:'success',
+                params:{
+                    type:'tip',
+                    message:'申请成功，等待审核'}})
           } else {
             console.log(res.data.Message);
           }
@@ -148,37 +176,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.tablerow {
-  width: 100%;
-  display: flex;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  align-items: center;
-  .tlt {
-    width: 25%;
-    font-size: 1.4rem;
-    font-weight: 400;
-    padding: 1.2rem 0;
-    text-indent: 1rem;
-    vertical-align: center;
-  }
-  .cnt {
-    width: 75%;
-    text-align: right;
-    padding: 1.2rem 0;
-    margin-right: 1rem;
-    font-size: 1.3rem;
-    input {
-      width: 100%;
-      border: 0;
-      font-size: 1.4rem;
-      padding: 0.6rem 0;
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-}
+
 
 .mg-top20 {
   margin-top: 1rem;

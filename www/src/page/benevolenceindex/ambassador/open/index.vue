@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="btnwp">
-                <button class="button success" @click="toPage('pay',{amount:365,orderid:unpaygift.Id,type:'account',ordernumber:'',remark:''})">去支付</button>
+                <button class="button success" @click="toPage('pay',{amount:Amount,orderid:unpaygift.Id,type:'account',ordernumber:'',remark:''})">去支付</button>
             </div>
     
         </div>
@@ -118,12 +118,13 @@ import header from '../../../../components/header.vue'
 import toast from '../../../../components/toast.vue'
 import expressaddresspicker from '../../../pickers/expressaddresspicker.vue'
 import * as api from '../../../../api/account'
+import * as checkJs from '../../../../utils/pubfunc'
 
 export default {
     components: {
         'mi-header': header,
         'mi-toast': toast,
-        expressaddresspicker
+        'expressaddresspicker':expressaddresspicker
     },
     data() {
         return {
@@ -132,7 +133,8 @@ export default {
                 size: 'M'
             },
             expressaddress: null,
-            unpaygift:false
+            unpaygift:false,
+            Amount:10000
         }
     },
     mounted() {
@@ -157,7 +159,7 @@ export default {
             this.$router.push({ path: page });
         },
         toPage(page,params){
-            this.$router.push({name:page,params:params});
+            this.$router.replace({name:page,params:params});
         },
         reselect(){
             this.unpaygift=false;
@@ -175,6 +177,12 @@ export default {
                 return false
             }
 
+            if(checkJs.isNullOrEmpty(this.expressaddress))
+            {
+                alertFuc('请选择收货地址')
+	            return;
+            }
+
             let params = {
                 GiftInfo: this.giftinfo,
                 ExpressAddressInfo: this.expressaddress
@@ -182,9 +190,9 @@ export default {
             api.AddUserGiftApi(params).then(
                 res => {
                     if (res.data.Code == 200) {
-                        console.log('添加成功')
+                        //提交成功进入付款页面
                         var userGiftId=res.data.UserGiftId;
-                        this.toPage('pay',{amount:365,orderid:userGiftId,type:'account',ordernumber:'',remark:''});
+                        this.toPage('pay',{amount:this.Amount,orderid:userGiftId,type:'account',ordernumber:'',remark:''});
                         //到支付页面
                     } else {
                         console.log("返回错误码：" + res.data.Code);

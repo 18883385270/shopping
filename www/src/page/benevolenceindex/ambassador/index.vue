@@ -1,31 +1,26 @@
 <template>
     <div class="pagewp">
-        <mi-header title="传递大使"></mi-header>
+        <mi-header title="店主"></mi-header>
         <div class="rolebanner">
             <svg><use xlink:href="#consumer"></use></svg>
-            <h1>传递大使</h1>
-            <h2>大爱社会的传播者</h2>
+            <h1>店主</h1>
+            <h2>开通爱心商城，引爆销量</h2>
         </div>
         <div class="timop">
             <div>有效期：一年</div>
             <div>已开通：2454644人</div>
         </div>
         <div class="shuoming">
-            <div class="tlt">为什么要做传递大使?</div>
+            <div class="tlt">为什么要做店主?</div>
             <div class="cont">
-                <p>【1】可以成为大爱社会公益传播者</p>
-                <p>【2】每购物满100元，即可获得1个善心</p>
-                <p>【3】享有商家让利的5倍奖励</p>
-                <p>【4】享有分享直接客户消费5%的善心奖励，如消费1000元，可获得0.5个善心</p>
-                <p>【5】享有分享间接客户消费2.5%的善心奖励，如消费1000元，可获得0.25个善心</p>
-                <p>【6】享有推荐商家，其销售额3%善心奖励，如店销售10000元，可获得3个善心</p>
+                <p>成为店主可以开通爱心店铺，销售产品</p>
             </div>
         </div>
         <div class="shuoming">
             <div class="tlt">开通方式</div>
             <div class="cont">
-                <p class="nianfei">缴纳 ￥365元/年</p>
-                <p>注意：一经开通，会员费概不退还</p>
+                <p class="nianfei">缴纳 ￥10000元/年</p>
+                <p>注意：一经开通，平台服务费概不退还</p>
             </div>
         </div>
         <div class="shuoming">

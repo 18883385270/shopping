@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import util from '../utils/util.js';
+import * as util from '../utils/util.js';
 
 export default {
     props: ['isHeadShow', 'type','title','isfullscreen'],
@@ -145,7 +145,6 @@ export default {
                         background: #fff;
                         .head {
                             width: 100%;
-                            background: #C1272D;
                             .close {
                                 width: 1.5rem;
                                 height: 2rem;
@@ -154,15 +153,14 @@ export default {
                                 cursor: pointer;
                                 text-align: center;
                                 line-height: 2rem;
-                                color: #fff;
+                                color: #333;
                                 svg{
-                                    width: 1.5rem;height: 1.5rem;fill:#fff;
+                                    width: 1.5rem;height: 1.5rem;fill:#333;
                                 }
                             }
                             .title {
                                 width: 100%;
                                 line-height: 4rem;
-                                color: #fff;
                                 font-size: 1.5rem;
                                 text-align: center;
                                 padding-left: 1.5rem;

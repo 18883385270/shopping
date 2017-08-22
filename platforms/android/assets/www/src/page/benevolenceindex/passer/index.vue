@@ -25,7 +25,7 @@
                 <p>【1】单次消费满99元</p>
                 <p>【2】或者推荐10个以上善心使者</p>
             </div>
-            <button class="sharebtn">分享给好友</button>
+            <button class="button warning">分享给好友</button>
         </div>
         
     
@@ -96,17 +96,7 @@ export default {
             }
         }
     }
-    .sharebtn {
-        text-align: center;
-        width:100%;
-        display: block;
-        margin-top: 2rem;
-        font-size: 1.3rem;
-        background: #C1272D;
-        color:#fff;
-        border: 0;
-        padding: 1rem 0;
-    }
+    
 }
 </style>
 

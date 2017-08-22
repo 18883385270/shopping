@@ -3,10 +3,10 @@
         <mi-header title="我的善心"></mi-header>
         <div class="bwarp">
             <svg class="topicon">
-                <use xlink:href="#consumer"></use>
+                <use xlink:href="#integral"></use>
             </svg>
             <h2>您的当前善心值为</h2>
-            <h1>{{this.$store.state.global.walletinfo.benevolence}}</h1>
+            <h1>{{this.$store.state.global.walletinfo.Benevolence}}</h1>
             <p> 善心值实时更新</p>
             <div class="utils">
                 <div>

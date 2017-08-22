@@ -21,6 +21,8 @@
             <div class="cont">
                 <p class="step">注册会员</p>
                 <p class="step_deliver">↓</p>
+                <p class="step">成为店铺所有人</p>
+                <p class="step_deliver">↓</p>
                 <p class="step">填写店铺资料，等待审核</p>
                 <p class="step_deliver">↓</p>
                 <p class="step">审核通过，开通线下线上店铺</p>
@@ -30,29 +32,51 @@
         <div class="shuoming">
             <div class="tlt">申请条件</div>
             <div class="cont">
-                <p>【1】已是传递大使身份</p>
+                <p>【1】已是店铺所有人身份</p>
                 <p>【2】提供产品或服务的真实公司、个体工商户、个人</p>
                 <p>【3】可提供国家法律允许经营的合法商品或服务</p>
             </div>
-            <button class="button success" @click="goPage('/bindex/storeowner/open')">知道了，去开店</button>
+            <button v-if="!this.$store.state.global.userinfo.StoreId" class="button success" @click="goPage('/bindex/storeowner/open')">知道了，去开店</button>
+            <button v-if="this.$store.state.global.userinfo.StoreId" class="button info" @click="goPage('/storemgr')">您已开店，管理我的店铺</button>
         </div>
-        
-
-        
-    
     </div>
 </template>
 
 <script>
 import header from '../../../components/header.vue';
+import * as api from '../../../api/store'
 
 export default {
     components: {
         'mi-header': header
     },
+    data(){
+        return{
+            storeinfo:{}
+        }
+    },
+    mounted() {
+    
+    },
     methods:{
         goPage(page){
             this.$router.push({path:page})
+        },
+        getStoreInfo(){
+            //加载店铺信息
+            let params = {};
+            api.InfoApi(params).then(
+            res => {
+                if (res.data.Code == 200) {
+                this.storeinfo = res.data.StoreInfo;
+                } else {
+                console.log(res.data.Message);
+                }
+            },
+            err => {
+                console.log('网络错误');
+            }
+            )
         }
     }
 }

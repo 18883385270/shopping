@@ -4,35 +4,35 @@
         <div class="tablerow">
             <div class="tlt">收货人</div>
             <div class="cnt">
-                <input type="text" placeholder="姓名" v-model="name" />
+                <input type="text" placeholder="姓名" v-model="Name" />
             </div>
         </div>
         <div class="tablerow">
             <div class="tlt">手机号码</div>
             <div class="cnt">
-                <input type="number" placeholder="11位手机号" v-model="mobile" />
+                <input type="number" placeholder="11位手机号" v-model="Mobile" />
             </div>
         </div>
         <div class="tablerow">
             <div class="tlt">地区</div>
             <div class="cnt" @click="selectRegion">
-                {{region}}
+                {{Region}}
             </div>
         </div>
         <div class="tablerow">
             <div class="tlt">详细地址</div>
             <div class="cnt">
-                <input type="text" placeholder="街道门牌信息" v-model="address"/>
+                <input type="text" placeholder="街道门牌信息" v-model="Address"/>
             </div>
         </div>
         <div class="tablerow">
             <div class="tlt">邮政编码</div>
             <div class="cnt">
-                <input type="number" placeholder="邮政编码" v-model="zip"/>
+                <input type="number" placeholder="邮政编码" v-model="Zip"/>
             </div>
         </div>
         <div class="btnwarp">
-            <button type="button" @click="save">保存</button>
+            <button type="button" class="button success" @click="save">保存</button>
         </div>
         <mi-regionpicker ref="regionpicker" @regionPickerEvent="regionPickerHandle"></mi-regionpicker>
         <mi-toast ref="toast"></mi-toast>
@@ -55,11 +55,11 @@ export default {
     },
     data(){
         return{
-            name:'',
-            mobile:'',
-            region:'',
-            address:'',
-            zip:''
+            Name:'',
+            Mobile:'',
+            Region:'',
+            Address:'',
+            Zip:''
         }
     },
     methods: {
@@ -68,7 +68,7 @@ export default {
         },
         regionPickerHandle(String){
             console.log(String);
-            this.region=String;
+            this.Region=String;
         },
         save(){
             let alertFuc = (msg) => {
@@ -78,33 +78,31 @@ export default {
             }
             //字段验证
             let self=this;
-            if (!checkJs.isPhone(this.mobile)) {
-                alertFuc('请输入正确的手机号码！')
-                return;
-            }
-            if (checkJs.isNullOrEmpty(this.name)) {
+            
+            if (checkJs.isNullOrEmpty(this.Name)) {
                 alertFuc('请填写收货人姓名')
                 return;
             }
-            if (checkJs.isNullOrEmpty(this.region)) {
+            if (!checkJs.isPhone(this.Mobile)) {
+                alertFuc('请输入正确的手机号码！')
+                return;
+            }
+            if (checkJs.isNullOrEmpty(this.Region)) {
                 alertFuc('请选择地区')
                 return;
             }
-            if (checkJs.isNullOrEmpty(this.address)) {
+            if (checkJs.isNullOrEmpty(this.Address)) {
                 alertFuc('请填写详细地址')
                 return;
             }
-            if (!checkJs.isZip(this.zip)) {
-                alertFuc('请填写正确的邮编')
-                return;
-            }
+            
 
             let params = {
-                Name: this.name,
-                Mobile: this.mobile,
-                Region: this.region,
-                Address:this.address,
-                Zip:this.zip
+                Name: this.Name,
+                Mobile: this.Mobile,
+                Region: this.Region,
+                Address:this.Address,
+                Zip:this.Zip
             }
             api.AddExpressAddressApi(params).then(
                 res => {
@@ -163,18 +161,6 @@ export default {
     padding: 1rem;
     background: #fff;
 
-    button {
-        width: 100%;
-        padding: 1.2rem 0;
-        background: #9c6;
-        border: 0;
-        color: #fff;
-        font-size: 1.3rem;
-        border-radius: 3px;
-        &:disabled {
-            background: #ccc;
-        }
-    }
 }
 </style>
 

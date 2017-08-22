@@ -2,23 +2,23 @@
     <div class="warp">
         <div class="control">
             <div class="left hook" @click="goBackEvent"><svg> <use xlink:href="#star"></use> </svg></div>
-            <div class="right hook" @click="goodSearchEvent"><svg> <use xlink:href="#qrscanline"></use> </svg></div>
+            <div class="right hook" @click="qrScan"><svg> <use xlink:href="#qrscanline"></use> </svg></div>
         </div>
         <div class="benevolenceindex">
             <!-- <i class="index_icon"></i> -->
             <svg class="index_icon"> <use xlink:href="#index"></use> </svg>
-            <h2>昨日善心指数</h2>
-            <p>0.2345</p>
-            <p class="myearnings">昨日激励 {{this.$store.state.global.walletinfo.yesterdayEarnings|currency('￥',2)}} 元</p>
-            <p class="earningtip">注意：每晚23.00点后计算今日指数，激励善心</p>
+            <h2>善心指数</h2>
+            <p>{{BenevolenceIndex.CurrentBenevolenceIndex}}</p>
+            <p class="myearnings">上次激励 {{this.$store.state.global.walletinfo.YesterdayEarnings|currency('￥',2)}} 元</p>
+            <p class="earningtip">注意，系统用当日23.00时的善心指数激励善心</p>
         </div>
         <div class="button_bar">
             <div>
-                <p>25634 <i>家</i></p>
+                <p>{{BenevolenceIndex.StoreCount}} <i>家</i></p>
                 联盟商家
             </div>
             <div>
-                <p>25634 <i>个</i></p>
+                <p>{{BenevolenceIndex.ConsumerCount}} <i>个</i></p>
                 爱心使者
             </div>
             <div>
@@ -31,13 +31,50 @@
 </template>
 
 <script>
+import * as checkJs from '../../utils/pubfunc'
+
 export default {
+    props:['BenevolenceIndex'],
     methods:{
         goBackEvent(){
             
         },
-        goodSearchEvent(){
+        qrScan(){
+            let self=this;
+            cordova.plugins.barcodeScanner.scan(  
+                function (result) {  
+                    // alert("We got a barcode\n" +  
+                    //         "Result: " + result.text + "\n" +  
+                    //         "Format: " + result.format + "\n" +  
+                    //         "Cancelled: " + result.cancelled);
+                    //format QR_CODE 二维码，EAN_13条形码
 
+                    if(result.format=='QR_CODE') 
+                    {//如果是二维码 
+                        //判断是否是用户的二维码
+                        var userId=checkJs.GetUserId(result.text);
+                        if(!checkJs.isNullOrEmpty(userId))
+                        {
+                            if(checkJs.isNullOrEmpty(self.$store.state.global.token))
+                            {//未登录 进入注册页面
+                                self.$router.push({name:'register',params:{UserId:userId}});
+                            }
+                        }
+                        else{
+                            //显示扫描信息
+                            alert('扫描结果：'+result.text)
+                        }
+                        
+                    }
+                    if(result.format=='EAN_13'){
+                        alert('扫描结果：'+result.text)
+                    }
+                    
+                },   
+                function (error) {  
+                    alert("扫描失败: " + error);  
+                }  
+            );  
         }
     }
 }

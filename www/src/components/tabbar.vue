@@ -22,6 +22,7 @@
       <p>善心指数</p>
     </div>
     <div class="tabbar_item" :class="{active: tabbarIndex == 3}" @click="tabbarEvent(3)">
+      <i class="bedge" v-if="this.$store.state.global.userinfo.CartGoodsCount">{{this.$store.state.global.userinfo.CartGoodsCount}}</i>
       <svg>
         <use xlink:href="#cart"></use>
       </svg>
@@ -37,7 +38,7 @@
 </template>
 <script>
 export default {
-  props: ['selected'],
+  props: ['selected','cartgoodscount'],
   data() {
     return {
       tabbarIndex: this.selected
@@ -83,6 +84,18 @@ export default {
     color: #888;
     font-size: 0.9rem;
     text-align: center;
+    .bedge{
+      display:inline-block;
+      position:absolute;
+      color:#c03;
+      border:1px solid #c03;
+      padding:0 0.3rem;
+      border-radius: 1rem;
+      font-style:normal;
+      background:#fff;
+      margin-top:0.2rem;
+      line-height:1.1rem;
+    }
     svg {
       width: 1.7rem;display:block;
       height: 1.7rem;

@@ -39,7 +39,7 @@
                 <p>【4】运营股东或培训股东（拥有五千个善心，市级）</p>
                 <p>【5】行业股东（拥有一千个善心，县级）</p>
             </div>
-            <button class="sharebtn">知道了，去申请</button>
+            <button class="button err">知道了，去申请</button>
         </div>
         
 
@@ -115,17 +115,7 @@ export default {
             }
         }
     }
-    .sharebtn {
-        text-align: center;
-        width:100%;
-        display: block;
-        margin-top: 2rem;
-        font-size: 1.3rem;
-        background: #C1272D;
-        color:#fff;
-        border: 0;
-        padding: 1rem 0;
-    }
+    
     
 }
 </style>

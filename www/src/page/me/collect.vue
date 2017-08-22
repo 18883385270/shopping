@@ -6,11 +6,11 @@
         </div>
         <div class="body">
             <div>
-                <b class="number">12 </b>商品</div>
+                <b class="number">0 </b>商品</div>
             <div>
-                <b class="number">23 </b>店铺</div>
+                <b class="number">0 </b>店铺</div>
             <div>
-                <b class="number">3 </b>受助人</div>
+                <b class="number">0 </b>受助人</div>
             <div>
                 <b class="number"> </b>
             </div>

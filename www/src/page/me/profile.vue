@@ -5,12 +5,12 @@
     <div class="profilewp">
         <div class="warp">
             <div class="portrait">
-                <img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1733071988,3600838707&fm=117&gp=0.jpg" />
+                <img src="dist/defaultportrait.png" />
             </div>
             <div class="name" @click="goPage('/me/profile')">
-                <h3>{{this.$store.state.global.userinfo.nickname}}
+                <h3>{{this.$store.state.global.userinfo.NickName}}
                 </h3>
-                <span class="phone">Id:{{this.$store.state.global.userinfo.mobile}}</span>
+                <span class="phone">{{this.$store.state.global.userinfo.Mobile|mobilehide}}</span>
             </div>
             <div class="qrCode">
                 <svg @click="openMyQrCode">
@@ -22,8 +22,8 @@
             </div>
         </div>
         <div class="rolelist">
-            <span class="primary">{{this.$store.state.global.userinfo.role}}</span>
-            <span class="warning" v-if="this.$store.state.global.userinfo.storeid">店主</span>
+            <span class="primary">{{this.$store.state.global.userinfo.Role}}</span>
+            <span class="warning" v-if="this.$store.state.global.userinfo.StoreId">已开店</span>
         </div>
     </div>
 </template>
@@ -46,7 +46,6 @@ export default {
 <style lang="less" scoped>
 .profilewp {
     width: 100%;
-    padding: 1rem 0rem;
     background: #fff;
     .warp {
 
@@ -82,8 +81,8 @@ export default {
             padding-right: 0rem;
             svg {
                 fill: #666;
-                width: 2.5rem;
-                height: 2.5rem;
+                width: 2rem;
+                height: 2rem;
                 margin-right: 1rem;
             }
         }

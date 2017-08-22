@@ -8,25 +8,20 @@
       <span :class="{'active': !tabState}" @click="tabEvent2">参数</span>
     </div>
     <div class="detail" v-show="tabState">
-      <img :src="item" v-for="item in detailList" />
+      <p v-html="GoodsDetails.Description"></p>
     </div>
     <div class="attr" v-show="!tabState">
-      <img :src="item" v-for="item in attrList" />
+      商品参数
     </div>
   </div>
 </template>
 <script>
 export default {
-  props: ['detailData'],
-  created() {
-    this.detailList = this.detailData.detailList;
-    this.attrList = this.detailData.attrList;
-  },
+  props: ['GoodsDetails'],
+  
   data() {
     return {
       tabState: true,
-      detailList: [],
-      attrList: []
     };
   },
   components: {},
@@ -73,7 +68,6 @@ export default {
   .detail,
   .attr {
     width: 100%;
-    font-size: 0;
     img {
       width: 100%;
     }

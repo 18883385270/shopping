@@ -1,26 +1,26 @@
 <template>
     <div class="orderlswarp">
-        <div class="orderwarp" v-for="order in orders">
-            <div class="header">
-                <div class="ordernumber">订单号：{{order.orderNumber}}</div>
-                <div class="orderstatus">{{order.status}}</div>
+        <div class="orderwarp" v-for="StoreOrder in StoreOrders">
+            <div class="header" @click="goInfoPage(StoreOrder)">
+                <div class="ordernumber">订单号：{{StoreOrder.Number}}</div>
+                <div class="orderstatus">{{StoreOrder.Status}}</div>
             </div>
-            <div class="ordgoods">
-                <div class="storetlt">{{order.storeName}}</div>
-                <div class="goods" v-for="goods in order.goodses" @click="goPage('/orders/info')">
+            <div class="ordgoods" >
+                <div class="storetlt">{{StoreOrder.StoreName}}</div>
+                <div class="goods" v-for="Goods in StoreOrder.StoreOrderGoodses">
                     <div class="goodspic">
-                        <img :src="goods.pic" />
+                        <img :src="Goods.GoodsPic" />
                     </div>
                     <div class="goodstlt">
-                        <p class="goodsname">{{goods.name}}</p>
-                        <p>{{goods.specificationName}} {{goods.quantity}}件</p>
+                        <p class="goodsname">{{Goods.GoodsName}}</p>
+                        <p>{{Goods.SpecificationName}} {{Goods.Quantity}}件</p>
                     </div>
                 </div>
             </div>
             <div class="ordertools">
-                <div class="price">总价：<span>￥{{order.total}}</span></div>
+                <div class="price">总计：<span>{{StoreOrder.Total|currency('￥',2)}}</span></div>
                 <div class="btns">
-                    <button>再次购买</button><button class="del">删除</button>
+                    <!-- <button>再次购买</button><button class="del">删除</button> -->
                 </div>
             </div>
         </div>
@@ -29,78 +29,38 @@
 </template>
 
 <script>
+import * as api from '../../../api/storeorder'
+
 export default {
     components:{
 
     },
     data(){
         return{
-            orders:[
-                {
-                    "orderNumber":353448254,
-                    "total":34.54,
-                    "status":'交易成功',
-                    "storeName":'公司自营',
-                    "goodses":[
-                        {
-                            "name":"京东超市上海特产 梅林午餐肉猪肉罐头",
-                            "pic":"https://i8.mifile.cn/v1/a1/38f1fa24-815b-c6a6-925f-65460ce541e4.webp?width=360&height=360",
-                            "specificationName":"340g 装",
-                            "quantity":1,
-                            "price":34.5
-                        },
-                        {
-                            "name":"小米（MI）便携鼠标 无线蓝牙4.0 男女家用/笔记本电脑/鼠标",
-                            "pic":"https://i8.mifile.cn/v1/a1/38f1fa24-815b-c6a6-925f-65460ce541e4.webp?width=360&height=360",
-                            "specificationName":"银色",
-                            "quantity":1,
-                            "price":99
-                        }
-                    ]
-                },
-                {
-                    "orderNumber":353448254,
-                    "total":34.54,
-                    "status":'交易成功',
-                    "storeName":'公司自营',
-                    "goodses":[
-                        {
-                            "name":"小米（MI）便携鼠标 无线蓝牙4.0 男女家用/笔记本电脑/鼠标",
-                            "pic":"https://i8.mifile.cn/v1/a1/38f1fa24-815b-c6a6-925f-65460ce541e4.webp?width=360&height=360",
-                            "specificationName":"银色",
-                            "quantity":1,
-                            "price":99
-                        }
-                    ]
-                },
-                {
-                    "orderNumber":353448254,
-                    "total":34.54,
-                    "status":'交易成功',
-                    "storeName":'公司自营',
-                    "goodses":[
-                        {
-                            "name":"京东超市上海特产 梅林午餐肉猪肉罐头",
-                            "pic":"https://i8.mifile.cn/v1/a1/38f1fa24-815b-c6a6-925f-65460ce541e4.webp?width=360&height=360",
-                            "specificationName":"340g 装",
-                            "quantity":1,
-                            "price":34.5
-                        },
-                        {
-                            "name":"小米（MI）便携鼠标 无线蓝牙4.0 男女家用/笔记本电脑/鼠标",
-                            "pic":"https://i8.mifile.cn/v1/a1/38f1fa24-815b-c6a6-925f-65460ce541e4.webp?width=360&height=360",
-                            "specificationName":"银色",
-                            "quantity":1,
-                            "price":99
-                        }
-                    ]
-                }
-            ]
+            StoreOrders:[]
         }
     },
+    mounted(){
+        //加载用户订单
+        let params = {
+            Status:0
+        };
+        api.UserOrdersApi(params).then(
+            res => {
+                if (res.data.Code == 200) {
+                    this.StoreOrders=res.data.StoreOrders;
+                } else {
+                    console.log(res.data.Message);
+                }
+            },
+            err => {
+                console.log('网络错误');
+            }
+        )
+    },
     methods:{
-        goPage(page){
-            this.$router.push({path:page});
+        goInfoPage(order){
+            this.$router.push({name:'orderinfo',params:{StoreOrder:order}});
         }
     }
 }

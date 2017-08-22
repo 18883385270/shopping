@@ -5,14 +5,37 @@ import Cordova from './Cordova.js'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 
+//引入vue2 filter
+import Vue2Filters from 'vue2-filters'
+Vue.use(Vue2Filters)
+
+//安装自定义filter
+import * as filters from './filters'
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key]);
+});
+
+//引入图片懒加载
+import VueLazyload from 'vue-lazyload'
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: 'dist/error.png',
+  loading: 'dist/loading.gif',
+  attempt: 1
+})
+
 import store from './store'
 import router from './router'
 import { sync } from 'vuex-router-sync'
+
+
 
 const FastClick = require('fastclick')
 FastClick.attach(document.body)
 
 sync(store, router)
+
+
 
 // Load Vue instance
 new Vue({
@@ -21,6 +44,6 @@ new Vue({
   el: '#app',
   render: h => h(App),
   mounted() {
-    Cordova.initialize()
+    Cordova.initialize();
   }
 })

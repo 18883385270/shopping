@@ -6,7 +6,7 @@
                 <use xlink:href="#cash"></use>
             </svg>
             <h2>我的现金</h2>
-            <h1>{{this.$store.state.global.walletinfo.cash|currency('￥',2)}}</h1>
+            <h1>{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}</h1>
     
             <div class="btns">
                 <button type="button" class="button success" @click="goPage('/wallet/cash/recharge')">充值</button>
@@ -50,9 +50,6 @@ export default {
         height: 6rem;
         margin: 2rem auto 1rem auto;
         fill: #f93;
-        padding: 0.8rem;
-        border: 2px solid #f93;
-        border-radius: 50%;
         display: block;
     }
     h2 {

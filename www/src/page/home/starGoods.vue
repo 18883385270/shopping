@@ -6,32 +6,28 @@
     <div class="boxbanner">
       {{title}}
     </div>
-    <div class="item" v-for="(good, index) in goodsls" @click="productEvent" :class="{'item2': index % 2 !== 0}">
+    <div class="item" v-for="(Goods, index) in Goodses" @click="goGoodsPage(Goods)" :class="{'item2': index % 2 !== 0}">
       <div class="top">
-        <img :src="good.imgSrc" />
+        <img v-lazy="Goods.Pics[0]" />
       </div>
       <div class="bottom">
-        <span class="title">{{ good.title }}</span>
-        <span class="desc">{{ good.desc }}</span>
-        <span class="price">￥{{ good.price }}</span>
+        <span class="title">{{ Goods.Name |truncate(20)}}</span>
+        <span class="price">{{ Goods.Price |currency('￥',2) }}</span>
       </div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  props: ['goodslist','title'],
-  created() {
-    this.goodsls = this.goodslist;
-  },
-  data() {
-    return {
-      goodsls: []
-    };
+  props: ['Goodses','title'],
+  data(){
+    return{
+      imgUrl:"https://i8.mifile.cn/v1/a1/9f7e141c-87a7-82c6-7170-599504ce2630.webp?width=360&height=360"
+    }
   },
   methods: {
-    productEvent() {
-      this.$router.push({ path: '/goodslist/info' });
+    goGoodsPage(goods) {
+      this.$router.push({name:'goodsinfo',params:{id:goods.Id}});
     }
   }
 };
@@ -55,7 +51,7 @@ export default {
     float: left;
     box-sizing: border-box;
     border-right: 0.1rem solid #fff;
-    min-height: 25rem;
+    height: 28rem;
     font-size: 0;
     .top {
       padding:1rem;

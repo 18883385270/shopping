@@ -5,15 +5,15 @@
 <template>
     <div class="stepwarp">
         <table class="steptable">
-            <tr class="steptr" v-for="step in steps">
+            <tr class="steptr" v-for="step in ExpressSteps">
                 <td class="steptd">
                     <i></i>
                     <div class="bgline"></div>
                 </td>
                 <td class="cnttd">
                     <div>
-                        {{step}}
-                        <p class="time">2017-3-23</p>
+                        {{step.context}}
+                        <p class="time">{{step.time}}</p>
                     </div>
                 </td>
             </tr>
@@ -23,17 +23,7 @@
 
 <script>
 export default {
-    data() {
-        return {
-            steps: [
-                '使用flex布局的容器（flex container），它内部的元使用flex布局的容器（flex container），它内部的元使用flex布局的容器（flex container），它内部的元素自动成为flex项目（flex item）。容器拥有两根隐形的轴，水平的主轴（main axis），和竖直的交叉轴',
-                '提交订单提交订单提交订单提交订单提交订单提交订单提交订单',
-                '配送中提交订单提交订单提交订单提交订单提交订单',
-                '交易提交订单提交订单提交订单提交订单提交订单提交订单提交订单完成',
-                '此外，需注意使用flex容器内元素，即flex item的float，clear、vertical-align属性将失效。'],
-            currentstep: 1
-        }
-    }
+    props:['ExpressSteps']
 }
 </script>
 

@@ -1,7 +1,4 @@
-/**
- * 判断字符串是否为空
- * @param  val
- */
+
 export const isNullOrEmpty = (val) => {
   if(val === '' ||
 	val === 0 ||
@@ -57,6 +54,22 @@ export const encryptedPassword =(pwd) => {
   let pwdkey = md5(pwd);
   return pwdkey;
 }
+
+//判断是否是平台用户二维码并返回用户id
+export const GetUserId=(value)=>{
+	// if( !value || typeof value !== 'string' ) return ''
+	// var userId= value.match(/^http:\/\/www.wftx666.com\/user\/(\S*)$/)[1];
+	var match = value.match(/^http:\/\/www.wftx666.com\/user\/(\S*)$/);
+	if(match!=null && match.length==2)
+	{
+		return match[1];
+	}
+	else{
+		return '';
+	}
+}
+
+
 
 
 

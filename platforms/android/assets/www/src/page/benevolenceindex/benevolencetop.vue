@@ -2,14 +2,15 @@
     <div class="warp">
         <div class="control">
             <div class="left hook" @click="goBackEvent"><svg> <use xlink:href="#star"></use> </svg></div>
-            <div class="right hook" @click="goodSearchEvent"><svg> <use xlink:href="#qrscanline"></use> </svg></div>
+            <div class="right hook" @click="qrScan"><svg> <use xlink:href="#qrscanline"></use> </svg></div>
         </div>
         <div class="benevolenceindex">
             <!-- <i class="index_icon"></i> -->
             <svg class="index_icon"> <use xlink:href="#index"></use> </svg>
-            <h2>今日善心指数</h2>
+            <h2>善心指数</h2>
             <p>0.2345</p>
-            <p class="myearnings">今日激励 32 元</p>
+            <p class="myearnings">上次激励 {{this.$store.state.global.walletinfo.yesterdayEarnings|currency('￥',2)}} 元</p>
+            <p class="earningtip">每晚23.00点后计算当日善心指数，并激励善心</p>
         </div>
         <div class="button_bar">
             <div>
@@ -30,13 +31,49 @@
 </template>
 
 <script>
+import * as checkJs from '../../utils/pubfunc'
+
 export default {
     methods:{
         goBackEvent(){
-            this.$router.push({path:'/login'});
+            
         },
-        goodSearchEvent(){
+        qrScan(){
+            let self=this;
+            cordova.plugins.barcodeScanner.scan(  
+                function (result) {  
+                    // alert("We got a barcode\n" +  
+                    //         "Result: " + result.text + "\n" +  
+                    //         "Format: " + result.format + "\n" +  
+                    //         "Cancelled: " + result.cancelled);
+                    //format QR_CODE 二维码，EAN_13条形码
 
+                    if(result.format=='QR_CODE') 
+                    {//如果是二维码 
+                        //判断是否是用户的二维码
+                        var userId=checkJs.GetUserId(result.text);
+                        if(!checkJs.isNullOrEmpty(userId))
+                        {
+                            if(checkJs.isNullOrEmpty(self.$store.state.global.token))
+                            {//未登录 进入注册页面
+                                self.$router.push({name:'register',params:{UserId:userId}});
+                            }
+                        }
+                        else{
+                            //显示扫描信息
+                            alert('扫描结果：'+result.text)
+                        }
+                        
+                    }
+                    if(result.format=='EAN_13'){
+                        alert('扫描结果：'+result.text)
+                    }
+                    
+                },   
+                function (error) {  
+                    alert("扫描失败: " + error);  
+                }  
+            );  
         }
     }
 }
@@ -90,7 +127,10 @@ export default {
         p{
             font-size:2rem;
             &.myearnings{
-                font-size:1.3rem;margin: 1rem 0;
+                font-size:1.3rem;margin: 1rem 0 0.5rem 0;
+            }
+            &.earningtip{
+                font-size:1rem;margin-bottom:1rem;
             }
         }
 

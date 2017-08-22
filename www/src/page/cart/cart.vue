@@ -1,28 +1,34 @@
 <template>
     <div class="cartwarper">
-        <div class="storewarp" v-for="(store,storeindex) in mycart">
+        <div class="emptybox" v-if="!StoreCartGoods.length">
+            <svg>
+                <use xlink:href="#cartline"></use>
+            </svg>
+            <p> 购物车中，没有任何商品，去逛逛吧</p>
+        </div>
+        <div class="storewarp" v-for="(store,storeindex) in StoreCartGoods">
             <div class="storetitle">
                 <div class="checkbar">
-                    <input type="checkbox" :id="'stcheck'+storeindex" class="regular-checkbox" @click="storeCheckAll(store.storeId,$event)">
+                    <input type="checkbox" :id="'stcheck'+storeindex" class="regular-checkbox" @click="storeCheckAll(store.StoreId,$event)">
                     <label :for="'stcheck'+storeindex"></label>
                 </div>
-                <div class="title">{{store.storeName}}</div>
+                <div class="title">{{store.StoreName}}</div>
             </div>
-            <div class="cuxiao">{{store.youhui}}</div>
+            <div class="cuxiao">店铺的优惠信息</div>
             <div class="storecontent">
-                <div class="goodswarp" v-for="(goods,goodsindex) in store.goodses" v-bind:class="{selected:goods.checked}">
+                <div class="goodswarp" v-for="(goods,goodsindex) in store.CartGoodses" v-bind:class="{selected:goods.Checked}">
                     <div class="checkbar">
-                        <input type="checkbox" :id="'check'+storeindex+goodsindex" class="regular-checkbox" v-model="goods.checked">
+                        <input type="checkbox" :id="'check'+storeindex+goodsindex" class="regular-checkbox" v-model="goods.Checked">
                         <label :for="'check'+storeindex+goodsindex"></label>
                     </div>
                     <div class="goodsimg">
-                        <img src="https://i8.mifile.cn/v1/a1/38f1fa24-815b-c6a6-925f-65460ce541e4.webp?width=360&height=360" />
+                        <img :src="goods.GoodsPic" />
                     </div>
                     <div class="goodsinfo">
-                        <p class="goodsname">{{goods.name}}</p>
-                        <p class="goodsspecification">规格：{{goods.specificationName}}</p>
-                        <p class="goodsprice">￥{{goods.price}}
-                            <span>库存{{goods.stock}}件</span>
+                        <p class="goodsname">{{goods.GoodsName}}</p>
+                        <p class="goodsspecification">规格：{{goods.SpecificationName}}</p>
+                        <p class="goodsprice">{{goods.Price|currency('￥',2)}}
+                            <span>库存{{goods.Stock}}件</span>
                         </p>
                         <p class="buycount">
                             <span class="del" @click="delGoods(goods)">
@@ -30,7 +36,7 @@
                                     <use xlink:href="#delline"></use>
                                 </svg>
                             </span>
-                            <mi-buycount v-model="goods.buycount" :stock="goods.stock"></mi-buycount>
+                            <mi-buycount v-model="goods.Quantity" :stock="goods.Stock"></mi-buycount>
                         </p>
                     </div>
                 </div>
@@ -66,9 +72,10 @@
 </template>
 
 <script>
-import buycount from '../../components/buycount.vue';
-import modal from '../../components/modal.vue';
-import data from '../../../../data.json';
+import buycount from '../../components/buycount.vue'
+import modal from '../../components/modal.vue'
+import * as api from '../../api/cart'
+import * as checkJs from '../../utils/pubfunc'
 
 export default {
     components: {
@@ -77,21 +84,40 @@ export default {
     },
     data() {
         return {
-            mycart: [],
+            StoreCartGoods: [],
             todelgoods: {}
         }
     },
     created() {
-        this.mycart = data.mycart;
+        //this.mycart = data.mycart;
+    },
+    mounted(){
+        this.getList();
     },
     methods: {
+        getList(){
+            //获取购物车数据
+            let params = {};
+            api.InfoApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        this.StoreCartGoods=res.data.StoreCartGoods;
+                    } else {
+                        console.log(res.data.Message);
+                    }
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
+        },
         storeCheckAll(storeid, evnt) {
             //店铺级别全选
             var checkbox = evnt.target;
-            this.mycart.forEach(function (store, index) {
-                if (storeid == store.storeId) {
-                    store.goodses.forEach(function (goods) {
-                        goods.checked = checkbox.checked;
+            this.StoreCartGoods.forEach(function (store, index) {
+                if (storeid == store.StoreId) {
+                    store.CartGoodses.forEach(function (goods) {
+                        goods.Checked = checkbox.checked;
                     });
                 }
             });
@@ -99,39 +125,56 @@ export default {
         checkAll(evnt){
             //全选
             var checkbox = evnt.target;
-            this.mycart.forEach(function (store, index) {
-                store.goodses.forEach(function (goods) {
-                    goods.checked = checkbox.checked;
+            this.StoreCartGoods.forEach(function (store, index) {
+                store.CartGoodses.forEach(function (goods) {
+                    goods.Checked = checkbox.checked;
                 });
             });
         },
         delGoods(goods) {
             this.todelgoods = goods;
-            console.log(this.todelgoods);
             this.$refs.confirm.modalOpen();
         },
         confirmDelGoods(num) {
-            console.log(num);
             console.log(this.todelgoods);
-            if (num == 1) {
-                //删除商品
-                this.mycart.forEach(function (store, index) {
-                    store.goodses.forEach(function (item) {
-                        if (item.id == this.todelgoods.id) {
-                            store.goodses.splice(store.goodses.indexOf(this.todelgoods), 1);
-                            return;
-                        }
+            let self=this;
+            //删除本地数据方法
+            let delLocalGoods=()=>{
+                this.StoreCartGoods.forEach(function (store, index) {
+                        store.CartGoodses.forEach(function (item,goodsindex) {
+                            if (item.Id == self.todelgoods.Id) {
+                                store.CartGoodses.splice(goodsindex, 1);
+                                return;
+                            }
+                        });
                     });
-                });
+            }
+            if (num == 1) {
+                //提交到服务器
+                let params = {Id:this.todelgoods.Id};
+                api.RemoveCartGoodsApi(params).then(
+                    res => {
+                        if (res.data.Code == 200) {
+                            delLocalGoods();
+                            this.getList();
+                        } else {
+                            console.log(res.data.Message);
+                        }
+                    },
+                    err => {
+                        console.log('网络错误');
+                    }
+                )
+                
             }
 
         },
         getCheckCount() {
             var count=0;
-            this.mycart.forEach(function (store, index) {
-                store.goodses.forEach(function (goods) {
-                    if (goods.checked) {
-                        count += goods.buycount;
+            this.StoreCartGoods.forEach(function (store, index) {
+                store.CartGoodses.forEach(function (goods) {
+                    if (goods.Checked) {
+                        count += goods.Quantity;
                     }
                 });
             });
@@ -139,17 +182,33 @@ export default {
         },
         getCheckAmount() {
             var amount=0;
-            this.mycart.forEach(function (store, index) {
-                store.goodses.forEach(function (goods) {
-                    if (goods.checked) {
-                        amount += goods.price * goods.buycount;
+            this.StoreCartGoods.forEach(function (store, index) {
+                store.CartGoodses.forEach(function (goods) {
+                    if (goods.Checked) {
+                        amount += goods.Price * goods.Quantity;
                     }
                 });
             });
             return amount;
         },
         postOrder(){
-            this.$router.push({path:'/cart/postorder'});
+            var storecartgoodses=[];
+            //找到选中的商品提交到订单页面
+            this.StoreCartGoods.forEach(function (store, index) {
+                store.CartGoodses.forEach(function (goods,goodsindex) {
+                    if (goods.Checked) {
+                        if(checkJs.isNullOrEmpty(storecartgoodses[index])){
+                            storecartgoodses.push({
+                                StoreId:store.StoreId,
+                                StoreName:store.StoreName,
+                                CartGoodses:[]
+                            });
+                        }
+                        storecartgoodses[index].CartGoodses.push(goods);
+                    }
+                });
+            });
+            this.$router.push({name:'postorder',params:{StoreCartGoods:storecartgoodses}});
         }
     }
 }

@@ -5,7 +5,7 @@
       <div class="addwarp" v-for="(expressAddress,index) in expressAddresses">
         <div class="cnt">
           <p>{{expressAddress.Region}} {{expressAddress.Address}}</p>
-          <p>{{expressAddress.Name}} {{expressAddress.Mobile}}</p>
+          <p>{{expressAddress.Name}} {{expressAddress.Mobile|mobilehide}}</p>
         </div>
         <div class="ops" @click="del(index)">
           <svg>
@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <div class="noaddress" v-if="!expressAddresses.length">
+    <div class="emptybox" v-if="!expressAddresses.length">
       <svg>
         <use xlink:href="#empty"></use>
       </svg>
@@ -83,12 +83,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.noaddress{
-  padding:2rem 1rem;text-align:center;font-size:1.3rem;
-  svg{
-    width:4rem;height:4rem;fill:#999;margin-bottom:2rem;
-  }
-}
+
 .addressls {
   padding: 1rem;
   .addwarp {

@@ -16,7 +16,7 @@
     </div>
   
     <div class="loginbtn">
-      <button type="button" @click="register">登录</button>
+      <button type="button" class="button success" @click="register">登录</button>
     </div>
     <div class="bottomlink">
       <router-link to="/login" replace>密码登录</router-link>
@@ -36,7 +36,7 @@ import timerbtn from '../../../components/timerbtn.vue';
 
 import * as api from '../../../api/account';
 import * as checkJs from '../../../utils/pubfunc';
-import util from '../../../utils/util.js';
+import * as util from '../../../utils/util.js';
 
 export default {
   components: {
@@ -73,7 +73,7 @@ export default {
       let params = {
         Mobile: this.mobile
       };
-      api.sendMsgCodeApi(params).then(
+      api.SendMsgCodeApi(params).then(
         res => {
           if (res.data.Code == 200) {
             console.log(res.data);
@@ -113,7 +113,7 @@ export default {
         Token: this.token
       }
 
-      api.msgLoginApi(params).then(
+      api.MsgLoginApi(params).then(
         res => {
           if (res.data.Code == 200) {
             self.$router.push({ path: '/login' });
@@ -166,18 +166,7 @@ p{
 
 .loginbtn {
   margin-top: 3rem;
-  button {
-    width: 100%;
-    padding: 1.3rem 0;
-    font-size: 1.3rem;
-    color: #fff;
-    background: #096;
-    border: 0;
-    border-radius: 3px;
-    &:disabled {
-      background: #999;
-    }
-  }
+  
 }
 
 .bottomlink {

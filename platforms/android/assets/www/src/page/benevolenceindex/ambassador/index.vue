@@ -24,20 +24,18 @@
         <div class="shuoming">
             <div class="tlt">开通方式</div>
             <div class="cont">
-                <p class="nianfei">缴纳 365元 年费</p>
+                <p class="nianfei">缴纳 ￥365元/年</p>
+                <p>注意：一经开通，会员费概不退还</p>
             </div>
         </div>
         <div class="shuoming">
             <div class="tlt">物料</div>
             <div class="cont">
-                <p>免费提供莱乾善商公益工作服一件</p>
-                <p>请在开通后与平台客服联系</p>
+                <p>免费提供五福填写善商公益工作服一件</p>
+                <p>公司免费邮递</p>
             </div>
-            <button class="sharebtn">立即开通</button>
+            <router-link to="/bindex/ambassador/open" class="button block success">立即开通</router-link>
         </div>
-
-        
-    
     </div>
 </template>
 
@@ -105,17 +103,7 @@ export default {
             }
         }
     }
-    .sharebtn {
-        text-align: center;
-        width:100%;
-        display: block;
-        margin-top: 2rem;
-        font-size: 1.3rem;
-        background: #C1272D;
-        color:#fff;
-        border: 0;
-        padding: 1rem 0;
-    }
+    
 }
 </style>
 

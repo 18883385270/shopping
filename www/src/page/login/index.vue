@@ -34,7 +34,7 @@ import toast from '../../components/toast.vue';
 
 import * as api from '../../api/account';
 import * as checkJs from '../../utils/pubfunc';
-import util from '../../utils/util.js';
+import * as util from '../../utils/util.js';
 
 export default {
     components: {
@@ -85,30 +85,30 @@ export default {
                             //存储用户信息
                             self.$store.dispatch('update_userinfo',{
                                 userinfo:{
-                                    nickname:res.data.UserInfo.NickName,
-                                    portrait:res.data.UserInfo.Portrait,
-                                    gender:res.data.UserInfo.Gender,
-                                    region:res.data.UserInfo.Region,
-                                    mobile:res.data.UserInfo.Mobile,
-                                    role:res.data.UserInfo.Role,
-                                    storeid:res.data.UserInfo.StoreId
+                                    Id:res.data.UserInfo.Id,
+                                    NickName:res.data.UserInfo.NickName,
+                                    Portrait:res.data.UserInfo.Portrait,
+                                    Gender:res.data.UserInfo.Gender,
+                                    Region:res.data.UserInfo.Region,
+                                    Mobile:res.data.UserInfo.Mobile,
+                                    Role:res.data.UserInfo.Role,
+                                    StoreId:res.data.UserInfo.StoreId,
+                                    CartGoodsCount:res.data.UserInfo.CartGoodsCount
                                 }
                             });
                             //存储钱包信息
                             self.$store.dispatch('update_walletinfo',{
                                 walletinfo:{
-                                    id:res.data.WalletInfo.Id,
-                                    accesscode:res.data.WalletInfo.AccessCode,
-                                    cash:res.data.WalletInfo.Cash,
-                                    benevolence:res.data.WalletInfo.Benevolence,
-                                    earnings:res.data.WalletInfo.Earnings,
-                                    yesterdayEarnings:res.data.WalletInfo.YesterdayEarnings
+                                    Id:res.data.WalletInfo.Id,
+                                    AccessCode:res.data.WalletInfo.AccessCode,
+                                    Cash:res.data.WalletInfo.Cash,
+                                    Benevolence:res.data.WalletInfo.Benevolence,
+                                    Earnings:res.data.WalletInfo.Earnings,
+                                    YesterdayEarnings:res.data.WalletInfo.YesterdayEarnings
                                 }
                             }).then(()=>{
                                 self.$router.replace('/me');
                             });
-
-                            
                         });
                     } else {
                         alertFuc(res.data.Message)

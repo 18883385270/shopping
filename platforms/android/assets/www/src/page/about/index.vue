@@ -2,10 +2,10 @@
   <div>
       <mi-header title="关于我们"></mi-header>
       <div class="about">
-        <img class="logo" src="../../img/logo.png" alt="logo">
+        <img class="logo" src="../../../dist/logo.png" alt="logo">
         <h1>五福天下慈善商城</h1>
-        <p>For Mobile App V1.0.0 build 5210</p>
-        <img class="qrcode" src="../../img/androidapk.png" alt="apk">
+        <p>For Mobile App V{{Version}} build {{Build}}</p>
+        <img class="qrcode" src="../../../dist/androidapk.png" alt="apk">
         <p class="shuoming">扫描二维码，您的朋友可以下载五福天下App</p>
       </div>
   </div>
@@ -17,6 +17,21 @@ import header from '../../components/header.vue';
 export default {
   components:{
     'mi-header':header
+  },
+  data(){
+    return{
+      Version:'',
+      Build:''
+    }
+  },
+  mounted(){
+    this.getVersion()
+  },
+  methods:{
+    getVersion(){
+      this.Version=AppVersion.version
+      this.Build=AppVersion.build
+    }
   }
 }
 </script>

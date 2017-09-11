@@ -41,7 +41,9 @@ export default {
         }
     },
     mounted() {
-        this.StoreOrder = this.$route.params.StoreOrder || {};
+        if(!checkJs.isNullOrEmpty(sessionStorage.StoreStoreOrder)){
+            this.StoreOrder = JSON.parse(sessionStorage.StoreStoreOrder)
+        }
     },
     methods: {
         DeliverEvent(){

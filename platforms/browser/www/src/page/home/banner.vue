@@ -31,7 +31,6 @@ export default {
         pagination: '.swiper-pagination',
         autoplayDisableOnInteraction: false
       });
-      console.log(mySwiper);
   }
 };
 </script>

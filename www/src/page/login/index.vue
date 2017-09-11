@@ -1,15 +1,15 @@
 <template>
-    <div class="loginpage" :style="{height:bodyHeight}">
+    <div class="loginpage">
         <mi-header title="登录"></mi-header>
         <h1>账号密码登录</h1>
         <div class="formgrp">
             <div class="inpt">
-                <input type="number" placeholder="请输入手机号" v-model="mobile">
+                <input type="number" placeholder="请输入手机号" v-model="Mobile">
             </div>
         </div>
         <div class="formgrp">
             <div class="inpt">
-                <input type="password" placeholder="输入密码" v-model="password">
+                <input type="password" placeholder="输入密码" v-model="Password">
             </div>
         </div>
     
@@ -43,13 +43,12 @@ export default {
     },
     data() {
         return {
-            mobile: '',
-            password: '',
-            bodyHeight: '100%'
+            Mobile: '',
+            Password: ''
         }
     },
     mounted() {
-        this.bodyHeight = util.screenSize().height + 'px';
+
     },
     methods: {
         login() {
@@ -61,19 +60,19 @@ export default {
 
 
             let self = this;
-            if (!checkJs.isPhone(this.mobile)) {
+            if (!checkJs.isPhone(this.Mobile)) {
                 alertFuc('请输入正确的手机号码！')
                 return;
             }
-            if (checkJs.isNullOrEmpty(this.password)) {
+            if (checkJs.isNullOrEmpty(this.Password)) {
                 alertFuc('请填写密码！')
                 return;
             }
 
             let params = {
                 Region: '+86',
-                Mobile: this.mobile,
-                Password: this.password
+                Mobile: this.Mobile,
+                Password: this.Password
             }
             api.LoginApi(params).then(
                 res => {
@@ -86,6 +85,7 @@ export default {
                             self.$store.dispatch('update_userinfo',{
                                 userinfo:{
                                     Id:res.data.UserInfo.Id,
+                                    ParentId:res.data.UserInfo.ParentId,
                                     NickName:res.data.UserInfo.NickName,
                                     Portrait:res.data.UserInfo.Portrait,
                                     Gender:res.data.UserInfo.Gender,

@@ -39,7 +39,7 @@ export default {
         }
     },
     mounted() {
-        this.StoreOrder = this.$route.params.StoreOrder || {};
+        this.StoreOrder=JSON.parse(sessionStorage.UserStoreOrder)
         this.RefundAmount=this.StoreOrder.Total;
     },
     methods: {
@@ -51,7 +51,7 @@ export default {
             }
             let self = this;
             if (checkJs.isNullOrEmpty(this.Reason)) {
-                alertFuc('请输入快递公司')
+                alertFuc('请输入退款原因')
                 return;
             }
             if (this.RefundAmount<0 ||this.RefundAmount>this.StoreOrder.Total) {

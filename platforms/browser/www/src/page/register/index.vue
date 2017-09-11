@@ -1,26 +1,33 @@
 <template>
-  <div class="loginpage" :style="{height:bodyHeight}">
+  <div class="loginpage">
     <mi-header title="注册"></mi-header>
+    
+    <div class="formgrp" v-if="Parent.Id">
+      <div class="recommander">
+        <img :src="Parent.Portrait" />
+        <p>{{Parent.NickName}} 推荐</p>
+      </div>
+    </div>
     <h1>注册账号</h1>
     <div class="formgrp">
       <div class="inpt">
-        <input type="number" placeholder="请输入手机号" v-model="mobile">
-        <timerbtn style="float:right;" :mobile="mobile" :second="60" @sendmsg="sendmsgHandler"></timerbtn>
+        <input type="number" placeholder="请输入手机号" v-model="Mobile">
+        <timerbtn style="float:right;" :mobile="Mobile" :second="60" @sendmsg="sendmsgHandler"></timerbtn>
       </div>
     </div>
     <div class="formgrp">
       <div class="inpt">
-        <input type="number" placeholder="请输入短信验证码" v-model="code">
+        <input type="number" placeholder="请输入短信验证码" v-model="MsgCode">
       </div>
     </div>
     <div class="formgrp">
       <div class="inpt">
-        <input type="password" placeholder="输入密码(最少6位，字母+数字)" v-model="password">
+        <input type="password" placeholder="输入密码(最少6位，字母+数字)" v-model="Password">
       </div>
     </div>
   
     <div class="loginbtn">
-      <button type="button" @click="register">提交</button>
+      <button type="button" class="button success" @click="register">注册</button>
     </div>
     <div class="protocol">注册/登录即代表同意
       <router-link to="/login/protocol">《五福天下商城用户使用协议》</router-link>
@@ -36,7 +43,7 @@ import timerbtn from '../../components/timerbtn.vue';
 
 import * as api from '../../api/account';
 import * as checkJs from '../../utils/pubfunc';
-import util from '../../utils/util.js';
+import * as util from '../../utils/util.js';
 
 export default {
   components: {
@@ -46,23 +53,47 @@ export default {
   },
   data() {
     return {
-      mobile: '',
-      code: '',
-      password: '',
-      token:'',
-      bodyHeight: '100%'
+      ParentId: '',
+      Mobile: '',
+      MsgCode: '',
+      Password: '',
+      Token: '',
+      Parent:{
+        Id:'',
+        NickName:'',
+        Portrait:''
+      }
     }
   },
-  watch: {
+  careted: {
 
   },
   mounted() {
-    this.bodyHeight = util.screenSize().height + 'px';
+    if(!checkJs.isNullOrEmpty(sessionStorage.RecommandUserId)){
+      this.Parent.Id=sessionStorage.RecommandUserId;
+      this.GetParentInfo();
+    }
   },
   methods: {
+    GetParentInfo(){
+      if(!checkJs.isNullOrEmpty(this.Parent.Id)){
+      let params = {
+        Id: this.Parent.Id
+      };
+      api.InfoApi(params).then(
+          res => {
+            if (res.data.Code == 200) {
+              this.Parent = res.data.UserInfo;
+            }
+            else {
+              alertFun(res.data.Message);
+            }
+          }, err => {
+            alertFuc('服务访问错误~');
+        })
+      }
+    },
     sendmsgHandler() {
-      console.log(this.mobile);
-
       let alertFuc = (msg) => {
         const toast = this.$refs.toast;
         toast.show(msg);
@@ -71,21 +102,19 @@ export default {
 
 
       let params = {
-        Mobile: this.mobile
+        Mobile: this.Mobile
       };
-      api.sendMsgCodeApi(params).then(
+      api.SendMsgCodeApi(params).then(
         res => {
-          if (res.data.Code == 200){
-            console.log(res.data);
-            this.token=res.data.Token;
-            console.log(this.token);
+          if (res.data.Code == 200) {
+            this.Token = res.data.Token;
           }
-          else{
+          else {
             alertFun(res.data.Message);
           }
         }, err => {
-          alertFuc(err.response.data.error.details);
-        })
+          alertFuc('服务访问错误~');
+      })
 
     },
     register() {
@@ -97,41 +126,45 @@ export default {
 
 
       let self = this;
-      if (!checkJs.isPhone(this.mobile)) {
+      if (!checkJs.isPhone(this.Mobile)) {
         alertFuc('请输入正确的手机号码！')
         return;
       }
-      if (checkJs.isNullOrEmpty(this.code)) {
+      if (checkJs.isNullOrEmpty(this.MsgCode)) {
         alertFuc('请填写验证码！')
         return;
       }
-      if (checkJs.isNullOrEmpty(this.password)) {
+      if (checkJs.isNullOrEmpty(this.Password)) {
         alertFuc('请填写密码！')
         return;
       }
-      if (this.password.length<6) {
+      if (this.Password.length < 6) {
         alertFuc('密码不得低于6位')
         return;
       }
 
       let params = {
         Region: '+86',
-        Mobile: this.mobile,
-        MsgCode:this.code,
-        Password:this.password,
-        Token:this.token
+        ParentId: this.Parent.Id,
+        Mobile: this.Mobile,
+        MsgCode: this.MsgCode,
+        Password: this.Password,
+        Token: this.Token
       }
 
-      api.registerApi(params).then(
+      api.RegisterApi(params).then(
         res => {
           if (res.data.Code == 200) {
-              self.$router.push({ path: '/login' });
+            alertFuc('注册成功，即将进入登录页面')
+            setTimeout(()=>{
+              self.$router.replace({name:'login'})
+            },3000)
           } else {
             alertFuc(res.data.Message)
           }
         },
         err => {
-          alertFuc(err.response.data.error.details);
+          alertFuc('服务访问错误~');
         }
       )
     }
@@ -154,7 +187,16 @@ h1 {
 
 .formgrp {
   margin-top: 2rem;
-
+  background:#fff;
+  .recommander {
+    text-align: center;
+    font-size:1.3rem;
+    img {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 2rem;
+    }
+  }
   .inpt {
     border-bottom: 1px solid #eee;
     padding: 1rem 0;
@@ -172,31 +214,19 @@ h1 {
 
 .loginbtn {
   margin-top: 3rem;
-  button {
-    width: 100%;
-    padding: 1.3rem 0;
-    font-size: 1.3rem;
-    color: #fff;
-    background: #096;
-    border: 0;
-    border-radius: 3px;
-    &:disabled {
-      background: #999;
-    }
-  }
 }
 
 
 .protocol {
-    margin-top:2rem;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    color: #999;
-    a {
-        color: #09c;
-        text-decoration: none;
-    }
+  margin-top: 2rem;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  color: #999;
+  a {
+    color: #09c;
+    text-decoration: none;
+  }
 }
 </style>
 

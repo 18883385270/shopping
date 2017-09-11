@@ -1,50 +1,43 @@
 <template>
     <div>
-        <mi-header title="失败"></mi-header>
+        <div class="pageheader">失败</div>
         <div class="succinfo">
             <svg>
-                <use xlink:href="#ok"></use>
+                <use xlink:href="#x"></use>
             </svg>
-            <div class="orderinfo" v-if="payinfo.orderid">
-                <h2>{{payinfo.orderid}}</h2>
-            </div>
-            <div class="tlt">{{message}}</div>
+            <div class="tlt">{{TipInfo.Message}}</div>
+            <div class="remark">{{TipInfo.Remark}}</div>
         </div>
         <div class="pd1">
-            <button class="button success" @click="goPage('/me')">确定</button>
+            <button class="button err" @click="goPage">确定</button>
         </div>
     </div>
 </template>
 
 <script>
-import header from '../../components/header.vue'
+import * as checkJs from '../../utils/pubfunc'
 
 export default {
     components: {
-        'mi-header':header
     },
     data() {
         return {
-            type: '',//类型  订单支付 / 大使支付
-            payinfo:{
-                amount: 0,//支付金额
-                orderid: '',//订单ID
-            },
-            message:''
+            TipInfo:{
+                Type:'',
+                Message:'',
+                NextPage:'',
+                Remark:''
+            }
         }
     },
     mounted() {
-        this.type = this.$route.params.type;
-        if(this.type=='pay')
-        {
-            this.amount = this.$route.params.amount;
-            this.orderid = this.$route.params.orderid;
+        if(!checkJs.isNullOrEmpty(sessionStorage.TipInfo)){
+            this.TipInfo=JSON.parse(sessionStorage.TipInfo)
         }
-        this.message=this.$route.params.message;
     },
     methods:{
-        goPage(page){
-            this.$router.replace({path:page})
+        goPage(){
+            this.$router.replace({path:this.TipInfo.NextPage})
         }
     }
 }
@@ -58,12 +51,12 @@ export default {
     svg {
         width: 6rem;
         height: 6rem;
-        fill: #096;
+        fill: #c03;
         margin:1rem auto;
     }
     .tlt {
         font-size: 2rem;
-        color: #096;
+        color: #c03;
         margin-top:1rem;
     }
 }

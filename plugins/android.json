@@ -22,7 +22,23 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.lq319.shop"
         },
-        "cordova-plugin-barcodescanner": {
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.lq319.shop"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.lq319.shop"
+        },
+        "cordova-plugin-file-opener2": {
+            "PACKAGE_NAME": "com.lq319.shop"
+        },
+        "cordova-plugin-appversion": {
+            "PACKAGE_NAME": "com.lq319.shop"
+        },
+        "cordova-plugin-qrscanner": {
+            "PACKAGE_NAME": "com.lq319.shop"
+        },
+        "cordova-plugin-wechat": {
+            "WECHATAPPID": "wx87bf751f1614b78c",
             "PACKAGE_NAME": "com.lq319.shop"
         }
     },

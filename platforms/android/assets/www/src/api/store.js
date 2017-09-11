@@ -13,6 +13,10 @@ export const InfoApi = (params) => {
   return request({method: 'post', url: '/Store/Info', data: params})
 }
 
+export const HomeInfoApi = (params) => {
+  return request({method: 'post', url: '/Store/HomeInfo', data: params})
+}
+
 export const AddGoodsApi = (params) => {
   return request({method: 'post', url: '/Store/AddGoods', data: params})
 }

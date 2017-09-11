@@ -1,5 +1,5 @@
 <template>
-  <div style="background:#fff" :style="{height:bodyHeight}">
+  <div>
     <mi-header title="修改密码" rightext="确定" @rightNavBarClicked="save"></mi-header>
     <div style="height:1rem;"></div>
     <div class="namewp">
@@ -31,12 +31,8 @@ export default {
     return {
       OldPassword: '',
       NewPassword:'',
-      ConfirmPassword:'',
-      bodyHeight: '100%'
+      ConfirmPassword:''
     }
-  },
-  mounted() {
-      this.bodyHeight = util.screenSize().height + 'px';
   },
   methods: {
     save() {

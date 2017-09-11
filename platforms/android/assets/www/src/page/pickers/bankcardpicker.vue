@@ -18,7 +18,7 @@
                 </div>
                 <div class="mark">
                     <svg :class="{selected:index==currentindex}">
-                        <use xlink:href="#ok"></use>
+                        <use xlink:href="#check"></use>
                     </svg>
                 </div>
             </div>
@@ -123,8 +123,8 @@ export default {
         width: 20%;
         text-align: right;
         svg {
-            width: 1.3rem;
-            height: 1.3rem;
+            width: 1.5rem;
+            height: 1.5rem;
             fill: #999;
             margin-top: 0.8rem;
             &.selected{

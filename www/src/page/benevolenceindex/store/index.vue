@@ -6,7 +6,7 @@
             <h1>公益商家</h1>
             <h2>加盟慈善事业，引爆产品销售</h2>
         </div>
-        
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">为什么要入驻商家?</div>
             <div class="cont">
@@ -16,6 +16,7 @@
                 <p>【4】享有促销让利，善心激励</p>
             </div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">开店流程</div>
             <div class="cont">
@@ -29,6 +30,7 @@
             </div>
             
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">申请条件</div>
             <div class="cont">
@@ -117,7 +119,6 @@ export default {
         }
     }
     .shuoming {
-        margin-top: 1rem;
         border-top: 1px solid #eee;
         background: #fff;
         padding: 1rem;

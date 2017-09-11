@@ -10,6 +10,7 @@
             <div>有效期：永久有效</div>
             <div>已开通：2454644人</div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">为什么要做善心使者?</div>
             <div class="cont">
@@ -18,7 +19,7 @@
                 <p>【3】1个善心价值100元，满1个善心可参与每日的善心激励</p>
                 <p>【4】善心激励就是将您的善心转换为人民币</p>
             </div>
-            <button class="sharebtn">分享给好友</button>
+            <button class="button info">分享给好友</button>
         </div>
 
         
@@ -71,7 +72,6 @@ export default {
         }
     }
     .shuoming {
-        margin-top: 1rem;
         border-top: 1px solid #eee;
         background: #fff;
         padding: 1rem;
@@ -90,17 +90,7 @@ export default {
             }
         }
     }
-    .sharebtn {
-        text-align: center;
-        width:100%;
-        display: block;
-        margin-top: 2rem;
-        font-size: 1.3rem;
-        background: #C1272D;
-        color:#fff;
-        border: 0;
-        padding: 1rem 0;
-    }
+    
 }
 </style>
 

@@ -14,19 +14,37 @@ const mutations  = {
     [types.SHOW_LOADING](state) {
         state.ajax_loading = true;
     },
-
     [types.HIDE_LOADING](state) {
         state.ajax_loading = false;
     },
-
+    //登录状态修改
     [types.UPDATE_TOKEN](state, user_db) {
       state.token = user_db.token || {};
       Storage.set('token', state.token);
     },
-
     [types.REMOVE_TOKEN](state, user_db) {
       Storage.remove('token', state.token);
       state.token = {};
+    },
+
+    //用户信息修改
+    [types.UPDATE_USERINFO](state, user_db) {
+      state.userinfo = user_db.userinfo || {};
+      Storage.set('userinfo', state.userinfo);
+    },
+    [types.REMOVE_USERINFO](state, user_db) {
+      Storage.remove('userinfo', state.userinfo);
+      state.userinfo = {};
+    },
+
+    //钱包信息修改
+    [types.UPDATE_WALLETINFO](state, user_db) {
+      state.walletinfo = user_db.walletinfo || {};
+      Storage.set('walletinfo', state.walletinfo);
+    },
+    [types.REMOVE_WALLETINFO](state, user_db) {
+      Storage.remove('walletinfo', state.walletinfo);
+      state.walletinfo = {};
     },
 }
 

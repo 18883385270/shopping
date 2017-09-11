@@ -28,9 +28,7 @@ export default {
 }
 </script>
 
-<style lang="less" src="../../img/common.less">
 
-</style>
 
 <style lang="less" scoped>
 

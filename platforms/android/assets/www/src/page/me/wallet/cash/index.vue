@@ -6,7 +6,7 @@
                 <use xlink:href="#cash"></use>
             </svg>
             <h2>我的现金</h2>
-            <h1>{{this.$store.state.global.walletinfo.cash|currency('￥',2)}}</h1>
+            <h1>{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}</h1>
     
             <div class="btns">
                 <button type="button" class="button success" @click="goPage('/wallet/cash/recharge')">充值</button>
@@ -26,7 +26,8 @@ export default {
     
     methods: {
         rightNavBarClickedHandle() {
-            this.goPage('/wallet/cash/transfer');
+            sessionStorage.MyCashTransferIndex=0
+            this.$router.push({path:'/wallet/cash/transfer'});
         },
         goPage(page) {
             this.$router.push({ path: page });

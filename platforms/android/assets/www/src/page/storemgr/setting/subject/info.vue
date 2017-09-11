@@ -11,11 +11,11 @@
     <div class="article">
       <p class="title">主体名称</p>
       <p>
-        夏兆伟
+        {{SubjectInfo.SubjectName}}
       </p>
       <p class="title">主体号码</p>
       <p>
-        3711033759379472742997
+        {{SubjectInfo.SubjectNumber}}
       </p>
     </div>
     <div class="article">
@@ -34,6 +34,14 @@ import header from '../../../../components/header.vue'
 export default {
   components:{
     'mi-header':header
+  },
+  data(){
+    return{
+      SubjectInfo:{}
+    }
+  },
+  mounted(){
+    this.SubjectInfo = JSON.parse(sessionStorage.SubjectInfo)
   }
 }
 </script>

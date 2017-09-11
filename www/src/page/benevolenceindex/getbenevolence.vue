@@ -96,7 +96,6 @@ export default {
   padding: 0;
   background: white;
   border-top: 1px solid #ddd;
-  margin-top: 1.6rem;
   .head {
     border-bottom: 1px solid #ddd;
     display: flex;

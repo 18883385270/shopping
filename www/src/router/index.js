@@ -17,11 +17,18 @@ router.beforeEach((to, from, next) => {
   if (!window.localStorage.getItem('token') 
     && to.name !== 'home' 
     && to.name !== 'register' 
+    && to.name !== 'reg' 
     && to.name !== 'login'
     && to.name !== 'msglogin'
+    && to.name !== 'getpwd'
+    && to.name !== 'resetpwd'
     && to.name !== 'userprotocol'
+    
+    && to.name !== 'scannerpage'
+    && to.name !== 'scannerresult'
 
     && to.name !=='jumppage'
+    && to.name !=='announcementinfo'
 
     && to.name !== 'section'
     && to.name !== 'goodslist'

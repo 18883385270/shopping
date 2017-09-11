@@ -2,13 +2,9 @@
     <div>
         <div :class="{screen: focus}">
             <div class="top">
-                <!--正常状态的背景-->
                 <div class="bg" v-show="!focus"></div>
-                <!--搜索状态下的背景-->
                 <div class="bg_focus" v-show="focus"></div>
-    
                 <div class="main-head">
-                    
                     <div class="left" v-if="focus" @click="goBackEvent">
                         <svg>
                             <use xlink:href="#leftarrowsline"></use>
@@ -85,6 +81,7 @@ export default {
     top: 0;
     left: 0;
     overflow: hidden;
+    z-index:10000;
 }
 
 .absolute100 {
@@ -93,7 +90,6 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 3;
 }
 
 .top {
@@ -111,6 +107,7 @@ export default {
 
         border-bottom:1px solid #ddd;
         background: white;
+        
     }
     .bg_focus {
         .absolute100;

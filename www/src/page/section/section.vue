@@ -1,10 +1,11 @@
 <template>
-  <div class="section_warp">
-    <div class="left_menu" :style="{height:leftbarheight}">
+  <div class="section_warp" :style="{height:pageheight}">
+    <div class="left_menu">
       <ul>
         <li v-for="(Category,index) in Categorys" :class="{active:selectedindex==index}">
           <span @click="tabEvent(index)">{{Category.Name}}</span>
         </li>
+        <li></li>
       </ul>
     </div>
     <div class="right_menu">
@@ -27,8 +28,8 @@
 </template>
 
 <script>
-import data from '../../../../data.json';
-import * as util from '../../utils/util.js';
+import * as util from '../../utils/util';
+import * as checkJs from '../../utils/pubfunc';
 import * as api from '../../api/category'
 
 export default {
@@ -36,31 +37,38 @@ export default {
     return {
       Categorys: [],
       selectedindex: 0,
-      leftbarheight:'100%'
+      pageheight:'100%'
     }
   },
   created() {
-    this.sections = data.sections;
   },
   mounted(){
-    this.leftbarheight=util.screenSize().height+'px';
-
-    //从服务器获取类别树
-    let params = {};
-    api.CategoryTreeApi(params).then(
-      res => {
-        if (res.data.Code == 200) {
-          this.Categorys=res.data.Categorys;
-        } else {
-          console.log(res.data.Message);
-        }
-      },
-      err => {
-        console.log('网络错误');
-      }
-    )
+    this.pageheight=util.screenSize().height+'px';
+    //从本地存储获取数据
+    if(!checkJs.isNullOrEmpty(sessionStorage.Categorys)){
+      this.Categorys=JSON.parse(sessionStorage.Categorys ||{})
+    }
+    this.fetchData();
   },
   methods: {
+    fetchData(){
+      //从服务器获取类别树
+      let params = {};
+      api.CategoryTreeApi(params).then(
+        res => {
+          if (res.data.Code == 200) {
+            this.Categorys=res.data.Categorys;
+            //存储到本地
+            sessionStorage.Categorys = JSON.stringify(this.Categorys)
+          } else {
+            console.log(res.data.Message);
+          }
+        },
+        err => {
+          console.log('网络错误');
+        }
+      )
+    },
     tabEvent(index) {
       this.selectedindex = index;
       console.log(index);
@@ -88,9 +96,11 @@ export default {
   .left_menu {
     width: 30%;
     background-color: #eee;
-    padding-bottom: 4rem;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     ul {
-      height: 100%;
       li {
         border-bottom: 1px solid #ccc;
         span {
@@ -110,11 +120,14 @@ export default {
     width: 70%;
     background:#fff;
     padding: 1rem;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     img {
       width: 100%;
     }
     .submenu_warp {
-      
       .title {
         margin: 1.5rem 0 1rem 0;
       }
@@ -126,6 +139,7 @@ export default {
           text-align: center;
           margin-right: 5%;
           margin-bottom: 1rem;
+          
           &:nth-child(3n+0) {
             margin-right: 0;
           }

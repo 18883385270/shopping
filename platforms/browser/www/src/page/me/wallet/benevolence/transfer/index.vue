@@ -1,34 +1,31 @@
 <template>
     <div class="transferpage">
         <mi-header title="记录"></mi-header>
-        <mi-category :categorys="transferTypes"></mi-category>
-        <div class="transferls">
+        <mi-category :categorys="TransferTypes" @categoryChanged="categoryChangedHandle"></mi-category>
+        <div class="emptybox" v-if="!Transfers.length">
+            <svg>
+                <use xlink:href="#emptyline"></use>
+            </svg>
+            <p> 没有记录</p>
+        </div>
+        <div class="transferls"v-if="Transfers.length">
             <ul>
-                <li>
+                <li v-for="transfer in Transfers">
                     <p class="tlt">
-                        <span class="time">2012-7-21</span>购物奖励</p>
-                    <p>
-                        <span class="amount">+1000.00</span>消费1000元</p>
-                </li>
-                <li>
-                    <p class="tlt">
-                        <span class="time">2012-7-21</span>商城消费</p>
-                    <p>
-                        <span class="amount">-500.00</span>订单：2343633435</p>
-                </li>
-                <li>
-                    <p class="tlt">
-                        <span class="time">2012-7-21</span>转账</p>
-                    <p>
-                        <span class="amount">+1000.00</span>对方账号xiazhaowei</p>
-                </li>
-                <li>
-                    <p class="tlt">
-                        <span class="time">2012-7-21</span>转账</p>
-                    <p>
-                        <span class="amount">+1000.00</span>对方账号xiazhaowei</p>
+                        <span class="time">{{transfer.CreatedOn}}</span>{{transfer.Type}}</p>
+                    <p class="cnt">
+                        <span class="amount">
+                            <span v-if="transfer.Direction=='进账'">+</span>
+                            <span v-if="transfer.Direction!='进账'">-</span>
+                            {{transfer.Amount}}</span>{{transfer.Remark}}</p>
                 </li>
             </ul>
+            <div class="nextpage" @click="NextPage" v-if="!NotAnyMore">
+                <span>加载更多</span>
+            </div>
+            <div class="nextpage" @click="NextPage" v-if="NotAnyMore">
+                <span>没有更多了</span>
+            </div>
         </div>
     </div>
 </template>
@@ -36,6 +33,7 @@
 <script>
 import header from '../../../../../components/header.vue';
 import category from '../../../../../components/category.vue';
+import * as api from '../../../../../api/wallet'
 
 export default {
     components: {
@@ -44,7 +42,52 @@ export default {
     },
     data() {
         return {
-            transferTypes: ['全部', '购物奖励', '商家激励','推荐用户','推荐商家','联盟','激励']
+            TransferTypes: ['全部','购物奖励', '商家奖励','推荐奖励','推荐商家','联盟分成','转账','善心激励','系统操作'],
+            TransferTypesValue:['All','ShoppingAward', 'StoreAward','RecommendUserAward','RecommendStoreAward','UnionAward','Transfer','Incentive','SystemOp'],
+            Transfers: [],
+            CurrentIndex:0,
+            CurrentPage:0,
+            NotAnyMore:false
+        }
+    },
+    mounted() {
+        this.getList(this.CurrentIndex,this.CurrentPage);
+    },
+    methods:{
+        categoryChangedHandle(index){
+            this.CurrentIndex=index;
+            this.CurrentPage=0;
+            this.NotAnyMore=false;
+            this.Transfers.splice(0,this.Transfers.length);//清空数据
+            this.getList(this.CurrentIndex,this.CurrentPage);
+        },
+        getList(index,page){
+            let params = {
+                Type:this.TransferTypesValue[index],
+                Page:page
+            };
+            api.BenevolenceTransfersApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        //加入到数组
+                        if(res.data.BenevolenceTransfers.length){
+                            this.Transfers=this.Transfers.concat(res.data.BenevolenceTransfers);
+                        }
+                        else{
+                            this.NotAnyMore=true;
+                        }
+                    } else {
+                        console.log("返回错误码：" + res.data.Code);
+                    }
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
+        },
+        NextPage(){
+            this.CurrentPage++;
+            this.getList(this.CurrentIndex,this.CurrentPage);
         }
     }
 }
@@ -54,27 +97,40 @@ export default {
 .transferpage {
     width: 100%;
     .transferls {
+        margin-top:1rem;
         li {
-            background:#fff;
+            background: #fff;
             list-style: none;
             padding: 1rem;
             border-bottom: 1px solid #eee;
             font-size: 1.3rem;
+
             .tlt {
-                font-weight: 400;padding-bottom:0.3rem;
+                padding-bottom: 0.3rem;
+                font-size: 1.3rem;
                 .time {
                     float: right;
                     font-size: 1rem;
-                    color: #999;font-weight: 200;
+                    color: #999;
                 }
+            }
+            .cnt {
+                font-size: 1.2rem;
+                color: #999;
             }
 
             .amount {
                 float: right;
-                font-size: 1.4rem;font-weight:400;
+                font-size: 1.4rem;
+                color: #333;
             }
         }
     }
+}
+.nextpage{
+    text-align:center;
+    padding:1rem;
+    background:#fff;
 }
 </style>
 

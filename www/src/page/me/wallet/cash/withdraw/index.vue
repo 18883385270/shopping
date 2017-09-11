@@ -1,11 +1,11 @@
 <template>
   <div class="withdrawpage">
     <mi-header title="提现申请" rightext="记录" @rightNavBarClicked="goPage('/wallet/cash/withdraw/log')"></mi-header>
-
+    <div class="divider"></div>
     <div class="tocardpicker" @click="showbankcardpicker">
       <div class="cardinfo" v-if="BankCard">
         <p class="tlt">{{BankCard.BankName |truncate}}（尾号{{BankCard.Number|endword(4)}}）</p>
-        <p>提现手续费率5%，工作日内24小时内到账</p>
+        <p>提现0手续费率，工作日内24小时内到账</p>
       </div>
       <div class="cardinfo" v-if="!BankCard">
         <p class="nocard">请选择银行卡</p>
@@ -16,18 +16,20 @@
         </svg>
       </div>
     </div>
-
+    <div class="divider"></div>
     <div class="withdrawamount">
       <p>提现金额￥</p>
       <input type="number" placeholder="输入提现金额" v-model="Amount"/>
       <p class="desc">当前账户余额{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}元，
         <span @click="withdrawall">全部提现</span>
       </p>
-      <div class="btnwarp">
+    </div>
+    <div class="divider"></div>
+    <div>
+      <div class="pd1">
         <button class="button primary" @click="apply">提现</button>
-      </div>
-      <div class="withdrowtip">
-        单笔提现金额不得低于500元，单日不超过5万元
+      
+        <p class="marg-top1">单笔提现金额不得低于100元，单日不超过2万元，单周不超过10万</p>
         <p>提现需要公司会计审核，提现审核前因余额变动，造成余额不足可能导致提现失败</p>
       </div>
     </div>
@@ -81,9 +83,9 @@ export default {
         alertFuc('请选择提款银行')
 	      return;
       }
-      if(this.Amount<500 || this.Amount>50000)
+      if(this.Amount<100 || this.Amount % 100>0)
       {
-        alertFuc('单笔提现金额不得低于500,高于50000')
+        alertFuc('单笔提现金额不得低于100，100的倍数')
 	      return;
       }
       		
@@ -94,11 +96,14 @@ export default {
       api.ApplyWithdrawApi(params).then(
         res => {
           if (res.data.Code == 200) {
-            this.$router.replace({
-                                name:'success',
-                                params:{
-                                    type:'tip',
-                                    message:'提现申请已经提交，等待审核'}})
+            var tipInfo={
+              Type:'Tip',
+              Message:'提现申请已经提交，等待审核',
+              NextPage:'/wallet/cash',
+              Remark:'公司一般审核日期为3个工作日内'
+            }
+            sessionStorage.TipInfo=JSON.stringify(tipInfo)
+            this.$router.replace({name:'success'});
           } else {
             console.log(res.data.Message);
           }
@@ -116,12 +121,6 @@ export default {
 <style lang="less" scoped>
 .withdrawpage {
   width: 100%;
-  
-  
-  .btnwarp {
-    padding: 1rem 0 0 0;
-    
-  }
   .withdrowtip{
     padding:1rem 0;
     font-size:1rem;

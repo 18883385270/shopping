@@ -79,3 +79,15 @@ export const GetUserUnPayGiftApi=(params)=>{
 export const SetUserGiftPayedApi=(params)=>{
   return request({method:'post',url:'User/SetUserGiftPayed',data:params})
 }
+
+export const MyInvotesApi=(params)=>{
+  return request({method:'post',url:'User/MyInvotes',data:params})
+}
+
+export const SetMyParentApi=(params)=>{
+  return request({method:'post',url:'User/SetMyParent',data:params})
+}
+
+export const ResetPasswordApi=(params)=>{
+  return request({method:'post',url:'User/ResetPassword',data:params})
+}

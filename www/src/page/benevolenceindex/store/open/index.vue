@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="tablerow">
-      <div class="tlt">地区</div>
+      <div class="tlt">选择地区</div>
       <div class="cnt" @click="selectRegion">
         {{region}}
       </div>

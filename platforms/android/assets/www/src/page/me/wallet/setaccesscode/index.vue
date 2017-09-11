@@ -1,5 +1,5 @@
 <template>
-    <div class="mobilevfwp" :style="{height:bodyHeight}">
+    <div class="mobilevfwp">
         <mi-header title="设置支付密码"></mi-header>
         <div class="desc">设置6为数字支付密码
         </div>
@@ -29,12 +29,11 @@ export default {
     data() {
         return {
             accesscode:'',
-            token:'',
-            bodyHeight: '100%'
+            token:''
         }
     },
     mounted() {
-        this.bodyHeight = util.screenSize().height + 'px';
+        
         //检查是否验证
         var verify= sessionStorage.getItem('verify') || JSON.stringify({verifypage:'setpaypassword',verifyed:false});
         if(verify)

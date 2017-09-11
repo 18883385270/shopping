@@ -5,7 +5,7 @@
     <div class="profilewp">
         <div class="warp">
             <div class="portrait">
-                <img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1733071988,3600838707&fm=117&gp=0.jpg" />
+                <img :src="this.$store.state.global.userinfo.Portrait" />
             </div>
             <div class="name" @click="goPage('/me/profile')">
                 <h3>{{this.$store.state.global.userinfo.NickName}}
@@ -23,7 +23,7 @@
         </div>
         <div class="rolelist">
             <span class="primary">{{this.$store.state.global.userinfo.Role}}</span>
-            <span class="warning" v-if="this.$store.state.global.userinfo.StoreId">店主</span>
+            <span class="warning" v-if="this.$store.state.global.userinfo.StoreId">已开店</span>
         </div>
     </div>
 </template>
@@ -32,8 +32,6 @@
 export default {
     methods: {
         openMyQrCode() {
-            console.log("openmyqrcode");
-            //广播事件
             this.$emit('openmyqrcode');
         },
         goPage(page) {
@@ -46,7 +44,6 @@ export default {
 <style lang="less" scoped>
 .profilewp {
     width: 100%;
-    padding: 1rem 0rem;
     background: #fff;
     .warp {
 
@@ -82,8 +79,8 @@ export default {
             padding-right: 0rem;
             svg {
                 fill: #666;
-                width: 2.5rem;
-                height: 2.5rem;
+                width: 2rem;
+                height: 2rem;
                 margin-right: 1rem;
             }
         }

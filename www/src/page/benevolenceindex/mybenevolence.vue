@@ -29,7 +29,6 @@ export default {
 
 <style lang="less" scoped>
   .warp{
-    margin-top:1.6rem;
     display: flex;background:white;border-top:1px solid #ddd;border-bottom:1px solid #ddd;
     >div{
       width:50%;padding:1rem;

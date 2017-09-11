@@ -1,5 +1,5 @@
 <template>
-  <div style="background:#fff" :style="{height:bodyHeight}">
+  <div>
     <mi-header title="更改名字" rightext="保存" @rightNavBarClicked="save"></mi-header>
     <div class="namewp">
       <input type="text" v-model="NickName">
@@ -23,12 +23,10 @@ export default {
   },
   data() {
     return {
-      NickName: '',
-      bodyHeight: '100%'
+      NickName: ''
     }
   },
   mounted() {
-    this.bodyHeight = util.screenSize().height + 'px';
     this.NickName = this.$store.state.global.userinfo.NickName;
   },
   methods: {

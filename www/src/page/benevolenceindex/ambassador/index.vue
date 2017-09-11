@@ -10,12 +10,14 @@
             <div>有效期：一年</div>
             <div>已开通：2454644人</div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">为什么要做店主?</div>
             <div class="cont">
                 <p>成为店主可以开通爱心店铺，销售产品</p>
             </div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">开通方式</div>
             <div class="cont">
@@ -23,6 +25,7 @@
                 <p>注意：一经开通，平台服务费概不退还</p>
             </div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">物料</div>
             <div class="cont">
@@ -79,7 +82,6 @@ export default {
         }
     }
     .shuoming {
-        margin-top: 1rem;
         border-top: 1px solid #eee;
         background: #fff;
         padding: 1rem;

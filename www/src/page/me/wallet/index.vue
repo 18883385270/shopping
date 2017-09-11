@@ -11,8 +11,8 @@
                 <p>{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}</p>
             </div>
         </div>
-
-        <div class="tablerow mg-top20" @click="goPage('/wallet/setpaypassword')">
+        <div class="divider"></div>
+        <div class="tablerow" @click="goPage('/wallet/setpaypassword')">
             <div class="tlt">设置支付密码</div>
             <div class="cnt">
                 <span class="warning" v-if="!this.$store.state.global.walletinfo.AccessCode">您还未设置支付密码</span>
@@ -21,8 +21,8 @@
                 </svg>
             </div>
         </div>
-        
-        <div class="tablerow mg-top20" @click="goPage('/wallet/cardsmgr')">
+        <div class="divider"></div>
+        <div class="tablerow" @click="goPage('/wallet/cardsmgr')">
             <div class="tlt">银行卡管理</div>
             <div class="cnt">
                 <svg>

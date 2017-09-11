@@ -1,5 +1,5 @@
 <template>
-  <div class="loginpage" :style="{height:bodyHeight}">
+  <div class="loginpage">
     <mi-header title="注册"></mi-header>
     
     <div class="formgrp" v-if="Parent.Id">
@@ -62,39 +62,38 @@ export default {
         Id:'',
         NickName:'',
         Portrait:''
-      },
-      bodyHeight: '100%'
+      }
     }
   },
   careted: {
 
   },
   mounted() {
-    this.bodyHeight = util.screenSize().height + 'px';
-
-    var parentId=this.$route.params.UserId ||'';
-    this.Parent.Id=parentId;
-    //获取推荐人信息
-    if(!checkJs.isNullOrEmpty(parentId)){
-      let params = {
-        Id: parentId
-      };
-      api.InfoApi(params).then(
-        res => {
-          if (res.data.Code == 200) {
-            this.Parent = res.data.UserInfo;
-          }
-          else {
-            alertFun(res.data.Message);
-          }
-        }, err => {
-          alertFuc('服务访问错误~');
-      })
+    if(!checkJs.isNullOrEmpty(sessionStorage.RecommandUserId)){
+      this.Parent.Id=sessionStorage.RecommandUserId;
+      this.GetParentInfo();
     }
   },
   methods: {
+    GetParentInfo(){
+      if(!checkJs.isNullOrEmpty(this.Parent.Id)){
+      let params = {
+        Id: this.Parent.Id
+      };
+      api.InfoApi(params).then(
+          res => {
+            if (res.data.Code == 200) {
+              this.Parent = res.data.UserInfo;
+            }
+            else {
+              alertFun(res.data.Message);
+            }
+          }, err => {
+            alertFuc('服务访问错误~');
+        })
+      }
+    },
     sendmsgHandler() {
-
       let alertFuc = (msg) => {
         const toast = this.$refs.toast;
         toast.show(msg);
@@ -156,7 +155,10 @@ export default {
       api.RegisterApi(params).then(
         res => {
           if (res.data.Code == 200) {
-            self.$router.push({ path: '/login' });
+            alertFuc('注册成功，即将进入登录页面')
+            setTimeout(()=>{
+              self.$router.replace({name:'login'})
+            },3000)
           } else {
             alertFuc(res.data.Message)
           }

@@ -7,7 +7,7 @@
         <div class="body">
             <div @click="goPage('/storemgr')">
                 <svg><use xlink:href="#storeline"></use></svg>店铺管理</div>
-            <div @class="goPage('/partnermgr')">
+            <div @click="goPage('/partnermgr')">
                 <svg><use xlink:href="#partnerline"></use></svg>联盟管理</div>
             <div @click="goPage('/classroom')">
                 <svg><use xlink:href="#classroomline"></use></svg>五福课堂</div>
@@ -27,9 +27,7 @@ export default {
 }
 </script>
 
-<style lang="less" src="../../img/common.less">
 
-</style>
 
 <style lang="less" scoped>
 

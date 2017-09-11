@@ -10,15 +10,15 @@
             <p> 善心值实时更新</p>
             <div class="utils">
                 <div>
-                    <svg><use xlink:href="#bankcard"></use></svg>
+                    <svg><use xlink:href="#bookline"></use></svg>
                     <p>善心解读</p>
                 </div>
                 <div>
-                    <svg><use xlink:href="#bankcard"></use></svg>
+                    <svg><use xlink:href="#increaseline"></use></svg>
                     <p>分值提升</p>
                 </div>
                 <div @click="goPage('/wallet/benevolence/transfer')">
-                    <svg><use xlink:href="#bankcard"></use></svg>
+                    <svg><use xlink:href="#recordline"></use></svg>
                     <p>记录明细</p>
                 </div>
             </div>
@@ -54,10 +54,6 @@ export default {
         height: 5rem;
         margin: 0 auto 1rem auto;
         fill: #fff;
-        padding: 0.8rem;
-        border: 2px solid #fff;
-        border-radius: 50%;
-        display: block;
     }
     h2 {
         font-weight: 400;font-size:1.3rem;
@@ -78,7 +74,7 @@ export default {
                 font-size:1rem;
             }
             svg{
-                width:3rem;height:3rem;fill:#fff;margin:auto;
+                width:2.5rem;height:2.5rem;fill:#fff;margin:auto;
             }
         }
     }

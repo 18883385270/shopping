@@ -1,14 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.lq319.shop" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.lq319.shop" version="1.1.5" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Camera">
         <param name="browser-package" value="Camera" />
     </feature>
+    <feature name="QRScanner">
+        <param name="browser-package" value="QRScanner" />
+    </feature>
     <name>五福天下</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        五福天下，慈善商城.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="xiazhaoweiii@126.com" href="http://cordova.io">
+        悟行电商团队
     </author>
     <content src="index.html" />
     <access origin="*" />

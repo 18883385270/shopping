@@ -1,0 +1,92 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "cordova-plugin-appversion",
+        "scope": null,
+        "escapedName": "cordova-plugin-appversion",
+        "name": "cordova-plugin-appversion",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "C:\\Users\\xiazhaowei\\Documents\\HybridAPP\\shopping\\node_modules"
+    ]
+  ],
+  "_from": "cordova-plugin-appversion@latest",
+  "_id": "cordova-plugin-appversion@1.0.0",
+  "_inCache": true,
+  "_location": "/cordova-plugin-appversion",
+  "_nodeVersion": "0.10.33",
+  "_npmUser": {
+    "name": "joelambert",
+    "email": "joe@joelambert.co.uk"
+  },
+  "_npmVersion": "2.1.6",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cordova-plugin-appversion",
+    "scope": null,
+    "escapedName": "cordova-plugin-appversion",
+    "name": "cordova-plugin-appversion",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-appversion/-/cordova-plugin-appversion-1.0.0.tgz",
+  "_shasum": "b60a3913e475935f9008930b469725c263942891",
+  "_shrinkwrap": null,
+  "_spec": "cordova-plugin-appversion",
+  "_where": "C:\\Users\\xiazhaowei\\Documents\\HybridAPP\\shopping\\node_modules",
+  "author": {
+    "name": "Rareloop",
+    "url": "http://rareloop.com"
+  },
+  "bugs": {
+    "url": "https://github.com/Rareloop/cordova-plugin-app-version/issues"
+  },
+  "cordova": {
+    "id": "cordova-plugin-appversion",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "dependencies": {},
+  "description": "Access the native app version & build number in JavaScript",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "b60a3913e475935f9008930b469725c263942891",
+    "tarball": "https://registry.npmjs.org/cordova-plugin-appversion/-/cordova-plugin-appversion-1.0.0.tgz"
+  },
+  "gitHead": "3a5a6ba458df5ea94ad4a1d5446d468747a543c4",
+  "homepage": "https://github.com/Rareloop/cordova-plugin-app-version",
+  "keywords": [
+    "cordova",
+    "appversion",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "joelambert",
+      "email": "joe@joelambert.co.uk"
+    }
+  ],
+  "name": "cordova-plugin-appversion",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rareloop/cordova-plugin-app-version.git"
+  },
+  "scripts": {},
+  "version": "1.0.0"
+}

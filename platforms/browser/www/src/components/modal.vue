@@ -72,20 +72,20 @@
 </template>
 
 <script>
-import util from '../utils/util.js';
+import * as util from '../utils/util.js';
 
 export default {
     props: ['isHeadShow', 'type','title','isfullscreen'],
     data () {
         return {
             isModalShow: false,
-            bodyHeight:'100'
-           
+            bodyHeight:'100',
+            fullscreen:this.isfullscreen? this.isfullscreen:false
         };
     },
     mounted(){
-        console.log(this.isfullscreen);
-        if(this.isfullscreen){
+        console.log(this.fullscreen);
+        if(this.fullscreen){
             console.log(util.screenSize().height);
             this.bodyHeight=util.screenSize().height+'px';
         }
@@ -122,7 +122,7 @@ export default {
     .shade {
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.8);
         position: fixed;
         top: 0;
         left: 0;
@@ -145,7 +145,6 @@ export default {
                         background: #fff;
                         .head {
                             width: 100%;
-                            background: #C1272D;
                             .close {
                                 width: 1.5rem;
                                 height: 2rem;
@@ -154,16 +153,15 @@ export default {
                                 cursor: pointer;
                                 text-align: center;
                                 line-height: 2rem;
-                                color: #fff;
+                                color: #333;
                                 svg{
-                                    width: 1.5rem;height: 1.5rem;fill:#fff;
+                                    width: 1.5rem;height: 1.5rem;fill:#333;
                                 }
                             }
                             .title {
                                 width: 100%;
                                 line-height: 4rem;
-                                color: #fff;
-                                font-size: 1.6rem;
+                                font-size: 1.5rem;
                                 text-align: center;
                                 padding-left: 1.5rem;
                             }
@@ -187,7 +185,7 @@ export default {
                                 background: #fff;
                                 border: none;
                                 border-top: 0.1rem solid #56aeb0;
-                                font-size: 1.7rem;
+                                font-size: 1.3rem;
                                 color: #108d93;
                                 border-radius: 0 0 1rem 1rem;
                                 outline: none;
@@ -216,7 +214,7 @@ export default {
                                 background: #fff;
                                 border: 0.1rem solid #ddd;
                                 float: left;
-                                font-size: 1.6rem;
+                                font-size: 1.3rem;
                                 color: #333;
                                 outline: none;
                                 &:active {

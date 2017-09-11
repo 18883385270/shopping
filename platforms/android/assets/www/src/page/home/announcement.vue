@@ -3,7 +3,7 @@
         <div class="announcementwarp" @click="GoAnnouncementInfo">
             <span class="title">
                 <svg>
-                    <use xlink:href="#ok"></use>
+                    <use xlink:href="#notice"></use>
                 </svg>
                 系统公告：</span>
             <span class="info">{{Announcement.Title|truncate(20)}}</span>

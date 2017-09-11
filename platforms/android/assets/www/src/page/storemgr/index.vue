@@ -1,14 +1,14 @@
 <template>
   <div>
     <mi-header title="店铺管理"></mi-header>
-    <div class="tip error" v-if="storeinfo.Status && storeinfo.Status!='正常'">
+    <div class="divider"></div>
+    <div class="tip error" v-if="StoreInfo.Status && StoreInfo.Status!='正常'">
       <svg>
-        <use xlink:href="#ok"></use>
+        <use xlink:href="#x"></use>
       </svg>
       您的店铺未上线，因为店铺资料在审核中
     </div>
-  
-    <div class="emptybox" v-if="storeinfo.Name.length==0">
+    <div class="emptybox" v-if="!StoreInfo.Name">
       <svg>
         <use xlink:href="#emptyline"></use>
       </svg>
@@ -16,36 +16,36 @@
       <button class="button success" @click="goPage('/bindex/storeowner')">现在开店</button>
     </div>
   
-    <div v-if="storeinfo.Name.length">
+    <div v-if="StoreInfo.Name">
       <div class="storeinfo">
         <div class="storename">
-          <svg @click="goPage('/storemgr/setting')">
-            <use xlink:href="#ok" />
+          <svg @click="goSettingPage">
+            <use xlink:href="#settingline" />
           </svg>
-          <p class="name"> {{storeinfo.Name}}</p>
-          <p>{{storeinfo.Region}}{{storeinfo.Address}}</p>
+          <p class="name"> {{StoreInfo.Name}}</p>
+          <p>{{StoreInfo.Region}}{{StoreInfo.Address}}</p>
         </div>
         <div class="tongjiinfo">
           <div>
-            <span>{{statisticsinfo.TodayOrder}}</span>
+            <span>{{StatisticsInfo.TodayOrder}}</span>
             <p>今日订单</p>
           </div>
           <div>
-            <span>{{statisticsinfo.TodaySale|currency('￥',2)}}</span>
+            <span>{{StatisticsInfo.TodaySale|currency('￥',2)}}</span>
             <p>今日销售额</p>
           </div>
           <div>
-            <span>{{statisticsinfo.TotalOrder}}</span>
+            <span>{{StatisticsInfo.TotalOrder}}</span>
             <p>累计订单</p>
           </div>
           <div>
-            <span>{{statisticsinfo.TotalSale|currency('￥',2)}}</span>
+            <span>{{StatisticsInfo.TotalSale|currency('￥',2)}}</span>
             <p>累计销售</p>
           </div>
         </div>
       </div>
-      <div style="height:1rem;"></div>
-      <div class="newordertip" v-for="StoreOrder in StoreOrders" @click="goInfoPage(StoreOrder)">
+      <div class="divider"></div>
+      <div class="newordertip" v-for="StoreOrder in StoreOrders" @click="goOrderInfoPage(StoreOrder)">
         <div class="title">
           <p class="tiplabel">新订单，提醒</p>
           <p>订单号：{{StoreOrder.Number}}</p>
@@ -54,7 +54,7 @@
         <div class="ordergoodses">
           <div class="goods" v-for="Goods in StoreOrder.StoreOrderGoodses">
             <div class="pic">
-              <img src="https://i8.mifile.cn/v1/a1/1fbd6d1f-05bf-f22e-cba8-250dfade437d.webp?width=360&heihgt=256" alt="">
+              <img :src="Goods.GoodsPic" alt="">
             </div>
             <div class="cnt">
               <p>{{Goods.GoodsName}}</p>
@@ -72,8 +72,8 @@
           </p>
         </div>
       </div>
-  
-      <div class="tablerow marg-top1" @click="goPage('/storemgr/ordermgr')">
+      <div class="divider"></div>
+      <div class="tablerow" @click="goPage('/storemgr/ordermgr')">
         <div class="tlt">订单管理</div>
         <div class="cnt">
           <svg>
@@ -91,7 +91,7 @@
         </div>
       </div>
     </div>
-    <div style="height:2rem;"></div>
+    <div class="divider"></div>
   </div>
 </template>
 
@@ -105,10 +105,9 @@ export default {
   },
   data() {
     return {
-      storeinfo: {
-        Name: ''
-      },
-      statisticsinfo: {},
+      StoreInfo: {},
+      StatisticsInfo: {},
+      SubjectInfo:{},
       StoreOrders: []
     }
   },
@@ -122,9 +121,13 @@ export default {
       api.InfoApi(params).then(
         res => {
           if (res.data.Code == 200) {
-            this.storeinfo = res.data.StoreInfo;
-            this.statisticsinfo = res.data.StatisticsInfo;
+            this.StoreInfo = res.data.StoreInfo;
+            this.StatisticsInfo = res.data.StatisticsInfo;
+            this.SubjectInfo = res.data.SubjectInfo;
             this.StoreOrders = res.data.StoreOrders;
+            //将数据保存到sessionStore 方便页面传值
+            sessionStorage.StoreInfo = JSON.stringify(this.StoreInfo)
+            sessionStorage.SubjectInfo = JSON.stringify(this.SubjectInfo)
           } else {
 
           }
@@ -138,8 +141,13 @@ export default {
       //未开店，进入开店
       this.$router.push({ path: page })
     },
-    goInfoPage(order) {
-      this.$router.push({ name: 'orderinfomgr', params: { StoreOrder: order } });
+    goSettingPage(){
+      this.$router.push({name:'storesetting',params:{Store:this.StoreInfo,SubjectInfo:this.SubjectInfo}})
+    },
+    goOrderInfoPage(order) {
+      //要传递的订单信息存到sessionStorage
+      sessionStorage.StoreStoreOrder = JSON.stringify(order)
+      this.$router.push({name:'orderinfomgr'})
     }
   }
 }
@@ -194,8 +202,8 @@ export default {
       padding: 0.8rem 0;
     }
     svg{
-      width:2rem;
-      height:2rem;
+      width:1.6rem;
+      height:1.6rem;
       fill:#333;
       float:right;
     }

@@ -1,8 +1,24 @@
 <template>
     <div>
         <mi-header title="确认订单"></mi-header>
-        <mi-selectexpressaddress></mi-selectexpressaddress>
-        <mi-ordergoods></mi-ordergoods>
+        <div class="exadd" @click="showpicker">
+            <div class="tlt">收货地址</div>
+            <div class="cnt">
+                <div v-if="ExpressAddress">
+                    <p> {{ExpressAddress.Region}} {{ExpressAddress.Address}}</p>
+                    <p>{{ExpressAddress.Name}} {{ExpressAddress.Mobile|mobilehide}}</p>
+                </div>
+                <div class="noaddress" v-if="!ExpressAddress">选择收货地址</div>
+            </div>
+            <div class="change">
+                <svg>
+                    <use xlink:href="#rightarrowsline"></use>
+                </svg>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <mi-ordergoods :StoreCartGoods="StoreCartGoods"></mi-ordergoods>
+        <div class="divider"></div>
         <div class="youhuiwarp">
             <div class="tablerow">
                 <div class="tlt">发票信息</div>
@@ -10,67 +26,124 @@
             </div>
             <div class="tablerow">
                 <div class="tlt">优惠券</div>
-                <div class="cnt">已使用一张 已抵用￥30</div>
-            </div>
-            <div class="tablerow">
-                <div class="tlt">余额付款</div>
-                <div class="cnt">
-                    <span class="swch">
-                        <mi-switch @switchEvent="switchEventHandle"></mi-switch>
-                    </span>
-                    <span class="txt"> 可用余额6.00</span>
-                </div>
-            </div>
-            <div class="paypassword" v-if="isCashPay">
-                <div class="tlt">支付密码</div>
-                <div>
-                    <mi-paypassword></mi-paypassword>
-                </div>
+                <div class="cnt">未使用优惠券</div>
             </div>
         </div>
+        <div class="divider"></div>
         <div class="remark">
-            <div class="tablerow">
+            <div class="info">
                 <input type="text" placeholder="订单备注(限45字，请勿填写发票、配送方面的信息)">
             </div>
         </div>
+        <div class="divider"></div>
         <div class="paytype">
             <div class="total">
                 总价：
-                <span>￥50.5</span>
-                <p>包含运费:4.5元</p>
+                <span>￥{{CalTotalAmount()}}</span>
+                <!-- <p>包含运费:4.5元</p> -->
             </div>
-            <button class="warning">提交订单</button>
-            <button class="success">微信支付</button>
-            <button class="primary">支付宝支付</button>
-            <p>支付金额为0，无需支付</p>
+            <button class="button warning" @click="PostOrderEvent">提交订单</button>
         </div>
+        <expressaddresspicker ref="expressaddresspicker" @expressaddressPickerEvent="expressaddressPickerHandle"></expressaddresspicker>
+        <mi-toast ref="toast"></mi-toast>
+
     </div>
 </template>
 
 <script>
 import header from '../../../components/header.vue';
 import vswitch from '../../../components/switch.vue';
-import paypassword from '../../../components/paypassword.vue';
-import selectexpressaddress from './selectexpressaddress.vue';
+import expressaddresspicker from '../../pickers/expressaddresspicker.vue'
+import toast from '../../../components/toast.vue'
 import ordergoods from './ordergoods.vue';
+import * as api from '../../../api/order'
+import * as checkJs from '../../../utils/pubfunc'
 
 
 export default {
     components: {
         'mi-header': header,
         'mi-switch': vswitch,
-        'mi-paypassword': paypassword,
-        'mi-selectexpressaddress': selectexpressaddress,
-        'mi-ordergoods': ordergoods
+        'mi-ordergoods': ordergoods,
+        'expressaddresspicker':expressaddresspicker,
+        'mi-toast':toast
     },
     data() {
         return {
-            isCashPay: false
+            ExpressAddress: {},
+            StoreCartGoods:[]
         }
     },
+    mounted(){
+        this.StoreCartGoods=JSON.parse(sessionStorage.StoreCartGoods);
+    },
     methods: {
-        switchEventHandle(isOn) {
-            this.isCashPay = isOn;
+        showpicker() {
+            this.$refs.expressaddresspicker.show();
+        },
+        expressaddressPickerHandle(expressaddress) {
+            this.ExpressAddress = expressaddress;
+        },
+        CalTotalAmount(){
+            var amount=0;
+            this.StoreCartGoods.forEach(function (store, index) {
+                store.CartGoodses.forEach(function (goods) {
+                    amount+=(goods.Price*goods.Quantity)
+                });
+            });
+            return amount;
+        },
+        toPage(page,params){
+            this.$router.replace({name:page,params:params});
+        },
+        PostOrderEvent(){
+            let alertFuc = (msg) => {
+                const toast = this.$refs.toast;
+                toast.show(msg);
+                return false
+            }
+            
+            if(checkJs.isNullOrEmpty(this.ExpressAddress)){
+                alertFuc('请选择收货地址')
+	            return;
+            }
+            var cartGoodses=[];
+            this.StoreCartGoods.forEach(function (store, index) {
+                store.CartGoodses.forEach(function (goods) {
+                    cartGoodses.push(goods);
+                });
+            });
+            let totalamount=this.CalTotalAmount();
+            let params = {
+                ExpressAddress:this.ExpressAddress,
+                CartGoodses:cartGoodses
+            };
+            //提交订单
+            api.AddApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        var orderId=res.data.OrderId;
+                        var paymentId=res.data.PaymentId;
+                        //提交订单成功并且创建好待付款项目 进入支付页面
+                        let toPayInfo={
+                            Type:'order',
+                            OrderId:orderId,
+                            PaymentId:paymentId,
+                            OrderNumber:'',
+                            Amount:totalamount,
+                            Remark:'订单付款',
+                            CreatedOn:(new Date()).valueOf()
+                        }
+                        sessionStorage.ToPayInfo = JSON.stringify(toPayInfo)
+                        this.$router.push({name:'pay'})
+                    } else {
+                        alertFuc(res.data.Message)
+                    }
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
         }
     }
 }
@@ -80,30 +153,7 @@ export default {
 <style lang="less" scoped>
 .youhuiwarp {
     background: #fff;
-    margin-top: 1rem;
-    .tablerow {
-        display: flex;
-        font-size: 1.3rem;
-        border-bottom: 1px solid #eee;
-        .tlt {
-            width: 40%;
-            padding: 1rem;
-        }
-        .cnt {
-            width: 60%;
-            font-size: 1rem;
-            text-align: right;
-            padding: 1rem;
-            .txt {
-                display: inline-block;
-                margin-top: 0.6rem;
-                margin-right:1rem;
-            }
-            .swch {
-                float: right;
-            }
-        }
-    }
+    
     .paypassword {
         padding: 1rem;
         display: flex;
@@ -117,15 +167,14 @@ export default {
 
 .remark {
     background: #fff;
-    margin-top: 1rem;
-    .tablerow {
+    .info {
         padding: 1rem;
         input {
             font-size: 1.3rem;
             color: #999;
-            width: 100%;
             padding: 0.5rem 0;
             border: none;
+            width:100%;
             &:focus {
                 outline: none;
             }
@@ -135,7 +184,6 @@ export default {
 
 .paytype {
     background: #fff;
-    margin-top: 1rem;
     padding: 1rem;
     font-size: 1.3rem;
     text-align: center;
@@ -153,25 +201,7 @@ export default {
         padding-top: 0.5rem;
         font-size: 1rem;
     }
-    button {
-        width: 100%;
-        padding: 1rem 0;
-        text-align: center;
-        margin-top: 1rem;
-        color: #fff;
-        font-size: 1.3rem;
-        border: 0;
-        border-radius: 3px;
-        &.success {
-            background: #096;
-        }
-        &.primary {
-            background: #36c;
-        }
-        &.warning {
-            background: #f90;
-        }
-    }
+    
 }
 </style>
 

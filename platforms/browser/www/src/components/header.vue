@@ -41,6 +41,7 @@ export default {
   background-color: #fff;
   border-bottom:1px solid #ddd;
   color: #000;
+  z-index:10000;
   .left {
     width: 30%;
     line-height: 3.7rem;

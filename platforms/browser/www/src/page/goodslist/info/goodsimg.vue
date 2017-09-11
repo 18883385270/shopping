@@ -2,7 +2,7 @@
   <div class="img">
     <div class="control">
       <div class="left hook" @click="goBackEvent"><svg><use xlink:href="#back"></use></svg></div>
-      <div class="right hook" @click="goodSearchEvent"><svg><use xlink:href="#search"></use></svg></div>
+      <div class="right hook" @click="goodSearchEvent"><svg><use xlink:href="#share"></use></svg></div>
     </div>
 
     <div class="swiper-container" ref="a">
@@ -18,14 +18,15 @@
   import Swiper from '../../../utils/swiper-3.4.2.min.js';
   import data from '../../../../../data.json';
   export default {
+    props:['bannerList'],
     data () {
       return {
-        bannerList: []
+        //bannerList: []
       };
     },
     components: {},
     created () {
-      this.bannerList = data.detail.img;
+      //this.bannerList = data.detail.img;
     },
     methods: {
       goBackEvent () {
@@ -42,7 +43,6 @@
         pagination: '.swiper-pagination',
         autoplayDisableOnInteraction: false
       });
-      console.log(mySwiper);
     }
   };
 </script>
@@ -88,7 +88,7 @@
     .swiper-slide {
       position: relative;
       height: 0;
-      padding-top: 115%;
+      padding-top: 100%;
       img {
         position: absolute;
         top: 0;

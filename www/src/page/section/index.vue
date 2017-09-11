@@ -34,45 +34,10 @@ export default {
         }
       },
       searchLeftBtnEventHandle(){
-        
+        this.$router.replace({name:'home'})
       },
       searchRightBtnEventHandle(){
-        //二维码扫描
-        let self=this;
-            cordova.plugins.barcodeScanner.scan(  
-                function (result) {  
-                    // alert("We got a barcode\n" +  
-                    //         "Result: " + result.text + "\n" +  
-                    //         "Format: " + result.format + "\n" +  
-                    //         "Cancelled: " + result.cancelled);
-                    //format QR_CODE 二维码，EAN_13条形码
-
-                    if(result.format=='QR_CODE') 
-                    {//如果是二维码 
-                        //判断是否是用户的二维码
-                        var userId=checkJs.GetUserId(result.text);
-                        if(!checkJs.isNullOrEmpty(userId))
-                        {
-                            if(checkJs.isNullOrEmpty(self.$store.state.global.token))
-                            {//未登录 进入注册页面
-                                self.$router.push({name:'register',params:{UserId:userId}});
-                            }
-                        }
-                        else{
-                            //显示扫描信息
-                            alert('扫描结果：'+result.text)
-                        }
-                        
-                    }
-                    if(result.format=='EAN_13'){
-                        alert('扫描结果：'+result.text)
-                    }
-                    
-                },   
-                function (error) {  
-                    alert("扫描失败: " + error);  
-                }  
-            ); 
+        this.$router.push({name:'scannerpage'});
       }
     }
 }

@@ -16,8 +16,13 @@ export default {
     props:['stock'],
     data() {
         return {
-            value: 1,
+            value:1 ,
             goodstock:this.stock
+        }
+    },
+    watch:{
+        stock(val){
+            this.goodstock=val
         }
     },
     methods:{
@@ -28,7 +33,6 @@ export default {
                 // 通过 input 事件发出数值
                 this.$emit('input', Number(this.value))
             }
-            
         },
         reducecount(){
             if(this.value>1)

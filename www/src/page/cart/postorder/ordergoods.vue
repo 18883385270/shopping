@@ -40,7 +40,6 @@ export default {
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
   background: #fff;
-  margin-top: 1rem;
   .storetitle {
     font-size: 1.3rem;text-indent: 1rem;
     padding: 1rem 0;

@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="tablerow">
-      <div class="tlt">地区</div>
+      <div class="tlt">选择地区</div>
       <div class="cnt" @click="selectRegion">
         {{region}}
       </div>
@@ -40,8 +40,10 @@
     </div>
     <div class="tablerow">
       <div class="tlt">证件照片</div>
-      <div class="cnt">
-        
+      <div>
+        <div style="padding:1rem 0;">
+                <imginputer placeholder="选择证件照片" size="small" @onChange="OnFileChangeHandle"></imginputer>
+            </div>
       </div>
     </div>
     <div class="btnwarp">
@@ -59,15 +61,18 @@
 
 <script>
 import header from '../../../../components/header.vue';
+import imginputer from '../../../../components/imginputer.vue'
 import regionpicker from '../../../../components/regionpicker.vue'
 import toast from '../../../../components/toast.vue'
 import * as api from '../../../../api/store'
 import * as checkJs from '../../../../utils/pubfunc'
+import * as util from '../../../../utils/util'
 
 export default {
   components: {
     'mi-header': header,
     'mi-regionpicker': regionpicker,
+    'imginputer':imginputer,
     'mi-toast': toast
   },
   data() {
@@ -84,11 +89,15 @@ export default {
   },
   mounted(){
     //检查用户身份，如果不是传递使者进入到开通传递大使页面
-    if(this.$store.state.global.userinfo.Role!='传递大使'){
+    if(this.$store.state.global.userinfo.Role!='店主'){
       this.$router.replace({path:'/bindex/ambassador'});
     }
   },
   methods: {
+    OnFileChangeHandle(file){
+            var ossfilename=util.uploadToOss(file,'subject');
+            this.subjectpic=ossfilename;
+        },
     selectRegion() {
       this.$refs.regionpicker.show();
     },
@@ -126,6 +135,10 @@ export default {
         alertFuc('请完善主体信息')
         return;
       }
+      if (checkJs.isNullOrEmpty(this.subjectpic)) {
+        alertFuc('请上传主体证件照片')
+        return;
+      }
       			
       let params = {
         Name:this.name,
@@ -136,7 +149,7 @@ export default {
         Subject:{
           Name:this.subjectname,
           Number:this.subjectnumber,
-          Pic:''
+          Pic:this.subjectpic
         }
       };
       api.ApplyStoreApi(params).then(

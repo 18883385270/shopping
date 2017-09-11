@@ -1,10 +1,12 @@
 <template>
-    <div class="profilepgwp">
+    <div class="profilepgwp" :style="{height:bodyHeight}">
         <mi-header title="个人资料"></mi-header>
-        <div class="tablerow mg-top20">
+        <div class="divider"></div>
+        <div class="tablerow">
             <div class="tlt">我的头像</div>
             <div class="cnt">
-                <img class="portrait" src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1733071988,3600838707&fm=117&gp=0.jpg" />
+                <img class="portrait" @click="openSelectImg($event)" :src="this.$store.state.global.userinfo.Portrait" />
+                <input type="file" id="fileElem" multiple accept="image/*" style="width:5rem;height:5rem;background:#000;position:absolute;right:1rem;opacity:0" @change="handleFiles($event)">
             </div>
         </div>
         <div class="tablerow" @click="goPage('/me/profile/setnickname')">
@@ -22,7 +24,7 @@
                 {{this.$store.state.global.userinfo.gender}}
             </div>
         </div> -->
-        <div class="tablerow" @click="openMyQrCodeHandle">
+        <div class="tablerow" @click="goPage('/me/profile/myqrcode')">
             <div class="tlt">二维码名片</div>
             <div class="cnt">
                 <svg>
@@ -30,7 +32,8 @@
                 </svg>
             </div>
         </div>
-        <div class="tablerow mg-top20">
+        <div class="divider"></div>
+        <div class="tablerow">
             <div class="tlt">手机号</div>
             <div class="cnt">
                 {{this.$store.state.global.userinfo.Mobile|mobilehide}}
@@ -44,7 +47,8 @@
                 </svg>
             </div>
         </div>
-        <div class="tablerow mg-top20" @click="goPage('/me/profile/changepassword')">
+        <div class="divider"></div>
+        <div class="tablerow" @click="goPage('/me/profile/changepassword')">
             <div class="tlt">修改登录密码</div>
             <div class="cnt">
                 <svg>
@@ -52,7 +56,8 @@
                 </svg>
             </div>
         </div>
-        <div class="tablerow mg-top20" @click="logout">
+        <div class="divider"></div>
+        <div class="tablerow" @click="logout">
             <div class="tlt">退出登录</div>
             <div class="cnt">
                 
@@ -66,13 +71,6 @@
             </div>
         </mi-modal>
         <mi-toast ref='toast'></mi-toast>
-        <!--弹出框-->
-        <mi-modal ref="alert" type="pop" :isHeadShow="true" title="我的二维码">
-            <div slot="modalbody" class="qrCodeWarp">
-                <vue-q-art :config="config" :downloadButton="downloadButton"></vue-q-art>
-                <p>扫描二维码，推荐朋友加入商城</p>
-            </div>
-        </mi-modal>
         <mi-popup ref="popup" title="更改性别">
             <div slot="modalbody" class="genderls">
                 <div class="genderitem">
@@ -99,33 +97,62 @@ import header from '../../../components/header.vue'
 import modal from '../../../components/modal.vue'
 import toast from '../../../components/toast.vue'
 import popup from '../../../components/popup.vue'
-import VueQArt from 'vue-qart'
 import * as api from '../../../api/account'
+import * as util from '../../../utils/util'
 
 export default {
     components: {
         'mi-header': header,
-        'mi-modal': modal,
         'mi-toast': toast,
+        'mi-modal':modal,
         'mi-popup': popup,
-        VueQArt
     },
-    data() {
-        return {
-            config: {
-                value: 'https://www.lq319.com',
-                imagePath: './src/img/logo.png',
-                filter: 'color'
-            },
-            downloadButton: false
+    data(){
+        return{
+            bodyHeight: '100%'
         }
     },
+    mounted(){
+        this.bodyHeight = util.screenSize().height + 'px';
+    },
     methods: {
+        handleFiles(event){
+            console.log('选择了文件')
+            let file = event.target.files[0];
+            var ossfilename=util.uploadToOss(file,'pingzheng');
+            this.SetPortrait(ossfilename);
+        },
+        SetPortrait(ossfilename){
+            let self = this
+            let params = {
+                Portrait: ossfilename
+            }
+            api.SetPortraitApi(params).then(
+                res => {
+                if (res.data.Code == 200) {
+                    //更新本地存储
+                    self.$store.dispatch('update_userinfo', {
+                    userinfo: {
+                        NickName: self.$store.state.global.userinfo.NickName,
+                        Portrait: ossfilename,
+                        Gender: self.$store.state.global.userinfo.Gender,
+                        Region: self.$store.state.global.userinfo.Region,
+                        Mobile: self.$store.state.global.userinfo.Mobile
+                    }
+                    }).then(() => {
+                    });
+                    
+                } else {
+                    alertFuc(res.data.Message)
+                }
+                },
+                err => {
+                console.log('网络错误');
+                }
+            );
+        },
         goPage(page) {
             this.$router.push({ path: page });
-        },
-        openMyQrCodeHandle() {
-            this.$refs.alert.modalOpen();
         },
         openSetGender() {
             this.$refs.popup.modalOpen();
@@ -149,44 +176,19 @@ export default {
             self.$store.dispatch('remove_userinfo', { userinfo: ''  });
             self.$store.dispatch('remove_walletinfo', { walletinfo: '' });
             self.$router.replace('/');
-			/*
-            api.LogoutApi(params).then(
-                res => {
-                    if (res.data.Code == 200) {
-                        self.$store.dispatch('remove_token', { token: '' });
-                        self.$router.replace('/');
-                    } else {
-                        alertFuc(res.data.Message);
-                    }
-                },
-                err => {
-                    self.$store.dispatch('remove_token', { token: '' });
-                    alertFuc("网络访问错误~");
-                }
-            )*/
         }
     }
 }
 </script>
 
 <style lang="less" scoped>
-
+.profilepgwp{
+    background:#eee;
+}
 
 .confirm {
     padding: 1rem;
     font-size: 1.3rem;
-}
-
-.qrCodeWarp {
-    padding: 3rem;
-    text-align: center;
-    img {
-        width: 100%;
-    }
-    p {
-        font-size: 1.3rem;
-        margin-top: 1rem;
-    }
 }
 
 .genderls {
@@ -194,11 +196,9 @@ export default {
     padding: 1rem;
     .genderitem {
         >label {
-                
-                display:inline-block;width:20rem;
-                font-size: 1.3rem;
-                line-height: 2rem;
-            
+            display:inline-block;width:20rem;
+            font-size: 1.3rem;
+            line-height: 2rem;
         }
     }
 }

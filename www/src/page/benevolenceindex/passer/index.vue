@@ -10,6 +10,7 @@
             <div>有效期：永久有效</div>
             <div>已开通：2454644人</div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">为什么要做传递使者?</div>
             <div class="cont">
@@ -20,6 +21,7 @@
                 <p>【5】善心激励就是将您的善心转换为人民币</p>
             </div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">开通方式</div>
             <div class="cont">
@@ -78,7 +80,6 @@ export default {
         }
     }
     .shuoming {
-        margin-top: 1rem;
         border-top: 1px solid #eee;
         background: #fff;
         padding: 1rem;

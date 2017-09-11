@@ -5,7 +5,7 @@
     <div class="profilewp">
         <div class="warp">
             <div class="portrait">
-                <img src="dist/defaultportrait.png" />
+                <img :src="this.$store.state.global.userinfo.Portrait" />
             </div>
             <div class="name" @click="goPage('/me/profile')">
                 <h3>{{this.$store.state.global.userinfo.NickName}}
@@ -32,8 +32,6 @@
 export default {
     methods: {
         openMyQrCode() {
-            console.log("openmyqrcode");
-            //广播事件
             this.$emit('openmyqrcode');
         },
         goPage(page) {

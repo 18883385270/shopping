@@ -20,8 +20,16 @@
         <div class="bottom">
           <span class="title">{{ Goods.Name| truncate(20)}}</span>
           <span class="desc"></span>
-          <span class="price">{{ Goods.Price|currency('￥',2) }}</span>
+          <span class="price">
+            <span>
+              {{Goods.Benevolence |currency('',2)}} 善心</span> {{ Goods.Price |currency('￥',2) }}</span>
         </div>
+      </div>
+      <div class="nextpage" @click="NextPage" v-if="!NotAnyMore">
+          <span>加载更多</span>
+      </div>
+      <div class="nextpage" @click="NextPage" v-if="NotAnyMore">
+          <span>没有更多了</span>
       </div>
     </div>
   </div>
@@ -41,8 +49,9 @@ export default {
       CategoryId:'',
       Search:'',
       Sort:'综合',
+      CurrentPage:0,
       Goodses: [],
-      imgUrl:"https://i8.mifile.cn/v1/a1/9f7e141c-87a7-82c6-7170-599504ce2630.webp?width=360&height=360"
+      NotAnyMore:false
     }
   },
   mounted(){
@@ -50,25 +59,30 @@ export default {
     this.Search=this.$route.params.search || '';
     this.CategoryId=this.$route.params.categoryid || '';
 
-    this.GetList();
+    this.fatchData();
   },
   methods: {
     sortEvent(sort){
       this.Sort=sort;
-      this.GetList();
+      this.fatchData();
     },
-    GetList(){
-      			
+    fatchData(){
       let params = {
         CategoryId:this.CategoryId,
         Type:this.Type,
         Search:this.Search,
-        Sort:this.Sort
+        Sort:this.Sort,
+        Page:this.CurrentPage
       };
       api.GoodsListApi(params).then(
         res => {
           if (res.data.Code == 200) {
-            this.Goodses=res.data.Goodses
+            if(res.data.Goodses.length){
+                this.Goodses=this.Goodses.concat(res.data.Goodses);
+            }
+            else{
+                this.NotAnyMore=true;
+            }
           } else {
             console.log(res.data.Message);
           }
@@ -78,8 +92,13 @@ export default {
         }
       )
     },
+    NextPage(){
+        this.CurrentPage++;
+        this.fatchData();
+    },
     goGoodsPage(goods) {
-      this.$router.push({name:'goodsinfo',params:{id:goods.Id}});
+      sessionStorage.GoodsId=goods.Id
+      this.$router.push({name:'goodsinfo'});
     }
   }
 }
@@ -97,6 +116,7 @@ export default {
     padding: 1rem 0;
     text-align: center;
     border-left: 1px solid #eee;
+    border-bottom:1px solid #eee;
     &:first-child {
       border-left: 0;
     }
@@ -131,7 +151,7 @@ export default {
     float: left;
     box-sizing: border-box;
     border-right: 0.1rem solid #fff;
-    min-height: 25rem;
+    height: 25rem;
     font-size: 0;
     .top {
       padding: 1rem;
@@ -162,14 +182,29 @@ export default {
         font-size: 1.3rem;
         color: #ff601e;
         line-height: 2rem;
+        span {
+            float: right;
+            font-size: 0.8rem;
+           background:#ff601e;
+            color:#fff;
+            line-height:1rem;
+            padding:0.2rem 0.6rem;
+            border-radius:2px;
+          }
       }
     }
   }
   .item2 {
-    float: right;
+    float:right;
     margin-right: 0;
     border-left: 0.1px solid #eee;
   }
+}
+.nextpage{
+    text-align:center;
+    clear:both;
+    padding:1rem;
+    background:#fff;
 }
 </style>
 

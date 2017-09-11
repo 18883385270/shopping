@@ -1,6 +1,6 @@
 <template>
     <span>
-        <button type="button" @click="runs" :class="style" :disabled="disabled || time > 0">
+        <button class="verifcode" type="button" @click="runs"  :disabled="disabled || time > 0">
             {{ text }}
         </button>
         <mi-toast ref="toast"></mi-toast>
@@ -89,7 +89,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.phone-verifcode {
+.verifcode {
     line-height: 2rem;
     font-size: 1.3rem;
     background:#fff;
@@ -99,15 +99,6 @@ export default {
     }
 }
 
-.phone-verifcode-out {
-    line-height: 2rem;
-    font-size: 1.3rem;
-    background: #fff;
-    border:0;
-    &:active{
-        outline: none;
-    }
-}
 </style>
 
 

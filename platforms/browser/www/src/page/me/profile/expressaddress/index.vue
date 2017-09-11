@@ -1,47 +1,89 @@
 <template>
   <div>
-    <mi-header title="我的地址"></mi-header>
-    <div class="addressls">
-      <div class="addwarp">
+    <mi-header title="我的地址" rightext="添加" @rightNavBarClicked="addAddress"></mi-header>
+    <div class="addressls" v-if="expressAddresses.length">
+      <div class="addwarp" v-for="(expressAddress,index) in expressAddresses">
         <div class="cnt">
-          <p>山东 日照 东港区 巨鹿路516弄3号3楼</p>
-          <p>夏兆伟 135****2764</p>
+          <p>{{expressAddress.Region}} {{expressAddress.Address}}</p>
+          <p>{{expressAddress.Name}} {{expressAddress.Mobile|mobilehide}}</p>
         </div>
-        <div class="ops">
-          <svg>
-            <use xlink:href="#delline"></use>
-          </svg>
-        </div>
-      </div>
-      <div class="addwarp">
-        <div class="cnt">
-          <p>山东 日照 东港区 巨鹿路516弄3号3楼</p>
-          <p>夏兆伟 135****2764</p>
-        </div>
-        <div class="ops">
+        <div class="ops" @click="del(index)">
           <svg>
             <use xlink:href="#delline"></use>
           </svg>
         </div>
       </div>
     </div>
-    <div class="addaddress">
-      + 添加地址
+    <div class="emptybox" v-if="!expressAddresses.length">
+      <svg>
+        <use xlink:href="#empty"></use>
+      </svg>
+      <p> 您还没有地址，快添加一个吧？</p>
     </div>
+   
   </div>
 </template>
 
 <script>
 import header from '../../../../components/header.vue';
+import * as api from '../../../../api/account';
 
 export default {
   components: {
     'mi-header': header
+  },
+  data(){
+    return {
+      expressAddresses:[]
+    }
+  },
+  mounted(){
+    //请求用户收件地址数据
+    let params={};
+    api.GetUserExpressAddressesApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        this.expressAddresses=res.data.ExpressAddresses;
+                        console.log(this.expressAddresses);
+                    } else {
+                        console.log("返回错误码："+res.data.Code);
+                    }
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
+  },
+  methods:{
+    addAddress(){
+      console.log('addaddress');
+      this.$router.push({path:'/me/profile/expressaddress/add'});
+    },
+    del(index){
+      let params={
+        expressAddressId:this.expressAddresses[index].Id
+      }
+      console.log(this.expressAddresses[index].Id);
+      api.DeleteExpressAddressApi(params).then(
+        res=>{
+          if(res.data.Code==200){
+            //删除本地数据
+            this.expressAddresses.splice(index,1);
+          }else{
+            console.log("返回错误码："+res.data.Code);
+          }
+        },
+        err=>{
+          console.log('网络错误')
+        }
+      );
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
+
 .addressls {
   padding: 1rem;
   .addwarp {
@@ -65,12 +107,6 @@ export default {
   }
 }
 
-.addaddress {
-  margin:1rem;
-  background: #fff;
-  border: 1px dashed #ddd;
-  text-align: center;
-  padding:1.3rem;font-size:1.3rem;
-}
+
 </style>
 

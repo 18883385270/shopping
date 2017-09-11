@@ -6,7 +6,7 @@
             <h1>善心联盟</h1>
             <h2>成为公司合伙人,从此财务自营</h2>
         </div>
-        
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">为什么要做善心联盟?</div>
             <div class="cont">
@@ -19,6 +19,7 @@
                 <p>【7】享有区域或行业销售总额0.5%~1%的善心奖励</p>
             </div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">申请流程</div>
             <div class="cont">
@@ -30,6 +31,7 @@
             </div>
             
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">申请条件</div>
             <div class="cont">
@@ -39,7 +41,7 @@
                 <p>【4】运营股东或培训股东（拥有五千个善心，市级）</p>
                 <p>【5】行业股东（拥有一千个善心，县级）</p>
             </div>
-            <button class="sharebtn">知道了，去申请</button>
+            <button class="button err">知道了，去申请</button>
         </div>
         
 
@@ -93,7 +95,6 @@ export default {
         }
     }
     .shuoming {
-        margin-top: 1rem;
         border-top: 1px solid #eee;
         background: #fff;
         padding: 1rem;
@@ -115,17 +116,7 @@ export default {
             }
         }
     }
-    .sharebtn {
-        text-align: center;
-        width:100%;
-        display: block;
-        margin-top: 2rem;
-        font-size: 1.3rem;
-        background: #C1272D;
-        color:#fff;
-        border: 0;
-        padding: 1rem 0;
-    }
+    
     
 }
 </style>

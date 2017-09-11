@@ -1,25 +1,19 @@
 <template>
   <div>
     <mi-header title="我的店铺"></mi-header>
+    <div class="divider"></div>
     <div class="storetitle">
-      <h1>夏天的店</h1>
-      <p>驴肉汤，驴肉火烧，正宗河间老师傅传授</p>
+      <h1>{{StoreInfo.Name}}</h1>
+      <p>{{StoreInfo.Description}}</p>
     </div>
-    <div class="tablerow mg-top20" @click="toPage('storesubjectinfo')">
+    <div class="divider"></div>
+    <div class="tablerow" @click="toSubjectPage">
       <div class="tlt">主体信息</div>
       <div class="cnt">
-        夏兆伟
+        {{SubjectInfo.SubjectName}}
         <svg>
           <use xlink:href="#rightarrowsline"></use>
         </svg>
-      </div>
-    </div>
-    <div class="tablerow mg-top20">
-      <div class="tlt">暂停营业</div>
-      <div class="cnt">
-        <span class="swch">
-          <mi-switch @switchEvent="switchEventHandle"></mi-switch>
-        </span>
       </div>
     </div>
   </div>
@@ -27,19 +21,24 @@
 
 <script>
 import header from '../../../components/header.vue'
-import vswitch from '../../../components/switch.vue';
 
 export default {
   components: {
     'mi-header': header,
-    'mi-switch': vswitch
+  },
+  data(){
+    return{
+      StoreInfo:{},
+      SubjectInfo:{}
+    }
+  },
+  mounted(){
+    this.StoreInfo = JSON.parse(sessionStorage.StoreInfo)
+    this.SubjectInfo = JSON.parse(sessionStorage.SubjectInfo)
   },
   methods: {
-    switchEventHandle(isOn) {
-      
-    },
-    toPage(page){
-      this.$router.push({name:page})
+    toSubjectPage(){
+      this.$router.push({name:'storesubjectinfo'})
     }
   }
 

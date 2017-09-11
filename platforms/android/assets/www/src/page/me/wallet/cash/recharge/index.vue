@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-gray" :style="{height:bodyHeight}">
     <mi-header title="选择充值方式"></mi-header>
     <div class="tablerow mg-top20" @click="goPage('/wallet/cash/recharge/onlinerecharge')">
       <div class="tlt">线上充值</div>
@@ -9,6 +9,7 @@
         </svg>
       </div>
     </div>
+
     <div class="tablerow" @click="goPage('/pay/offlinepay')">
       <div class="tlt">线下充值</div>
       <div class="cnt">
@@ -22,6 +23,7 @@
 
 <script>
 import header from '../../../../../components/header.vue'
+import * as util from '../../../../../utils/util'
 
 export default {
   components: {
@@ -29,8 +31,12 @@ export default {
   },
   data() {
     return {
-      amount: 0
+      amount: 0,
+      bodyHeight: '100%'
     }
+  },
+  mounted(){
+        this.bodyHeight = util.screenSize().height + 'px';
   },
   methods: {
     goPage(page) {
@@ -42,7 +48,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.bg-gray{
+  background:#eee;
+}
 </style>
 
 

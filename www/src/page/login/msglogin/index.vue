@@ -1,5 +1,5 @@
 <template>
-  <div class="loginpage" :style="{height:bodyHeight}">
+  <div class="loginpage" >
     <mi-header title="快捷登录"></mi-header>
     <h1>手机快捷登录</h1>
     <p>无需登录密码，通过短信验证码登录</p>
@@ -48,15 +48,8 @@ export default {
     return {
       Mobile: '',
       MsgCode: '',
-      Token: '',
-      bodyHeight: '100%'
+      Token: ''
     }
-  },
-  watch: {
-
-  },
-  mounted() {
-    this.bodyHeight = util.screenSize().height + 'px';
   },
   methods: {
     sendmsgHandler() {
@@ -117,14 +110,16 @@ export default {
               //存储用户信息
               self.$store.dispatch('update_userinfo', {
                 userinfo: {
-                  Id: res.data.UserInfo.Id,
-                  NickName: res.data.UserInfo.NickName,
-                  Portrait: res.data.UserInfo.Portrait,
-                  Gender: res.data.UserInfo.Gender,
-                  Region: res.data.UserInfo.Region,
-                  Mobile: res.data.UserInfo.Mobile,
-                  Role: res.data.UserInfo.Role,
-                  StoreId: res.data.UserInfo.StoreId,
+                  Id:res.data.UserInfo.Id,
+                  ParentId:res.data.UserInfo.ParentId,
+                  NickName:res.data.UserInfo.NickName,
+                  Portrait:res.data.UserInfo.Portrait,
+                  Gender:res.data.UserInfo.Gender,
+                  Region:res.data.UserInfo.Region,
+                  Mobile:res.data.UserInfo.Mobile,
+                  Role:res.data.UserInfo.Role,
+                  StoreId:res.data.UserInfo.StoreId,
+                  CartGoodsCount:res.data.UserInfo.CartGoodsCount
                 }
               });
               //存储钱包信息

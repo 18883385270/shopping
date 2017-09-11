@@ -5,18 +5,11 @@
   <div class="wripper">
     <mi-goodsimg :bannerList="GoodsDetails.Pics"></mi-goodsimg>
      <mi-goodsinfo :GoodsDetails="GoodsDetails" ref="control"></mi-goodsinfo> 
+     <div class="divider"></div>
     <mi-goodscomments :GoodsDetails="GoodsDetails"></mi-goodscomments>
+    <div class="divider"></div>
     <mi-goodsdetail :GoodsDetails="GoodsDetails"></mi-goodsdetail>
     <div style="height:5rem;"></div>
-    
-    <!--弹出框-->
-    <!-- <mi-modal ref="alert" type="alert" @alertEvent="alertBtnEvent">
-      <div slot="alert" class="alert">
-        <h5>您选择的产品</h5>
-        <h6>{{ popInfo.title }}</h6>
-        <p>{{ popInfo.ram }}　　{{ popInfo.color }}</p>
-      </div>
-    </mi-modal> -->
   </div>
 </template>
 <script>
@@ -25,7 +18,6 @@ import goodsinfo from './goodsinfo.vue'
 import goodsdetail from './goodsdetail.vue'
 import goodscomments from './goodscomments.vue'
 
-//import data from '../../../../../data.json'
 import modal from '../../../components/modal.vue'
 import * as api from '../../../api/goods'
 
@@ -41,12 +33,11 @@ export default {
     return {
       Id:'',
       GoodsDetails: {},
-      searchState: false,
-      popInfo: {}
+      searchState: false
     };
   },
   created() {
-    this.Id=this.$route.params.id
+    this.Id=sessionStorage.GoodsId
   },
   mounted(){
     //获取商品信息
@@ -59,6 +50,7 @@ export default {
           this.GoodsDetails=res.data.GoodsDetails;
           this.GoodsDetails.Specifications=res.data.Specifications;
           this.GoodsDetails.Comments=res.data.Comments;
+          this.GoodsDetails.GoodsParams=res.data.GoodsParams;
         } else {
           console.log(res.data.Message);
         }

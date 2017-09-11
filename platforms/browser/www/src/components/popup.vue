@@ -117,7 +117,7 @@ export default {
                         .title {
                             width: 100%;
                             line-height: 4rem;
-                            font-size: 1.6rem;
+                            font-size: 1.3rem;
                             text-align: center;
                             padding-left: 1.5rem;
                         }

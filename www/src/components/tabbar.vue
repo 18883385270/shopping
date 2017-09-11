@@ -49,20 +49,20 @@ export default {
       this.tabbarIndex = num;
 
       if (num == 0) {
-        this.$router.push({ path: '/' });
+        this.$router.replace({ path: '/' });
       }
 
       if (num == 1) {
-        this.$router.push({ path: '/section' });
+        this.$router.replace({ path: '/section' });
       }
       if (num == 2) {
-        this.$router.push({ path: '/bindex' });
+        this.$router.replace({ path: '/bindex' });
       }
       if (num == 3) {
-        this.$router.push({ path: '/cart' });
+        this.$router.replace({ path: '/cart' });
       }
       if (num == 4) {
-        this.$router.push({ path: '/me' });
+        this.$router.replace({ path: '/me' });
       }
     }
   }

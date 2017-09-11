@@ -5,101 +5,178 @@
 <template>
   <div>
     <mi-header title="申请开店"></mi-header>
+    <div class="pd1">店铺基本信息</div>
     <div class="tablerow">
       <div class="tlt">店铺名称</div>
       <div class="cnt">
-        <input type="text" placeholder="请输入店铺名称" />
+        <input type="text" placeholder="请输入店铺名称" v-model="name" />
       </div>
     </div>
     <div class="tablerow">
-      <div class="tlt">地区</div>
+      <div class="tlt">选择地区</div>
       <div class="cnt" @click="selectRegion">
-        江苏 宿迁
+        {{region}}
       </div>
     </div>
     <div class="tablerow">
       <div class="tlt">详细地址</div>
       <div class="cnt">
-        <input type="text" placeholder="详细地址精确到门牌号" />
+        <input type="text" placeholder="详细地址精确到门牌号" v-model="address" />
+      </div>
+    </div>
+    
+    <div class="pd1">主体信息（有营业执照请填写执照信息，否则填写店主身份证信息）</div>
+    <div class="tablerow">
+      <div class="tlt">主体名称</div>
+      <div class="cnt">
+        <input type="text" placeholder="主体名称 / 身份证姓名" v-model="subjectname" />
+      </div>
+    </div>
+    <div class="tablerow">
+      <div class="tlt">主体号码</div>
+      <div class="cnt">
+        <input type="text" placeholder="统一社会编码 / 身份证号" v-model="subjectnumber" />
+      </div>
+    </div>
+    <div class="tablerow">
+      <div class="tlt">证件照片</div>
+      <div>
+        <div style="padding:1rem 0;">
+                <imginputer placeholder="选择证件照片" size="small" @onChange="OnFileChangeHandle"></imginputer>
+            </div>
       </div>
     </div>
     <div class="btnwarp">
       <p>
         <label>
           <input type="checkbox" v-model="isaccept"> 我已阅读并同意</label>
-        <span @click="openXieyi">《店铺入驻协议》</span>
+        <span @click="goPage('/bindex/storeowner/open/protocol')">《店铺入驻协议》</span>
       </p>
-      <button v-bind="{disabled:!isaccept}">提交申请</button>
+      <button class="button success" v-bind="{disabled:!isaccept}" @click="applystore">提交申请</button>
     </div>
-  
-    <!--弹出框-->
-    <mi-modal ref="xieyiModal" type="pop" :isHeadShow="true" :isfullscreen="true" title="协议">
-      <div slot="modalbody" class="xieyiWarp">
-        <p>颜色搭配常识： 1.网页中色彩的表达使用三种颜色，及红(R)、绿(G)、蓝(B)，及通常所说的RGB色彩，它包含了人类所感知的所有颜色，网页中表达颜色如下（红色为例）RGB格式：红色是(255,0,0) 或十六进制hex格式为(FF0000)。 2.将色彩按"红->黄->绿->蓝->红"依次过度渐变可得到12色环：红，橙红，橙，橙黄，黄，黄绿，绿，蓝绿，蓝，蓝紫，紫，紫红。 3.颜色分非彩色和彩色两类。非彩色是指黑，白，灰系统色。彩色是指除了非彩色以外的所有色彩。通常内容文字用非彩色(黑色)，边框，背景，图片用彩色。所以即使页面丰富，看内容依然不会眼花,通常背景与内容对比要大。
-        </p>
-      </div>
-    </mi-modal>
-  
+    <mi-regionpicker ref="regionpicker" @regionPickerEvent="regionPickerHandle"></mi-regionpicker>
+    <mi-toast ref="toast"></mi-toast>
   </div>
 </template>
 
 <script>
 import header from '../../../../components/header.vue';
-import modal from '../../../../components/modal.vue';
+import imginputer from '../../../../components/imginputer.vue'
+import regionpicker from '../../../../components/regionpicker.vue'
+import toast from '../../../../components/toast.vue'
+import * as api from '../../../../api/store'
+import * as checkJs from '../../../../utils/pubfunc'
+import * as util from '../../../../utils/util'
 
 export default {
   components: {
     'mi-header': header,
-    'mi-modal': modal
+    'mi-regionpicker': regionpicker,
+    'imginputer':imginputer,
+    'mi-toast': toast
   },
-  data(){
-    return{
-      isaccept:true
+  data() {
+    return {
+      isaccept: true,
+      name:'',
+      region: '',
+      address:'',
+      accesscode:'',
+      subjectname:'',
+      subjectnumber:'',
+      subjectpic:''
+    }
+  },
+  mounted(){
+    //检查用户身份，如果不是传递使者进入到开通传递大使页面
+    if(this.$store.state.global.userinfo.Role!='店主'){
+      this.$router.replace({path:'/bindex/ambassador'});
     }
   },
   methods: {
+    OnFileChangeHandle(file){
+            var ossfilename=util.uploadToOss(file,'subject');
+            this.subjectpic=ossfilename;
+        },
     selectRegion() {
-      this.$router.push({ path: '/regionselect' });
+      this.$refs.regionpicker.show();
     },
-    openXieyi() {
-      this.$refs.xieyiModal.modalOpen();
+    regionPickerHandle(String) {
+      this.region = String;
+    },
+    goPage(page) {
+      this.$router.push({ path: page });
+    },
+    applystore(){
+      //提交申请
+      let alertFuc = (msg) => {
+        const toast = this.$refs.toast;
+        toast.show(msg);
+        return false
+      }
+      let self=this;
+      if (checkJs.isNullOrEmpty(this.name)) {
+        alertFuc('请输入店铺名称')
+        return;
+      }
+      if (checkJs.isNullOrEmpty(this.region)) {
+        alertFuc('请选择地区')
+        return;
+      }
+      if (checkJs.isNullOrEmpty(this.address)) {
+        alertFuc('请输入详细地址')
+        return;
+      }
+      if (checkJs.isNullOrEmpty(this.subjectname)) {
+        alertFuc('请完善主体信息')
+        return;
+      }
+      if (checkJs.isNullOrEmpty(this.subjectnumber)) {
+        alertFuc('请完善主体信息')
+        return;
+      }
+      if (checkJs.isNullOrEmpty(this.subjectpic)) {
+        alertFuc('请上传主体证件照片')
+        return;
+      }
+      			
+      let params = {
+        Name:this.name,
+        Description:'',
+        Region:this.region,
+        Address:this.address,
+        AccessCode:this.accesscode,
+        Subject:{
+          Name:this.subjectname,
+          Number:this.subjectnumber,
+          Pic:this.subjectpic
+        }
+      };
+      api.ApplyStoreApi(params).then(
+        res => {
+          if (res.data.Code == 200) {
+            console.log('申请成功');
+            //转到成功页面
+            this.$router.replace({
+                name:'success',
+                params:{
+                    type:'tip',
+                    message:'申请成功，等待审核'}})
+          } else {
+            console.log(res.data.Message);
+          }
+        },
+        err => {
+          console.log('网络错误');
+        }
+      )
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.tablerow {
-  width: 100%;
-  display: flex;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  align-items: center;
-  .tlt {
-    width: 25%;
-    font-size: 1.4rem;
-    font-weight: 400;
-    padding: 1.2rem 0;
-    text-indent: 1rem;
-    vertical-align: center;
-  }
-  .cnt {
-    width: 75%;
-    text-align: right;
-    padding: 1.2rem 0;
-    margin-right: 1rem;
-    font-size: 1.3rem;
-    input {
-      width: 100%;
-      border: 0;
-      font-size: 1.4rem;
-      padding: 0.6rem 0;
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-}
+
 
 .mg-top20 {
   margin-top: 1rem;
@@ -115,22 +192,11 @@ export default {
       color: blue;
     }
   }
-  button {
-    width: 100%;
-    padding: 1.2rem 0;
-    background: #9c6;
-    border: 0;
-    color: #fff;
-    font-size: 1.3rem;
-    border-radius: 3px;
-    &:disabled{
-      background:#ccc;
-    }
-  }
 }
 
 .xieyiWarp {
-  height:100%;overflow-y: scroll;
+  height: 100%;
+  overflow-y: scroll;
   font-size: 1.3rem;
   padding: 1rem;
 }

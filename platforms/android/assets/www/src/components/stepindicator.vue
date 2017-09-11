@@ -13,7 +13,7 @@
                             <svg><use xlink:href="#ok"></use></svg>
                         </i>
                         <i v-if="index>currentstep">
-                            <svg><use xlink:href="#delline"></use></svg>
+                            <svg><use xlink:href="#x"></use></svg>
                         </i>
                     </div>
                     <div class="bgline"></div>

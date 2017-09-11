@@ -5,7 +5,7 @@
       <div class="addwarp" v-for="(expressAddress,index) in expressAddresses">
         <div class="cnt">
           <p>{{expressAddress.Region}} {{expressAddress.Address}}</p>
-          <p>{{expressAddress.Name}} {{expressAddress.Mobile}}</p>
+          <p>{{expressAddress.Name}} {{expressAddress.Mobile|mobilehide}}</p>
         </div>
         <div class="ops" @click="del(index)">
           <svg>

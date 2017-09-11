@@ -2,50 +2,53 @@
     <div>
         <mi-header title="开通传递大使"></mi-header>
     
-        <div v-if="unpaygift">
+        <div v-if="UnpayGift">
             <div class="shuoming">
                 <span class="reselect" @click="reselect">
                     重新选择
                 </span>
                 您已选择赠品型号尺寸和收件地址，可直接支付
             </div>
+            <div class="divider"></div>
             <div class="tltcntbox2">
                 <div class="head">
                     <div class="title">收货信息</div>
                     <div class="more"></div>
                 </div>
                 <div class="body pd1">
-                    <div>{{unpaygift.Region}} {{unpaygift.Address}}</div>
-                    <div>{{unpaygift.Name}} {{unpaygift.Mobile}}【收】</div>
+                    <div>{{UnpayGift.Region}} {{UnpayGift.Address}}</div>
+                    <div>{{UnpayGift.Name}} {{UnpayGift.Mobile}}【收】</div>
                 </div>
             </div>
+            <div class="divider"></div>
             <div class="tltcntbox2">
                 <div class="head">
                     <div class="title">型号</div>
                     <div class="more"></div>
                 </div>
                 <div class="body pd1">
-                    <div>{{unpaygift.GiftSize}}</div>
+                    <div>{{UnpayGift.GiftSize}}</div>
                 </div>
             </div>
+            <div class="divider"></div>
             <div class="btnwp">
-                <button class="button success" @click="toPage('pay',{amount:365,orderid:unpaygift.Id,type:'account',ordernumber:'',remark:''})">去支付</button>
+                <button class="button success" @click="GoPayPage">去支付</button>
             </div>
-    
         </div>
-        <div v-if="!unpaygift">
+
+        <div v-if="!UnpayGift">
             <div class="shuoming">
-                开通传递大使，将获赠公益服装一件
+                开通传递大使，将获赠{{GiftInfo.Name}}一件
             </div>
     
             <div class="exadd" @click="showpicker">
                 <div class="tlt">收货地址</div>
                 <div class="cnt">
-                    <div v-if="expressaddress">
-                        <p> {{expressaddress.Region}} {{expressaddress.Address}}</p>
-                        <p>{{expressaddress.Name}} {{expressaddress.Mobile|mobilehide}}</p>
+                    <div v-if="ExpressAddress">
+                        <p> {{ExpressAddress.Region}} {{ExpressAddress.Address}}</p>
+                        <p>{{ExpressAddress.Name}} {{ExpressAddress.Mobile|mobilehide}}</p>
                     </div>
-                    <div class="noaddress" v-if="!expressaddress">选择收货地址</div>
+                    <div class="noaddress" v-if="!ExpressAddress">选择收货地址</div>
                 </div>
                 <div class="change">
                     <svg>
@@ -53,7 +56,7 @@
                     </svg>
                 </div>
             </div>
-    
+            <div class="divider"></div>
             <div class="sizepicker">
                 <div class="tltwp">
                     <div class="tlt">尺码</div>
@@ -62,39 +65,39 @@
                 <div class="sizelist">
                     <ul>
                         <li>
-                            <input type="radio" name="size" id="radio_s" value="S" class="regular-radio" v-model="giftinfo.size">
+                            <input type="radio" name="size" id="radio_s" value="S" class="regular-radio" v-model="GiftInfo.Size">
                             <label for="radio_s"></label>
                             <p>S</p>
                         </li>
                         <li>
-                            <input type="radio" name="size" id="radio_m" value="M" class="regular-radio" v-model="giftinfo.size" checked>
+                            <input type="radio" name="size" id="radio_m" value="M" class="regular-radio" v-model="GiftInfo.Size" checked>
                             <label for="radio_m"></label>
                             <p>M</p>
                         </li>
                         <li>
-                            <input type="radio" name="size" id="radio_l" value="L" class="regular-radio" v-model="giftinfo.size">
+                            <input type="radio" name="size" id="radio_l" value="L" class="regular-radio" v-model="GiftInfo.Size">
                             <label for="radio_l"></label>
                             <p>L</p>
                         </li>
                         <li>
-                            <input type="radio" name="size" id="radio_xl" value="XL" class="regular-radio" v-model="giftinfo.size">
+                            <input type="radio" name="size" id="radio_xl" value="XL" class="regular-radio" v-model="GiftInfo.Size">
                             <label for="radio_xl"></label>
                             <p>XL</p>
                         </li>
                         <li>
-                            <input type="radio" name="size" id="radio_xxl" value="XXL" class="regular-radio" v-model="giftinfo.size">
+                            <input type="radio" name="size" id="radio_xxl" value="XXL" class="regular-radio" v-model="GiftInfo.Size">
                             <label for="radio_xxl"></label>
                             <p>XXL</p>
                         </li>
                         <li>
-                            <input type="radio" name="size" value="XXXL" id="radio_xxxl" class="regular-radio" v-model="giftinfo.size">
+                            <input type="radio" name="size" value="XXXL" id="radio_xxxl" class="regular-radio" v-model="GiftInfo.Size">
                             <label for="radio_xxxl"></label>
                             <p>XXXL</p>
                         </li>
                     </ul>
                 </div>
             </div>
-    
+
             <div class="shuoming">
                 <svg>
                     <use xlink:href="#ok"></use>
@@ -128,12 +131,13 @@ export default {
     },
     data() {
         return {
-            giftinfo: {
-                name: '公益T恤',
-                size: 'M'
+            GiftInfo: {
+                Name: '公益T恤',
+                Size: 'M'
             },
-            expressaddress: null,
-            unpaygift:false
+            ExpressAddress: null,
+            UnpayGift:false,
+            Amount:10000
         }
     },
     mounted() {
@@ -142,9 +146,9 @@ export default {
         api.GetUserUnPayGiftApi(params).then(
             res => {
                 if (res.data.Code == 200) {
-                    this.unpaygift=res.data.UserGift;
+                    this.UnpayGift=res.data.UserGift;
                 } else {
-                    this.unpaygift=false;
+                    this.UnpayGift=false;
                     console.log("返回错误码：" + res.data.Code);
                 }
             },
@@ -160,14 +164,26 @@ export default {
         toPage(page,params){
             this.$router.replace({name:page,params:params});
         },
+        GoPayPage(){
+            let toPayInfo={
+                Type:'account',
+                OrderId:this.UnpayGift.Id,
+                OrderNumber:'',
+                Amount:this.Amount,
+                Remark:'开通店主付款',
+                CreatedOn:(new Date()).valueOf()
+            }
+            sessionStorage.ToPayInfo = JSON.stringify(toPayInfo)
+            this.$router.push({name:'pay'});
+        },
         reselect(){
-            this.unpaygift=false;
+            this.UnpayGift=false;
         },
         showpicker() {
             this.$refs.expressaddresspicker.show();
         },
         expressaddressPickerHandle(expressaddress) {
-            this.expressaddress = expressaddress;
+            this.ExpressAddress = expressaddress;
         },
         addusergift() {
             let alertFuc = (msg) => {
@@ -176,22 +192,32 @@ export default {
                 return false
             }
 
-            if(checkJs.isNullOrEmpty(this.expressaddress))
+            if(checkJs.isNullOrEmpty(this.ExpressAddress))
             {
                 alertFuc('请选择收货地址')
 	            return;
             }
 
             let params = {
-                GiftInfo: this.giftinfo,
-                ExpressAddressInfo: this.expressaddress
+                GiftInfo: this.GiftInfo,
+                ExpressAddressInfo: this.ExpressAddress
             };
             api.AddUserGiftApi(params).then(
                 res => {
                     if (res.data.Code == 200) {
                         //提交成功进入付款页面
                         var userGiftId=res.data.UserGiftId;
-                        this.toPage('pay',{amount:365,orderid:userGiftId,type:'account',ordernumber:'',remark:''});
+                        //创建待付款信息
+                        let toPayInfo={
+                            Type:'account',
+                            OrderId:userGiftId,
+                            OrderNumber:'',
+                            Amount:this.Amount,
+                            Remark:'开通店主付款',
+                            CreatedOn:(new Date()).valueOf()
+                        }
+                        sessionStorage.ToPayInfo = JSON.stringify(toPayInfo)
+                        this.$router.push({name:'pay'});
                         //到支付页面
                     } else {
                         console.log("返回错误码：" + res.data.Code);
@@ -219,7 +245,6 @@ export default {
 }
 
 .sizepicker {
-    margin-top: 1rem;
     background: #fff;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;

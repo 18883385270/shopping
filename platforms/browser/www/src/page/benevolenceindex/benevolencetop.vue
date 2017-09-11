@@ -1,42 +1,62 @@
 <template>
     <div class="warp">
         <div class="control">
-            <div class="left hook" @click="goBackEvent"><svg> <use xlink:href="#star"></use> </svg></div>
-            <div class="right hook" @click="goodSearchEvent"><svg> <use xlink:href="#qrscanline"></use> </svg></div>
+            <div class="left hook" @click="goBackEvent">
+                <svg>
+                    <use xlink:href="#star"></use>
+                </svg>
+            </div>
+            <div class="right hook" @click="showScanner">
+                <svg>
+                    <use xlink:href="#qrscanline"></use>
+                </svg>
+            </div>
         </div>
         <div class="benevolenceindex">
             <!-- <i class="index_icon"></i> -->
-            <svg class="index_icon"> <use xlink:href="#index"></use> </svg>
-            <h2>今日善心指数</h2>
-            <p>0.2345</p>
-            <p class="myearnings">今日激励 32 元</p>
+            <svg class="index_icon">
+                <use xlink:href="#index"></use>
+            </svg>
+            <h2>善心指数</h2>
+            <p>{{BenevolenceIndex.CurrentBenevolenceIndex}}</p>
+            <p class="myearnings">上次激励 {{this.$store.state.global.walletinfo.YesterdayEarnings|currency('￥',2)}} 元</p>
+            <p class="earningtip">注意，系统用当日23.00时的善心指数激励善心</p>
         </div>
         <div class="button_bar">
             <div>
-                <p>25634 <i>家</i></p>
+                <p>{{BenevolenceIndex.StoreCount}}
+                    <i>家</i>
+                </p>
                 联盟商家
             </div>
             <div>
-                <p>25634 <i>个</i></p>
+                <p>{{BenevolenceIndex.ConsumerCount}}
+                    <i>个</i>
+                </p>
                 爱心使者
             </div>
             <div>
-                <p>25634 <i>元</i></p>
+                <p>25634
+                    <i>元</i>
+                </p>
                 爱心基金
             </div>
-            
+
         </div>
     </div>
 </template>
 
 <script>
-export default {
-    methods:{
-        goBackEvent(){
-            this.$router.push({path:'/login'});
-        },
-        goodSearchEvent(){
+import * as checkJs from '../../utils/pubfunc'
 
+export default {
+    props: ['BenevolenceIndex'],
+    methods: {
+        goBackEvent() {
+
+        },
+        showScanner(){
+            this.$router.push({name:'scannerpage'});
         }
     }
 }
@@ -59,52 +79,72 @@ export default {
             display: block;
             border-radius: 50%;
             text-align: center;
-            line-height: 3rem;padding:0.5rem;
+            line-height: 3rem;
+            padding: 0.5rem;
             color: #fff;
             &.left {
                 float: left;
-                svg{
-                    fill:#fff;width:2rem;height:2rem;
+                svg {
+                    fill: #fff;
+                    width: 2rem;
+                    height: 2rem;
                 }
             }
             &.right {
                 float: right;
-                svg{
-                    fill:#fff;width:2rem;height:2rem;
+                svg {
+                    fill: #fff;
+                    width: 2rem;
+                    height: 2rem;
                 }
             }
         }
     }
 
-    .benevolenceindex{
-        padding:1rem;
-        text-align: center;color:white;
-        .index_icon{
+    .benevolenceindex {
+        padding: 1rem;
+        text-align: center;
+        color: white;
+        .index_icon {
             display: block;
-            width:8rem;height:8rem;margin:1rem auto 0.3rem auto;
+            width: 8rem;
+            height: 8rem;
+            margin: 1rem auto 0.3rem auto;
             fill: #fff;
         }
-        h2{
-            font-weight: 400;margin-bottom: 1rem;font-size:1.3rem;
+        h2 {
+            font-weight: 400;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
         }
-        p{
-            font-size:2rem;
-            &.myearnings{
-                font-size:1.3rem;margin: 1rem 0;
+        p {
+            font-size: 2rem;
+            &.myearnings {
+                font-size: 1.3rem;
+                margin: 1rem 0 0.5rem 0;
+            }
+            &.earningtip {
+                font-size: 1rem;
+                margin-bottom: 1rem;
             }
         }
-
     }
-    .button_bar{
-        background:#DE4628;display: flex;display: flex;height:4rem;
-        >div{
-            width:33.3%;text-align: center;padding:0.4rem 0;color: white;
-            >p{
-                font-size:1.5rem;
-                >i{
-                    font-size:1rem;font-style: normal;
+    .button_bar {
+        background: #DE4628;
+        display: flex;
+        display: flex;
+        height: 4rem;
+        >div {
+            width: 33.3%;
+            text-align: center;
+            padding: 0.4rem 0;
+            color: white;
+            >p {
+                font-size: 1.5rem;
+                >i {
+                    font-size: 1rem;
+                    font-style: normal;
                 }
-                
             }
         }
     }

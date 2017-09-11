@@ -4,7 +4,7 @@
 <template>
     <div class="img-inputer" :class="[themeClass, sizeClass, nhe ? 'nhe': '', ]" ref="box">
         <svg>
-            <use xlink:href="#ok"></use>
+            <use xlink:href="#picline"></use>
         </svg>
         <p class="placeholder">{{placeholder}}</p>
         <div class="preview-box" v-if="imgSelected">
@@ -298,7 +298,7 @@ export default {
     height: 150px;
     border-radius: 5px;
     background: #f0f0f0;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, .117647), 0 1px 4px rgba(0, 0, 0, .117647);
+    // box-shadow: 0 1px 6px rgba(0, 0, 0, .117647), 0 1px 4px rgba(0, 0, 0, .117647);
     transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
 
     &.small {

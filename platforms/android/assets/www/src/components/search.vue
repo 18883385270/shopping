@@ -33,13 +33,13 @@
         <div>
           <div class="title">最近搜索</div>
           <ul>
-            <li v-for="item in latestWord" @click="inputFillEvent(item)">{{ item }}</li>
+            <li v-for="item in LatestWords" @click="inputFillEvent(item)">{{ item }}</li>
           </ul>
         </div>
         <div>
           <div class="title">热门搜索</div>
           <ul>
-            <li v-for="item in hotWord" @click="inputFillEvent(item)">{{ item }}</li>
+            <li v-for="item in HotWords" @click="inputFillEvent(item)">{{ item }}</li>
           </ul>
         </div>
       </div>
@@ -50,7 +50,9 @@
 </template>
 
 <script>
-import data from '../../../data.json';
+import data from '../../../data.json'
+import * as checkJs from '../utils/pubfunc'
+
 export default {
   props: ['opac', 'hasbg', 'hasbr'],
   data() {
@@ -59,8 +61,8 @@ export default {
       hasbackground: this.hasbg,
       hasborder: this.hasbr,
       inputText: '',
-      latestWord: ['充电宝', 'Ipad', '小米5s', '笔记本', '自行车', '空调','小米电视','连衣裙','牛仔裤'],
-      hotWord: ['红米4 超长续航', '小米Note 2', '小米5s', '笔记本', '小米电视3s', '智能电饭煲'],
+      LatestWords: ['充电宝', 'Ipad', '小米5s', '笔记本', '自行车', '空调','小米电视','连衣裙','牛仔裤'],
+      HotWords: ['红米4 超长续航', '小米Note 2', '小米5s', '笔记本', '小米电视3s', '智能电饭煲'],
       bgOpacSty: {
         opacity: this.hasbg ? 1 : 0,
       },
@@ -69,6 +71,10 @@ export default {
   },
   created() {
     this.searchImg = data.searchImg;
+    //获取本地最近搜索项目
+    if(!checkJs.isNullOrEmpty(sessionStorage.LatestWords)){
+      this.LatestWords=JSON.parse(sessionStorage.LatestWords)
+    }
   },
   watch: {
     opac() {
@@ -78,12 +84,11 @@ export default {
     }
   },
   methods: {
-    handleFocus() {//搜索
+    handleFocus() {
       this.focus = true;
-      //广播搜索事件
       this.$emit('searchEvent', true);
     },
-    goBackEvent() {//取消搜索
+    goBackEvent() {
       this.focus = false;
       this.$emit('searchEvent', false);
     },
@@ -99,6 +104,10 @@ export default {
     doSearch(){
       if(this.inputText.length>1)
       {
+        //添加最近搜索
+        this.LatestWords.pop();//删除最后一个
+        this.LatestWords.splice(0,0,this.inputText);//添加到第一个
+        sessionStorage.LatestWords = JSON.stringify(this.LatestWords)
         this.$router.push({name:'goodslist',params:{type:'Search',search:this.inputText}});
       }
     }

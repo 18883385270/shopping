@@ -10,6 +10,7 @@
             <div>有效期：永久有效</div>
             <div>已开通：2454644人</div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">为什么要做善心使者?</div>
             <div class="cont">
@@ -71,7 +72,6 @@ export default {
         }
     }
     .shuoming {
-        margin-top: 1rem;
         border-top: 1px solid #eee;
         background: #fff;
         padding: 1rem;

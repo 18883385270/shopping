@@ -1,0 +1,10 @@
+{
+    "android": {
+      "release": {
+        "keystore": "wftx.keystore",
+        "alias": "wftx",
+        "storePassword": "sd123456",
+        "password": "sd123456"
+      }
+    }
+}

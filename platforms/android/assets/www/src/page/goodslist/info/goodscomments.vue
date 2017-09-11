@@ -48,7 +48,6 @@ export default {
 
 <style lang="less" scoped>
 .gcmtwp {
-    margin-top: 1rem;
     background: #fff;
     .head {
         display: flex;

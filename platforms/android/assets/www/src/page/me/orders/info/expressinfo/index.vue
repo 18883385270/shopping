@@ -5,8 +5,8 @@
     <div class="exppage">
         <mi-header title="物流信息"></mi-header>
         <div class="exinfo">
-            <!-- <p>
-                <span>订单编号：</span>234353468934</p> -->
+            <p>
+                <span>订单编号：</span>{{StoreOrder.Number}}</p>
             <p>
                 <span>物流公司：</span>{{ExpressInfo.showapi_res_body.expTextName}}</p>
             <p>
@@ -29,10 +29,12 @@ export default {
     },
     data(){
         return{
-            ExpressInfo:{}
+            ExpressInfo:{},
+            StoreOrder:{}
         }
     },
     mounted(){
+        this.StoreOrder=JSON.parse(sessionStorage.UserStoreOrder)
         this.GetExpressSchedule();
     },
     methods:{

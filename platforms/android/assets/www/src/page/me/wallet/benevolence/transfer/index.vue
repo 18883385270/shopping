@@ -1,14 +1,14 @@
 <template>
     <div class="transferpage">
         <mi-header title="记录"></mi-header>
-        <mi-category :categorys="TransferTypes"></mi-category>
+        <mi-category :categorys="TransferTypes" @categoryChanged="categoryChangedHandle"></mi-category>
         <div class="emptybox" v-if="!Transfers.length">
             <svg>
-                <use xlink:href="#empty"></use>
+                <use xlink:href="#emptyline"></use>
             </svg>
             <p> 没有记录</p>
         </div>
-        <div class="transferls">
+        <div class="transferls"v-if="Transfers.length">
             <ul>
                 <li v-for="transfer in Transfers">
                     <p class="tlt">
@@ -17,9 +17,15 @@
                         <span class="amount">
                             <span v-if="transfer.Direction=='进账'">+</span>
                             <span v-if="transfer.Direction!='进账'">-</span>
-                            {{transfer.Amount}}</span>备注：{{transfer.Remark}}</p>
+                            {{transfer.Amount}}</span>{{transfer.Remark}}</p>
                 </li>
             </ul>
+            <div class="nextpage" @click="NextPage" v-if="!NotAnyMore">
+                <span>加载更多</span>
+            </div>
+            <div class="nextpage" @click="NextPage" v-if="NotAnyMore">
+                <span>没有更多了</span>
+            </div>
         </div>
     </div>
 </template>
@@ -36,24 +42,53 @@ export default {
     },
     data() {
         return {
-            TransferTypes: ['全部', '购物奖励', '商家激励','推荐用户','推荐商家','联盟','激励'],
-            Transfers: []
+            TransferTypes: ['全部','购物奖励', '商家奖励','推荐奖励','推荐商家','联盟分成','转账','善心激励','系统操作'],
+            TransferTypesValue:['All','ShoppingAward', 'StoreAward','RecommendUserAward','RecommendStoreAward','UnionAward','Transfer','Incentive','SystemOp'],
+            Transfers: [],
+            CurrentIndex:0,
+            CurrentPage:0,
+            NotAnyMore:false
         }
     },
     mounted() {
-        let params = {};
-        api.BenevolenceTransfersApi(params).then(
-            res => {
-                if (res.data.Code == 200) {
-                    this.Transfers = res.data.BenevolenceTransfers;
-                } else {
-                    console.log("返回错误码：" + res.data.Code);
+        this.getList(this.CurrentIndex,this.CurrentPage);
+    },
+    methods:{
+        categoryChangedHandle(index){
+            this.CurrentIndex=index;
+            this.CurrentPage=0;
+            this.NotAnyMore=false;
+            this.Transfers.splice(0,this.Transfers.length);//清空数据
+            this.getList(this.CurrentIndex,this.CurrentPage);
+        },
+        getList(index,page){
+            let params = {
+                Type:this.TransferTypesValue[index],
+                Page:page
+            };
+            api.BenevolenceTransfersApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        //加入到数组
+                        if(res.data.BenevolenceTransfers.length){
+                            this.Transfers=this.Transfers.concat(res.data.BenevolenceTransfers);
+                        }
+                        else{
+                            this.NotAnyMore=true;
+                        }
+                    } else {
+                        console.log("返回错误码：" + res.data.Code);
+                    }
+                },
+                err => {
+                    console.log('网络错误');
                 }
-            },
-            err => {
-                console.log('网络错误');
-            }
-        )
+            )
+        },
+        NextPage(){
+            this.CurrentPage++;
+            this.getList(this.CurrentIndex,this.CurrentPage);
+        }
     }
 }
 </script>
@@ -62,6 +97,7 @@ export default {
 .transferpage {
     width: 100%;
     .transferls {
+        margin-top:1rem;
         li {
             background: #fff;
             list-style: none;
@@ -90,6 +126,11 @@ export default {
             }
         }
     }
+}
+.nextpage{
+    text-align:center;
+    padding:1rem;
+    background:#fff;
 }
 </style>
 

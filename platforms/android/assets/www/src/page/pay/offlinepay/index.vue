@@ -1,6 +1,7 @@
 <template>
     <div>
         <mi-header title="线下转账" rightext="转账记录"@rightNavBarClicked="goPage('/pay/offlinepay/log')"></mi-header>
+        <div class="divider"></div>
         <div class="tltcntbox2">
             <div class="head">
                 <div class="title">使用场景</div>
@@ -16,6 +17,7 @@
     
             </div>
         </div>
+        <div class="divider"></div>
         <div class="tltcntbox2">
             <div class="head">
                 <div class="title">操作指引</div>
@@ -33,14 +35,14 @@
     
             </div>
         </div>
-
+        <div class="divider"></div>
         <div class="tltcntbox2">
             <div class="head">
                 <div class="title">公司收款账号</div>
                 <div class="more"></div>
             </div>
             <div class="body">
-                <div class="shuoming text-md">
+                <div class="shuoming">
                     <ul>
                         <li>【收款单位】：江苏悟行电子商务有限公司</li>
                         <li>【开户银行】：中国建设银行股份有限公司宿迁宿豫支行</li>
@@ -72,6 +74,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .shuoming {
     padding: 1rem;
     li{

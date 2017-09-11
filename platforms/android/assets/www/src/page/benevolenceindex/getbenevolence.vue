@@ -1,7 +1,7 @@
 <template>
   <div class="warp">
     <div class="head">
-      <div class="title">获取善心</div>
+      <div class="title">平台角色</div>
     </div>
     <div class="body">
       <div class="item" @click="goPage('/bindex/consumer')">
@@ -41,15 +41,15 @@
           </svg>
         </div>
         <div class="content_warp">
-          <h3>传递大使</h3>
-          <p>缴纳365元年费即可成为传递大使，享有直接或间接顾客消费激励</p>
+          <h3>商城店主</h3>
+          <p>缴纳1万元年费即可成为店主，开通商城销售商品</p>
         </div>
-        <div class="open_warp ok" v-if="this.$store.state.global.userinfo.Role=='传递大使'">
+        <div class="open_warp ok" v-if="this.$store.state.global.userinfo.Role=='店主'">
           <svg>
             <use xlink:href="#ok"></use>
           </svg>已加入</div>
       </div>
-      <div class="item" @click="goPage('/bindex/regionpartner')">
+      <!-- <div class="item" @click="goPage('/bindex/regionpartner')">
         <div class="icon_warp">
           <svg>
             <use xlink:href="#consumer"></use>
@@ -61,7 +61,7 @@
         </div>
         <div class="open_warp">
         </div>
-      </div>
+      </div> -->
       <div class="item" @click="goPage('/bindex/storeowner')">
         <div class="icon_warp">
           <svg>
@@ -96,7 +96,6 @@ export default {
   padding: 0;
   background: white;
   border-top: 1px solid #ddd;
-  margin-top: 1.6rem;
   .head {
     border-bottom: 1px solid #ddd;
     display: flex;

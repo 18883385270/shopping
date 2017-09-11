@@ -1,0 +1,114 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "cordova-plugin-wechat@2.0.0",
+        "scope": null,
+        "escapedName": "cordova-plugin-wechat",
+        "name": "cordova-plugin-wechat",
+        "rawSpec": "2.0.0",
+        "spec": "2.0.0",
+        "type": "version"
+      },
+      "C:\\Users\\xiazhaowei\\Documents\\HybridAPP\\shopping\\node_modules"
+    ]
+  ],
+  "_from": "cordova-plugin-wechat@2.0.0",
+  "_id": "cordova-plugin-wechat@2.0.0",
+  "_inCache": true,
+  "_location": "/cordova-plugin-wechat",
+  "_nodeVersion": "8.1.3",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/cordova-plugin-wechat-2.0.0.tgz_1498961850010_0.6576200474519283"
+  },
+  "_npmUser": {
+    "name": "xu-li",
+    "email": "AthenaLightenedMyPath@gmail.com"
+  },
+  "_npmVersion": "5.0.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cordova-plugin-wechat@2.0.0",
+    "scope": null,
+    "escapedName": "cordova-plugin-wechat",
+    "name": "cordova-plugin-wechat",
+    "rawSpec": "2.0.0",
+    "spec": "2.0.0",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-wechat/-/cordova-plugin-wechat-2.0.0.tgz",
+  "_shasum": "af24ac74abf3d32ca3729fe46c4b7f981816b2e5",
+  "_shrinkwrap": null,
+  "_spec": "cordova-plugin-wechat@2.0.0",
+  "_where": "C:\\Users\\xiazhaowei\\Documents\\HybridAPP\\shopping\\node_modules",
+  "author": {
+    "name": "xu.li",
+    "email": "AthenaLightenedMyPath@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/xu-li/cordova-plugin-wechat/issues"
+  },
+  "cordova": {
+    "id": "cordova-plugin-wechat",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "dependencies": {},
+  "description": "A cordova plugin, a JS version of Wechat SDK",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-6AHeGCoJdb1rrMy0pKDxUFPJXl2o6NJfOXCKqDgtIVFtW4WD+Mju4bCaPGi7WmRn2eSXC87ELiRcetlqMqKG6A==",
+    "shasum": "af24ac74abf3d32ca3729fe46c4b7f981816b2e5",
+    "tarball": "https://registry.npmjs.org/cordova-plugin-wechat/-/cordova-plugin-wechat-2.0.0.tgz"
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "2.0.0": {
+        "cordova": ">=6.1.0",
+        "cordova-android": ">=6.1.0",
+        "cordova-ios": ">=4.3.1"
+      },
+      "<2.0.0": {
+        "cordova": ">=3.5.0"
+      }
+    }
+  },
+  "gitHead": "7c464193b851220444ad393b265f9fa38538ef07",
+  "homepage": "https://github.com/xu-li/cordova-plugin-wechat#readme",
+  "keywords": [
+    "cordova",
+    "wechat",
+    "weixin",
+    "share",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "floatinghotpot",
+      "email": "rjfun.mobile@gmail.com"
+    },
+    {
+      "name": "xu-li",
+      "email": "AthenaLightenedMyPath@gmail.com"
+    }
+  ],
+  "name": "cordova-plugin-wechat",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xu-li/cordova-plugin-wechat.git"
+  },
+  "version": "2.0.0"
+}

@@ -16,7 +16,9 @@
                 </svg>
             </div>
         </div>
+        <div class="divider"></div>
         <mi-ordergoods :StoreCartGoods="StoreCartGoods"></mi-ordergoods>
+        <div class="divider"></div>
         <div class="youhuiwarp">
             <div class="tablerow">
                 <div class="tlt">发票信息</div>
@@ -24,20 +26,21 @@
             </div>
             <div class="tablerow">
                 <div class="tlt">优惠券</div>
-                <div class="cnt">已使用一张 已抵用￥30</div>
+                <div class="cnt">未使用优惠券</div>
             </div>
         </div>
+        <div class="divider"></div>
         <div class="remark">
             <div class="info">
                 <input type="text" placeholder="订单备注(限45字，请勿填写发票、配送方面的信息)">
             </div>
         </div>
+        <div class="divider"></div>
         <div class="paytype">
             <div class="total">
                 总价：
                 <span>￥{{CalTotalAmount()}}</span>
-                <p>包含运费:4.5元</p>
-                
+                <!-- <p>包含运费:4.5元</p> -->
             </div>
             <button class="button warning" @click="PostOrderEvent">提交订单</button>
         </div>
@@ -72,7 +75,7 @@ export default {
         }
     },
     mounted(){
-        this.StoreCartGoods=this.$route.params.StoreCartGoods;
+        this.StoreCartGoods=JSON.parse(sessionStorage.StoreCartGoods);
     },
     methods: {
         showpicker() {
@@ -122,9 +125,19 @@ export default {
                         var orderId=res.data.OrderId;
                         var paymentId=res.data.PaymentId;
                         //提交订单成功并且创建好待付款项目 进入支付页面
-                        this.toPage('pay',{amount:totalamount,orderid:orderId,paymentid:paymentId,type:'order',ordernumber:'',remark:''});
+                        let toPayInfo={
+                            Type:'order',
+                            OrderId:orderId,
+                            PaymentId:paymentId,
+                            OrderNumber:'',
+                            Amount:totalamount,
+                            Remark:'订单付款',
+                            CreatedOn:(new Date()).valueOf()
+                        }
+                        sessionStorage.ToPayInfo = JSON.stringify(toPayInfo)
+                        this.$router.push({name:'pay'})
                     } else {
-                        console.log(res.data.Message);
+                        alertFuc(res.data.Message)
                     }
                 },
                 err => {
@@ -140,7 +153,6 @@ export default {
 <style lang="less" scoped>
 .youhuiwarp {
     background: #fff;
-    margin-top: 1rem;
     
     .paypassword {
         padding: 1rem;
@@ -155,7 +167,6 @@ export default {
 
 .remark {
     background: #fff;
-    margin-top: 1rem;
     .info {
         padding: 1rem;
         input {
@@ -173,7 +184,6 @@ export default {
 
 .paytype {
     background: #fff;
-    margin-top: 1rem;
     padding: 1rem;
     font-size: 1.3rem;
     text-align: center;

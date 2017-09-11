@@ -3,7 +3,7 @@ import store from '../store/'
 import router from '../router/'
 
 // 默认配置
-//@ts-checkaxios.defaults.baseURL = 'http://localhost:51776'//这里是放实际的URI
+//axios.defaults.baseURL = 'http://localhost:51776'//这里是放实际的URI
 axios.defaults.baseURL = 'http://app.wftx666.com'//这里是放实际的URI
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 axios.defaults.withCredentials = true //启用cookie

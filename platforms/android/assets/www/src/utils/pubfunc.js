@@ -69,6 +69,16 @@ export const GetUserId=(value)=>{
 	}
 }
 
+export const isUrl=(value)=>{
+	var reg=/^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/;
+	if(!reg.test(value)){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 
 
 

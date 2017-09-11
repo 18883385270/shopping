@@ -8,11 +8,15 @@ import ticket from '../page/ticket/index.vue'
 //登录注册
 import login from '../page/login/index.vue'
 import msglogin from '../page/login/msglogin/index.vue'
+import getpwd from '../page/login/getpwd/index.vue'
+import resetpwd from '../page/login/getpwd/resetpwd.vue'
 import register from '../page/register/index.vue'
+import reg from '../page/register/reg.vue'
 import userprotocol from '../page/login/protocol/index.vue'
 
-
+//线下商家
 import offlinestore from '../page/offlinestore/index.vue'
+//基金
 import foundation from '../page/foundation/index.vue'
 
 import store from '../page/store/index.vue'
@@ -53,6 +57,8 @@ import myqrcode from '../page/me/profile/myqrcode/index.vue'
 //邀请
 import invote from '../page/me/invite/index.vue'
 import myinvote from '../page/me/invite/myinvote.vue'
+import setmyinvote from '../page/me/invite/setmyinvote.vue'
+import faceinvote from '../page/me/invite/faceinvote.vue'
 
 import expressaddress from '../page/me/profile/expressaddress/index.vue'
 import addexpressaddress from '../page/me/profile/expressaddress/add/index.vue'
@@ -61,6 +67,8 @@ import addexpressaddress from '../page/me/profile/expressaddress/add/index.vue'
 import about from '../page/about/index.vue'
 //讲堂
 import classroom from '../page/classroom/index.vue'
+//联盟管理
+import partnermgr from '../page/partnermgr/index.vue'
 //收藏
 import collect from '../page/collect/index.vue'
 
@@ -113,12 +121,24 @@ import orderinfo from '../page/me/orders/info/index.vue';
 import applyrefund from '../page/me/orders/info/applyrefund.vue';
 import expressinfo from '../page/me/orders/info/expressinfo/index.vue';
 
+//扫一扫
+import scannerpage from '../page/scannerpage/index.vue'
+import scannerresult from '../page/scannerpage/scannerresult.vue'
+
 const routes=[
     //登录注册
     { name: 'login', path: '/login', component: login },
     { name: 'register', path: '/register', component: register },
+    { name: 'reg', path: '/reg', component: reg },
     { name: 'msglogin', path: '/login/msglogin', component: msglogin },
+    { name: 'getpwd', path: '/login/getpwd', component: getpwd },
+    { name: 'resetpwd', path: '/login/resetpwd', component: resetpwd },
     { name: 'userprotocol', path: '/login/protocol', component: userprotocol },
+
+    //扫一扫
+    { name: 'scannerpage', path: '/scannerpage', component: scannerpage },
+    { name: 'scannerresult', path: '/scannerresult', component: scannerresult },
+
     //支付
     { name: 'pay', path: '/pay', component: pay },
     { name: 'offlinepay', path: '/pay/offlinepay', component: offlinepay },
@@ -168,6 +188,8 @@ const routes=[
     //邀请
     { name: 'invote', path: '/me/invote', component: invote },
     { name: 'myinvote', path: '/me/myinvote', component: myinvote },
+    { name: 'setmyinvote', path: '/me/setmyinvote', component: setmyinvote },
+    { name: 'faceinvote', path: '/me/faceinvote', component: faceinvote },
     
     { name: 'changepassword', path: '/me/profile/changepassword', component: changepassword },
     { name: 'expressaddress', path: '/me/profile/expressaddress', component: expressaddress },
@@ -176,6 +198,8 @@ const routes=[
     { name: 'about', path: '/about', component: about },
     //讲堂
     { name: 'classroom', path: '/classroom', component: classroom },
+    //联盟管理
+    { name: 'partnermgr', path: '/partnermgr', component: partnermgr },
 
 
     //店铺管理

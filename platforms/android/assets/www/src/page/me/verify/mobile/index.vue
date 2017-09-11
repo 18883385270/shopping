@@ -1,8 +1,8 @@
 <template>
-    <div class="mobilevfwp" :style="{height:bodyHeight}">
+    <div class="mobilevfwp">
         <mi-header title="手机验证"></mi-header>
-        <div class="desc">验证码将发送到尾号为 {{Mobile}} 的手机上，请获取验证码
-            <p>
+        <div class="desc">验证码将发送到尾号为 {{Mobile |mobilehide}} 的手机上，请获取验证码
+            <p style="margin-top:1rem;">
                <timerbtn :mobile="Mobile" :second="60" @sendmsg="sendmsgHandler"></timerbtn>
             </p>
         </div>
@@ -32,12 +32,10 @@ export default {
         return {
             Mobile: '',
             MsgCode:'',
-            Token:'',
-            bodyHeight: '100%'
+            Token:''
         }
     },
     mounted() {
-        this.bodyHeight = util.screenSize().height + 'px';
         this.Mobile=this.$store.state.global.userinfo.Mobile;
     },
     methods:{
@@ -104,7 +102,6 @@ export default {
 </script>
 
 
-<style lang="less" src="../../../../img/common.less"></style>
 <style lang="less" scoped>
 .desc {
     margin-top: 3rem;
@@ -113,7 +110,6 @@ export default {
 
 .mobilevfwp {
     width: 100%;
-    background:#fff;
     .codeinput {
         text-align: center;
         padding: 3rem;

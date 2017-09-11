@@ -2,6 +2,7 @@
     <div class="page">
         <mi-header title="订单详情"></mi-header>
         <mi-stepindicator :steps="Steps" :currentstep="CurrentStep"></mi-stepindicator>
+        <div class="divider"></div>
         <div class="expressinfo">
             <div class="exinfo" @click="goPage('/orders/info/expressinfo')">
                 【宿迁市】您的订单已签收，本人签收，感谢您使用顺丰快递，欢迎您再次光临
@@ -15,31 +16,35 @@
                     <span>下单时间：</span>{{StoreOrder.CreatedOn}}</p>
             </div>
             <div class="btntools" v-if="CurrentStep==3">
-                <button>去评价</button>
-                <button class="success">再次购买</button>
-                <button>赢免单</button>
+                <!-- <button>去评价</button>
+                <button class="success">再次购买</button> -->
+                <!-- <button>赢免单</button> -->
             </div>
             <div class="btntools" v-if="CurrentStep==1">
                 <button @click="ConfirmExpress">确认收货</button>
-                <button class="success">退货退款</button>
-                <button>赢免单</button>
+                <!-- <button class="success">退货退款</button>
+                <button>赢免单</button> -->
             </div>
             <div class="btntools" v-if="CurrentStep==0">
                 <button @click="toPage('applyrefund')">申请退款</button>
-                <button class="success">提醒发货</button>
-                <button>赢免单</button>
+                <!-- <button class="success">提醒发货</button>
+                <button>赢免单</button> -->
             </div>
         </div>
+        <div class="divider"></div>
         <div class="expressaddress">
             <p>
                 <span>收货地址：</span>{{StoreOrder.ExpressRegion}}{{StoreOrder.ExpressAddress}}</p>
             <p>
                 <span>收货人：</span>{{StoreOrder.ExpressName}} {{StoreOrder.ExpressMobile|mobilehide}}</p>
-            <p>
-                <span>配送方式：</span>顺丰快递</p>
-            <p>
-                <span>运单号：</span>2324252443</p>
+            <div v-if="CurrentStep==1">
+                <p>
+                    <span>配送方式：</span>顺丰快递</p>
+                <p>
+                    <span>运单号：</span>2324252443</p>
+            </div>
         </div>
+        <div class="divider"></div>
         <div class="totalinfo">
             <p>
                 <span>商品总额：</span>{{StoreOrder.Total|currency('￥',2)}}</p>
@@ -82,7 +87,7 @@ export default {
         }
     },
     mounted(){
-        this.StoreOrder=this.$route.params.StoreOrder ||{};
+        this.StoreOrder=JSON.parse(sessionStorage.UserStoreOrder)
         switch(this.StoreOrder.Status)
         {
         case '待发货':
@@ -100,7 +105,7 @@ export default {
     },
     methods: {
         toPage(page){
-            this.$router.replace({name:page,params:{StoreOrder:this.StoreOrder}});
+            this.$router.push({name:page});
         },
         ConfirmExpress(){
             this.$refs.confirm.modalOpen();
@@ -144,11 +149,7 @@ export default {
             border-top: 1px dashed #eee;
             border-bottom: 1px dashed #eee;
         }
-
-
         .orderstatus {
-
-            margin-top: 1rem;
             p {
                 padding: 0.2rem 0;
                 span {
@@ -183,7 +184,6 @@ export default {
     .expressaddress {
         padding: 1rem;
         background: #fff;
-        margin-top: 1rem;
         p {
             padding: 0.2rem 0;
             span {

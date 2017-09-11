@@ -10,22 +10,25 @@
             <div>有效期：永久有效</div>
             <div>已开通：2454644人</div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">为什么要做传递使者?</div>
             <div class="cont">
                 <p>【1】参与公益事业，提升个人荣誉</p>
                 <p>【2】每购物满100元，即可获得1个善心</p>
                 <p>【3】享有商家让利的5倍奖励</p>
-                <p>【4】善心激励就是将您的善心转换为人民币</p>
+                <p>【4】可推荐商家入驻商城，获得商家销售奖励</p>
+                <p>【5】善心激励就是将您的善心转换为人民币</p>
             </div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">开通方式</div>
             <div class="cont">
                 <p>【1】单次消费满99元</p>
                 <p>【2】或者推荐10个以上善心使者</p>
             </div>
-            <button class="sharebtn">分享给好友</button>
+            <button class="button warning">分享给好友</button>
         </div>
         
     
@@ -77,7 +80,6 @@ export default {
         }
     }
     .shuoming {
-        margin-top: 1rem;
         border-top: 1px solid #eee;
         background: #fff;
         padding: 1rem;
@@ -96,17 +98,7 @@ export default {
             }
         }
     }
-    .sharebtn {
-        text-align: center;
-        width:100%;
-        display: block;
-        margin-top: 2rem;
-        font-size: 1.3rem;
-        background: #C1272D;
-        color:#fff;
-        border: 0;
-        padding: 1rem 0;
-    }
+    
 }
 </style>
 

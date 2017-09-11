@@ -2,11 +2,12 @@
     <div class="cartwarper">
         <div class="emptybox" v-if="!StoreCartGoods.length">
             <svg>
-                <use xlink:href="#emptyline"></use>
+                <use xlink:href="#cartline"></use>
             </svg>
             <p> 购物车中，没有任何商品，去逛逛吧</p>
         </div>
         <div class="storewarp" v-for="(store,storeindex) in StoreCartGoods">
+            <div class="divider"></div>
             <div class="storetitle">
                 <div class="checkbar">
                     <input type="checkbox" :id="'stcheck'+storeindex" class="regular-checkbox" @click="storeCheckAll(store.StoreId,$event)">
@@ -42,7 +43,7 @@
                 </div>
             </div>
         </div>
-    
+
         <div class="buttombar">
             <div class="checkbar">
                 <input type="checkbox" id="checkall_checkbox" class="regular-checkbox" @click="checkAll($event)">
@@ -91,17 +92,17 @@ export default {
     created() {
         //this.mycart = data.mycart;
     },
-    mounted(){
+    mounted() {
         this.getList();
     },
     methods: {
-        getList(){
+        getList() {
             //获取购物车数据
             let params = {};
             api.InfoApi(params).then(
                 res => {
                     if (res.data.Code == 200) {
-                        this.StoreCartGoods=res.data.StoreCartGoods;
+                        this.StoreCartGoods = res.data.StoreCartGoods;
                     } else {
                         console.log(res.data.Message);
                     }
@@ -122,7 +123,7 @@ export default {
                 }
             });
         },
-        checkAll(evnt){
+        checkAll(evnt) {
             //全选
             var checkbox = evnt.target;
             this.StoreCartGoods.forEach(function (store, index) {
@@ -137,21 +138,21 @@ export default {
         },
         confirmDelGoods(num) {
             console.log(this.todelgoods);
-            let self=this;
+            let self = this;
             //删除本地数据方法
-            let delLocalGoods=()=>{
+            let delLocalGoods = () => {
                 this.StoreCartGoods.forEach(function (store, index) {
-                        store.CartGoodses.forEach(function (item,goodsindex) {
-                            if (item.Id == self.todelgoods.Id) {
-                                store.CartGoodses.splice(goodsindex, 1);
-                                return;
-                            }
-                        });
+                    store.CartGoodses.forEach(function (item, goodsindex) {
+                        if (item.Id == self.todelgoods.Id) {
+                            store.CartGoodses.splice(goodsindex, 1);
+                            return;
+                        }
                     });
+                });
             }
             if (num == 1) {
                 //提交到服务器
-                let params = {Id:this.todelgoods.Id};
+                let params = { Id: this.todelgoods.Id };
                 api.RemoveCartGoodsApi(params).then(
                     res => {
                         if (res.data.Code == 200) {
@@ -165,12 +166,12 @@ export default {
                         console.log('网络错误');
                     }
                 )
-                
+
             }
 
         },
         getCheckCount() {
-            var count=0;
+            var count = 0;
             this.StoreCartGoods.forEach(function (store, index) {
                 store.CartGoodses.forEach(function (goods) {
                     if (goods.Checked) {
@@ -181,7 +182,7 @@ export default {
             return count;
         },
         getCheckAmount() {
-            var amount=0;
+            var amount = 0;
             this.StoreCartGoods.forEach(function (store, index) {
                 store.CartGoodses.forEach(function (goods) {
                     if (goods.Checked) {
@@ -191,24 +192,26 @@ export default {
             });
             return amount;
         },
-        postOrder(){
-            var storecartgoodses=[];
+        postOrder() {
+            var storecartgoodses = [];
             //找到选中的商品提交到订单页面
             this.StoreCartGoods.forEach(function (store, index) {
-                store.CartGoodses.forEach(function (goods,goodsindex) {
+                store.CartGoodses.forEach(function (goods, goodsindex) {
                     if (goods.Checked) {
-                        if(checkJs.isNullOrEmpty(storecartgoodses[index])){
+                        if (checkJs.isNullOrEmpty(storecartgoodses[index])) {
                             storecartgoodses.push({
-                                StoreId:store.StoreId,
-                                StoreName:store.StoreName,
-                                CartGoodses:[]
+                                StoreId: store.StoreId,
+                                StoreName: store.StoreName,
+                                CartGoodses: []
                             });
                         }
                         storecartgoodses[index].CartGoodses.push(goods);
                     }
                 });
             });
-            this.$router.push({name:'postorder',params:{StoreCartGoods:storecartgoodses}});
+            //提交到确认订单页面
+            sessionStorage.StoreCartGoods = JSON.stringify(storecartgoodses)
+            this.$router.push({ name: 'postorder' });
         }
     }
 }
@@ -222,7 +225,6 @@ export default {
         border-top: 1px solid #eee;
         border-bottom: 1px solid #eee;
         background: #fff;
-        margin-top: 1rem;
         .storetitle {
             font-size: 1.3rem;
             padding: 1rem 0;
@@ -246,8 +248,8 @@ export default {
                 padding-top: 1rem;
                 padding-bottom: 1rem;
                 border-top: 1px solid #eee;
-                &.selected{
-                    background:lightyellow;
+                &.selected {
+                    background: lightyellow;
                 }
                 .checkbar {
                     width: 10%;
@@ -264,8 +266,7 @@ export default {
                 .goodsinfo {
                     width: 70%;
                     padding-left: 1rem;
-                    .goodsname {
-                    }
+                    .goodsname {}
                     .goodsspecification {
                         margin-top: 0.5rem;
                         color: #666;
@@ -285,8 +286,10 @@ export default {
                             float: right;
                             display: inline-block;
                             padding: 0.5rem 2rem 0.5rem 0;
-                            svg{
-                                width:1rem;height:1rem;fill:#666;
+                            svg {
+                                width: 1.5rem;
+                                height: 1.5rem;
+                                fill: #666;
                             }
                         }
                     }
@@ -325,10 +328,11 @@ export default {
         .jiesuanbtn {
             width: 30%;
             text-align: center;
+            background: #ddd;
             button {
                 display: block;
                 width: 100%;
-                height: 100%;
+                height: 4rem;
                 text-align: center;
                 font-size: 1.3rem;
                 background: #C1272D;
@@ -338,14 +342,16 @@ export default {
                     font-size: 1rem;
                 }
                 &:disabled {
-                    background: #ddd;color:#666;
+                    background: #ddd;
+                    color: #666;
                 }
             }
         }
     }
-    .confirm{
+    .confirm {
         text-align: center;
-        p{
+        p {
+            font-size:1.3rem;
         }
     }
 }

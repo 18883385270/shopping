@@ -1,22 +1,22 @@
 <template>
-  <div class="loginpage" :style="{height:bodyHeight}">
+  <div class="loginpage" >
     <mi-header title="快捷登录"></mi-header>
     <h1>手机快捷登录</h1>
-    <p>未注册过的手机号将自动创建账号，注册过的账号直接登录</p>
+    <p>无需登录密码，通过短信验证码登录</p>
     <div class="formgrp">
       <div class="inpt">
-        <input type="number" placeholder="请输入手机号" v-model="mobile">
-        <timerbtn style="float:right;" :mobile="mobile" :second="60" @sendmsg="sendmsgHandler"></timerbtn>
+        <input type="number" placeholder="请输入手机号" v-model="Mobile">
+        <timerbtn style="float:right;" :mobile="Mobile" :second="60" @sendmsg="sendmsgHandler"></timerbtn>
       </div>
     </div>
     <div class="formgrp">
       <div class="inpt">
-        <input type="number" placeholder="请输入短信验证码" v-model="code">
+        <input type="number" placeholder="请输入短信验证码" v-model="MsgCode">
       </div>
     </div>
-  
+
     <div class="loginbtn">
-      <button type="button" class="button success" @click="register">登录</button>
+      <button type="button" class="button success" @click="msglogin">登录</button>
     </div>
     <div class="bottomlink">
       <router-link to="/login" replace>密码登录</router-link>
@@ -46,38 +46,26 @@ export default {
   },
   data() {
     return {
-      mobile: '',
-      code: '',
-      password: '',
-      token: '',
-      bodyHeight: '100%'
+      Mobile: '',
+      MsgCode: '',
+      Token: ''
     }
-  },
-  watch: {
-
-  },
-  mounted() {
-    this.bodyHeight = util.screenSize().height + 'px';
   },
   methods: {
     sendmsgHandler() {
-      console.log(this.mobile);
-
       let alertFuc = (msg) => {
         const toast = this.$refs.toast;
         toast.show(msg);
         return false
       }
-
-
       let params = {
-        Mobile: this.mobile
+        Mobile: this.Mobile
       };
       api.SendMsgCodeApi(params).then(
         res => {
           if (res.data.Code == 200) {
             console.log(res.data);
-            this.token = res.data.Token;
+            this.Token = res.data.Token;
             console.log(this.token);
           }
           else {
@@ -88,7 +76,7 @@ export default {
         })
 
     },
-    register() {
+    msglogin() {
       let alertFuc = (msg) => {
         const toast = this.$refs.toast;
         toast.show(msg);
@@ -97,26 +85,59 @@ export default {
 
 
       let self = this;
-      if (!checkJs.isPhone(this.mobile)) {
+      if (!checkJs.isPhone(this.Mobile)) {
         alertFuc('请输入正确的手机号码！')
         return;
       }
-      if (checkJs.isNullOrEmpty(this.code)) {
+      if (checkJs.isNullOrEmpty(this.MsgCode)) {
         alertFuc('请填写验证码！')
         return;
       }
 
       let params = {
-        Region: '+86',
-        Mobile: this.mobile,
-        MsgCode: this.code,
-        Token: this.token
+        Mobile: this.Mobile,
+        MsgCode: this.MsgCode,
+        Token: this.Token
       }
 
       api.MsgLoginApi(params).then(
         res => {
           if (res.data.Code == 200) {
-            self.$router.push({ path: '/login' });
+            //保存登录凭证
+            self.$store.dispatch('update_token', {
+              token: res.data.UserInfo.Token
+            }).then(() => {
+              //存储用户信息
+              self.$store.dispatch('update_userinfo', {
+                userinfo: {
+                  Id:res.data.UserInfo.Id,
+                  ParentId:res.data.UserInfo.ParentId,
+                  NickName:res.data.UserInfo.NickName,
+                  Portrait:res.data.UserInfo.Portrait,
+                  Gender:res.data.UserInfo.Gender,
+                  Region:res.data.UserInfo.Region,
+                  Mobile:res.data.UserInfo.Mobile,
+                  Role:res.data.UserInfo.Role,
+                  StoreId:res.data.UserInfo.StoreId,
+                  CartGoodsCount:res.data.UserInfo.CartGoodsCount
+                }
+              });
+              //存储钱包信息
+              self.$store.dispatch('update_walletinfo', {
+                walletinfo: {
+                  Id: res.data.WalletInfo.Id,
+                  AccessCode: res.data.WalletInfo.AccessCode,
+                  Cash: res.data.WalletInfo.Cash,
+                  Benevolence: res.data.WalletInfo.Benevolence,
+                  Earnings: res.data.WalletInfo.Earnings,
+                  YesterdayEarnings: res.data.WalletInfo.YesterdayEarnings
+                }
+              }).then(() => {
+                self.$router.replace('/me');
+              });
+
+
+            });
           } else {
             alertFuc(res.data.Message)
           }
@@ -142,8 +163,11 @@ h1 {
   font-weight: 300;
   margin-top: 3rem;
 }
-p{
-  font-size:1.3rem;color:#999;margin-top:0.5rem;
+
+p {
+  font-size: 1.3rem;
+  color: #999;
+  margin-top: 0.5rem;
 }
 
 .formgrp {
@@ -166,29 +190,30 @@ p{
 
 .loginbtn {
   margin-top: 3rem;
-  
 }
 
 .bottomlink {
   text-align: center;
   padding: 2rem 0;
   a {
-    text-align: center;color:#999;text-decoration: none;
+    text-align: center;
+    color: #999;
+    text-decoration: none;
     font-size: 1.2rem;
     padding: 0 1rem;
   }
 }
 
 .protocol {
-    margin-top:2rem;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    color: #999;
-    a {
-        color: #09c;
-        text-decoration: none;
-    }
+  margin-top: 2rem;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  color: #999;
+  a {
+    color: #09c;
+    text-decoration: none;
+  }
 }
 </style>
 

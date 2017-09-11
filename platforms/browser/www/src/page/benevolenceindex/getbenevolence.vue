@@ -1,7 +1,7 @@
 <template>
   <div class="warp">
     <div class="head">
-      <div class="title">获取善心</div>
+      <div class="title">平台角色</div>
     </div>
     <div class="body">
       <div class="item" @click="goPage('/bindex/consumer')">
@@ -14,7 +14,7 @@
           <h3>善心使者</h3>
           <p>注册即成为善心使者，每消费100元获得一颗善心</p>
         </div>
-        <div class="open_warp ok">
+        <div class="open_warp ok" v-if="this.$store.state.global.token.length">
           <svg>
             <use xlink:href="#ok"></use>
           </svg>已加入</div>
@@ -29,7 +29,7 @@
           <h3>传递使者</h3>
           <p>消费满99元或者推荐10个善心使者，即可成为传递使者</p>
         </div>
-        <div class="open_warp ok">
+        <div class="open_warp ok" v-if="this.$store.state.global.userinfo.Role=='传递使者'">
           <svg>
             <use xlink:href="#ok"></use>
           </svg>已加入</div>
@@ -41,13 +41,15 @@
           </svg>
         </div>
         <div class="content_warp">
-          <h3>传递大使</h3>
-          <p>缴纳365元年费即可成为传递大使，享有直接或间接顾客消费激励</p>
+          <h3>商城店主</h3>
+          <p>缴纳1万元年费即可成为店主，开通商城销售商品</p>
         </div>
-        <div class="open_warp">
-        </div>
+        <div class="open_warp ok" v-if="this.$store.state.global.userinfo.Role=='店主'">
+          <svg>
+            <use xlink:href="#ok"></use>
+          </svg>已加入</div>
       </div>
-      <div class="item" @click="goPage('/bindex/regionpartner')">
+      <!-- <div class="item" @click="goPage('/bindex/regionpartner')">
         <div class="icon_warp">
           <svg>
             <use xlink:href="#consumer"></use>
@@ -59,7 +61,7 @@
         </div>
         <div class="open_warp">
         </div>
-      </div>
+      </div> -->
       <div class="item" @click="goPage('/bindex/storeowner')">
         <div class="icon_warp">
           <svg>
@@ -70,8 +72,10 @@
           <h3>公益商家</h3>
           <p>认同公益事业并愿为公益做贡献的商家，销售产品即可获得善心激励</p>
         </div>
-        <div class="open_warp">
-        </div>
+        <div class="open_warp ok" v-if="this.$store.state.global.userinfo.StoreId">
+          <svg>
+            <use xlink:href="#ok"></use>
+          </svg>已加入</div>
       </div>
     </div>
   </div>
@@ -92,7 +96,6 @@ export default {
   padding: 0;
   background: white;
   border-top: 1px solid #ddd;
-  margin-top: 1.6rem;
   .head {
     border-bottom: 1px solid #ddd;
     display: flex;

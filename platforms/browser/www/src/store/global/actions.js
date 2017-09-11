@@ -20,7 +20,6 @@ const actions = {
 			resolve()
 		});
 	},
-
 	hide_loading: ({commit}) => {
 		return new Promise((resolve, reject) => {
 			commit(types.HIDE_LOADING);
@@ -28,6 +27,8 @@ const actions = {
 		});
 	},
 
+
+  //token
   update_token: ({commit}, {token}) => {
     return new Promise((resolve, reject) => {
       commit(types.UPDATE_TOKEN, {
@@ -36,7 +37,6 @@ const actions = {
       resolve()
     });
   },
-
   remove_token: ({commit}, {
     token
   }) => {
@@ -47,6 +47,50 @@ const actions = {
       resolve()
     });
   },
+
+
+  //userinfo
+  update_userinfo: ({commit}, {userinfo}) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_USERINFO, {
+        userinfo
+      });
+      resolve()
+    });
+  },
+  remove_userinfo: ({commit}, {
+    userinfo
+  }) => {
+    return new Promise((resolve, reject) => {
+      commit(types.REMOVE_USERINFO, {
+        userinfo
+      });
+      resolve()
+    });
+  },
+
+  //wallet
+  update_walletinfo: ({commit}, {walletinfo}) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_WALLETINFO, {
+        walletinfo
+      });
+      resolve()
+    });
+  },
+  remove_walletinfo: ({commit}, {
+    walletinfo
+  }) => {
+    return new Promise((resolve, reject) => {
+      commit(types.REMOVE_WALLETINFO, {
+        walletinfo
+      });
+      resolve()
+    });
+  },
+
+
+
 }
 
 export default actions

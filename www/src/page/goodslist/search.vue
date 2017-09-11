@@ -37,13 +37,13 @@
                 <div>
                     <div class="title">最近搜索</div>
                     <ul>
-                        <li v-for="item in hotWord" @click="inputFillEvent(item)">{{ item }}</li>
+                        <li v-for="item in LatestWords" @click="inputFillEvent(item)">{{ item }}</li>
                     </ul>
                 </div>
                 <div>
                     <div class="title">热门搜索</div>
                     <ul>
-                        <li v-for="item in hotWord" @click="inputFillEvent(item)">{{ item }}</li>
+                        <li v-for="item in HotWords" @click="inputFillEvent(item)">{{ item }}</li>
                     </ul>
                 </div>
             </div>
@@ -54,6 +54,8 @@
 </template>
 
 <script>
+import * as checkJs from '../../utils/pubfunc'
+
 export default {
     props: ['search'],
     data() {
@@ -62,12 +64,19 @@ export default {
             inputText:'',
             hasbackground: this.hasbg,
             hasborder: this.hasbr,
-            hotWord: ['红米4 超长续航', '小米Note 2', '小米5s', '笔记本', '小米电视3s', '智能电饭煲']
+            LatestWords:['红米4 超长续航', '小米Note 2', '小米5s', '笔记本', '小米电视3s', '智能电饭煲'],
+            HotWords: ['红米4 超长续航', '小米Note 2', '小米5s', '笔记本', '小米电视3s', '智能电饭煲']
         };
     },
     watch: {
         search(val){
             this.inputText=val;
+        }
+    },
+    created(){
+        //获取本地最近搜索项目
+        if(!checkJs.isNullOrEmpty(sessionStorage.LatestWords)){
+            this.LatestWords=JSON.parse(sessionStorage.LatestWords)
         }
     },
     methods: {
@@ -89,6 +98,10 @@ export default {
         doSearch(){
             if(this.inputText.length>1)
             {
+                //添加最近搜索
+                this.LatestWords.pop();//删除最后一个
+                this.LatestWords.splice(0,0,this.inputText);//添加到第一个
+                sessionStorage.LatestWords = JSON.stringify(this.LatestWords)
                 this.$router.replace({name:'jumppage',params:{type:'Search',search:this.inputText}});
             }
         }

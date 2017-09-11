@@ -1,12 +1,12 @@
 <template>
     <div class="pagewp">
-        <mi-header title="善心联盟"></mi-header>
+        <mi-header title="公益商家"></mi-header>
         <div class="rolebanner">
             <svg><use xlink:href="#consumer"></use></svg>
-            <h1>平台商家</h1>
+            <h1>公益商家</h1>
             <h2>加盟慈善事业，引爆产品销售</h2>
         </div>
-        
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">为什么要入驻商家?</div>
             <div class="cont">
@@ -16,10 +16,13 @@
                 <p>【4】享有促销让利，善心激励</p>
             </div>
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">开店流程</div>
             <div class="cont">
                 <p class="step">注册会员</p>
+                <p class="step_deliver">↓</p>
+                <p class="step">成为店铺所有人</p>
                 <p class="step_deliver">↓</p>
                 <p class="step">填写店铺资料，等待审核</p>
                 <p class="step_deliver">↓</p>
@@ -27,31 +30,55 @@
             </div>
             
         </div>
+        <div class="divider"></div>
         <div class="shuoming">
             <div class="tlt">申请条件</div>
             <div class="cont">
-                <p>【1】提供产品或服务的真实公司或个体工商户</p>
-                <p>【2】可提供国家法律允许经营的合法商品或服务</p>
+                <p>【1】已是店铺所有人身份</p>
+                <p>【2】提供产品或服务的真实公司、个体工商户、个人</p>
+                <p>【3】可提供国家法律允许经营的合法商品或服务</p>
             </div>
-            <button class="sharebtn" @click="goPage('/bindex/storeowner/open')">知道了，去开店</button>
+            <button v-if="!this.$store.state.global.userinfo.StoreId" class="button success" @click="goPage('/bindex/storeowner/open')">知道了，去开店</button>
+            <button v-if="this.$store.state.global.userinfo.StoreId" class="button info" @click="goPage('/storemgr')">您已开店，管理我的店铺</button>
         </div>
-        
-
-        
-    
     </div>
 </template>
 
 <script>
 import header from '../../../components/header.vue';
+import * as api from '../../../api/store'
 
 export default {
     components: {
         'mi-header': header
     },
+    data(){
+        return{
+            storeinfo:{}
+        }
+    },
+    mounted() {
+    
+    },
     methods:{
         goPage(page){
             this.$router.push({path:page})
+        },
+        getStoreInfo(){
+            //加载店铺信息
+            let params = {};
+            api.InfoApi(params).then(
+            res => {
+                if (res.data.Code == 200) {
+                this.storeinfo = res.data.StoreInfo;
+                } else {
+                console.log(res.data.Message);
+                }
+            },
+            err => {
+                console.log('网络错误');
+            }
+            )
         }
     }
 }
@@ -92,7 +119,6 @@ export default {
         }
     }
     .shuoming {
-        margin-top: 1rem;
         border-top: 1px solid #eee;
         background: #fff;
         padding: 1rem;

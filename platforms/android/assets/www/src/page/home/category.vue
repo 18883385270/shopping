@@ -1,8 +1,3 @@
-/*
-主菜单
-*/
-
-
 <template>
   <div class="mainmenuwarp">
     <div class="menuwarp">
@@ -12,29 +7,29 @@
         </svg>领优惠券
       </div>
       <div>
-        <svg>
+        <svg class="purple">
           <use xlink:href="#sort"></use>
         </svg>都在买
       </div>
       <div>
-        <svg>
+        <svg class="pink">
           <use xlink:href="#sale"></use>
         </svg>找折扣
       </div>
       <div @click="goPage('/offlinestore')">
-        <svg>
+        <svg class="blue">
           <use xlink:href="#store"></use>
         </svg>线下商家
       </div>
       <div @click="goPage('/me')">
-        <svg>
+        <svg class="green">
           <use xlink:href="#vip"></use>
         </svg>会员中心
       </div>
     </div>
     <div class="menuwarp">
       <div @click="goPage('/foundation')">
-        <svg>
+        <svg class="green">
           <use xlink:href="#foundation"></use>
         </svg>五福基金
       </div>
@@ -44,17 +39,17 @@
         </svg>受助人
       </div>
       <div @click="goPage('/bindex')">
-        <svg>
+        <svg class="yellow">
           <use xlink:href="#heart"></use>
         </svg>善心指数
       </div>
       <div @click="goPage('/classroom')">
-        <svg>
+        <svg class="green">
           <use xlink:href="#classroom"></use>
         </svg>莱乾讲堂
       </div>
       <div>
-        <svg>
+        <svg class="black">
           <use xlink:href="#all"></use>
         </svg>全部频道
       </div>
@@ -90,6 +85,24 @@ export default {
         display: block;
         margin: 0 auto 0.7rem auto;
         fill: #c66;
+      }
+      svg.green{
+        fill:#096;
+      }
+      svg.black{
+        fill:#333;
+      }
+      svg.yellow{
+        fill:#f90;
+      }
+      svg.purple{
+        fill:#969;
+      }
+      svg.blue{
+        fill:#06c;
+      }
+      svg.pink{
+        fill:#f66;
       }
     }
   }

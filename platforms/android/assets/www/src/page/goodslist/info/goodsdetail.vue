@@ -11,14 +11,19 @@
       <p v-html="GoodsDetails.Description"></p>
     </div>
     <div class="attr" v-show="!tabState">
-      商品参数
+      <ul>
+        <li v-for="goodsParam in GoodsDetails.GoodsParams">
+          <span class="paramtlt">{{goodsParam.Name}}</span>
+          <span>{{goodsParam.Value}}</span>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 <script>
 export default {
   props: ['GoodsDetails'],
-  
+
   data() {
     return {
       tabState: true,
@@ -38,8 +43,6 @@ export default {
 
 <style lang="less" scope>
 .detailwp {
-  margin-top:1rem;
-
   .tab {
     font-family: 'Microsoft YaHei';
     width: 100%;
@@ -51,12 +54,13 @@ export default {
     span {
       font-size: 1.3rem;
       color: #333;
-      margin-top: 0.6rem;
+      padding: 0.6rem 0;
       width: 50%;
       box-sizing: border-box;
       text-align: center;
       line-height: 3rem;
       display: inline-block;
+      border-bottom: 1px solid #eee;
       &:first-child {
         border-right: 0.1rem solid #d5d5d5;
       }
@@ -68,8 +72,18 @@ export default {
   .detail,
   .attr {
     width: 100%;
-    img {
-      width: 100%;
+    ul {
+      padding: 1rem;
+      li {
+        list-style: none;
+        padding: 0.5rem;
+        .paramtlt {
+          color: #666;
+          display: inline-block;
+          padding-right: 1rem;
+          width: 4rem;
+        }
+      }
     }
   }
 }

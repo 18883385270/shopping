@@ -12,7 +12,7 @@
         </div>
         <div class="content_warp">
           <h3>善心使者</h3>
-          <p>注册即成为善心使者，每消费100元获得一颗善心</p>
+          <p>注册即成为善心使者，购物得善心，赚收益</p>
         </div>
         <div class="open_warp ok" v-if="this.$store.state.global.token.length">
           <svg>
@@ -27,7 +27,7 @@
         </div>
         <div class="content_warp">
           <h3>传递使者</h3>
-          <p>消费满99元或者推荐10个善心使者，即可成为传递使者</p>
+          <p>消费满100元或者推荐10个善心使者，即可成为传递使者</p>
         </div>
         <div class="open_warp ok" v-if="this.$store.state.global.userinfo.Role=='传递使者'">
           <svg>
@@ -69,8 +69,8 @@
           </svg>
         </div>
         <div class="content_warp">
-          <h3>公益商家</h3>
-          <p>认同公益事业并愿为公益做贡献的商家，销售产品即可获得善心激励</p>
+          <h3>加盟商家</h3>
+          <p>认同我们的事业，加盟合作商家，提供产品销售，销售产品即可获得善心激励</p>
         </div>
         <div class="open_warp ok" v-if="this.$store.state.global.userinfo.StoreId">
           <svg>
@@ -95,9 +95,9 @@ export default {
 .warp {
   padding: 0;
   background: white;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #eee;
   .head {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #eee;
     display: flex;
     width: 100%;
     .title {
@@ -111,7 +111,7 @@ export default {
     width: 100%;
     .item {
       display: flex;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid #eee;
       .icon_warp {
         padding: 1.5rem;width:10%;
         svg {

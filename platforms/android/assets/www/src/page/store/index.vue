@@ -2,39 +2,51 @@
     <div>
         <mi-header title="店铺首页"></mi-header>
         <!-- <mi-storesearch></mi-storesearch> -->
-        <div class="banner">
-            <div class="storeinfo">
-                <div class="logo">
-                    <img src="https://i8.mifile.cn/v1/a1/38f1fa24-815b-c6a6-925f-65460ce541e4.webp?width=360&height=360" alt="">
-                </div>
-                <div class="storename">
-                    <div>
-                        <p>耐克专营店宿迁店</p>
-                        <span class="label">公司自营</span>
-                    </div>
-                </div>
-                <div class="tools">
-                    <button>收藏</button>
-                </div>
+        <mi-banner :StoreInfo="StoreInfo"></mi-banner>
+        <div class="navbar">
+            <div class="item active">
+                <svg>
+                    <use xlink:href="#storeline"></use>
+                </svg>
+                <p>
+                    首页
+                </p>
+            </div>
+            <!-- <div class="item">
+                <svg>
+                    <use xlink:href="#newline"></use>
+                </svg>
+                <p>
+                    上新
+                </p>
+            </div> -->
+            <div class="item" @click="goPageWithName('subject')">
+                <svg>
+                    <use xlink:href="#identitycardline"></use>
+                </svg>
+                <p>
+                    资料
+                </p>
             </div>
         </div>
-
+        <mi-goodses :Goodses="Goodses"></mi-goodses>
     </div>
 </template>
 
 <script>
 import header from '../../components/header.vue'
-import storesearch from './search.vue'
+import banner from './banner.vue'
+import goodses from './goodses.vue'
 import * as api from '../../api/store'
 
 export default {
     components: {
         'mi-header': header,
-        'mi-storesearch': storesearch
+        'mi-banner': banner,
+        'mi-goodses':goodses
     },
     data(){
         return{
-            StoreId:'',
             StoreInfo:{},
             Goodses:[]
         }
@@ -44,6 +56,9 @@ export default {
         this.fatchData()
     },
     methods:{
+        goPageWithName(pageName){
+            this.$router.replace({name:pageName})
+        },
         fatchData(){
             let params = {
                 Id:this.StoreId
@@ -67,39 +82,27 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.banner {
-    background: #fff;
-    padding: 1rem;
-    .storeinfo {
-        display: flex;
-        .logo {
-            width: 12%;
-            img {
-                width: 100%;
-            }
+
+.navbar{
+    display:flex;
+    border-bottom:1px solid #eee;
+    background:#fff;
+    .item{
+        padding:0.5rem;
+        width:50%;
+        text-align:center;
+        border-bottom:1px solid #fff;
+        svg{
+            width:2rem;
+            height:2rem;
+            margin-bottom:0.2rem;
         }
-        .storename {
-            width: 75%;
-            font-size: 1.3rem;
-            padding-left: 1rem;
-            .label {
-                display: inline-block;
-                background: #c03;
-                color: #fff;
-                font-size: 1rem;
-                border-radius: 1rem;
-                padding: 0.1rem 0.8rem;
-            }
-        }
-        .tools {
-            width: 15%;
-            text-align:right;
-            button{
-                border:1px solid #eee;
-                padding:0.2rem 1rem;
-                font-size:1rem;
-                background:#fff;
-            }
+    }
+    .active{
+        color:#096;
+        border-color:#096;
+        svg{
+            fill:#096;
         }
     }
 }

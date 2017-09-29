@@ -1,6 +1,6 @@
 <template>
     <div class="pagewp" :style="{height:pageHeight}">
-        <mi-header title="面对面邀请"></mi-header>
+        <mi-header title="面对面邀请" isWhiteText="true"></mi-header>
         <div class="mylink">
             您的邀请链接
             <p> {{MyLink}}</p>
@@ -48,7 +48,11 @@ export default {
     padding: 2rem;
     font-size: 2rem;
     text-align: center;
-    background: #fff;
+    color:#fff;
+    background:#057D55;
+    margin:1rem 1rem 0 1rem;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
     p {
         margin-top: 1rem;
         font-size: 1rem;
@@ -58,11 +62,13 @@ export default {
 .qrcodebg {
     padding-top: 6rem;
     text-align: center;
+    background:#fff;
+    margin:0 1rem 0 1rem;
     .facttip {
         padding: 2rem 4rem;
         font-size: 1.3rem;
         text-align: center;
-        color: #fff;
+        color: #057D55;
     }
 }
 </style>

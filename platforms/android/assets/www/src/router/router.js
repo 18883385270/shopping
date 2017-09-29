@@ -18,8 +18,10 @@ import userprotocol from '../page/login/protocol/index.vue'
 import offlinestore from '../page/offlinestore/index.vue'
 //基金
 import foundation from '../page/foundation/index.vue'
-
+//店铺主页
 import store from '../page/store/index.vue'
+import subject from '../page/store/subject.vue'
+
 //受助人
 import grantee from '../page/grantee/index.vue'
 import granteeinfo from '../page/grantee/granteeinfo/index.vue'
@@ -54,6 +56,9 @@ import profile from '../page/me/profile/index.vue'
 import setnickname from '../page/me/profile/nickname/index.vue'
 import changepassword from '../page/me/profile/password/index.vue'
 import myqrcode from '../page/me/profile/myqrcode/index.vue'
+//用户详情
+import userinfo from '../page/userinfo/index.vue'
+
 //邀请
 import invote from '../page/me/invite/index.vue'
 import myinvote from '../page/me/invite/myinvote.vue'
@@ -106,14 +111,18 @@ import cardsmgr from '../page/me/wallet/cardsmgr/index.vue';
 import addbankcard from '../page/me/wallet/cardsmgr/add/index.vue';
 
 import benevolence from '../page/me/wallet/benevolence/index.vue';
-import benevolencetransfer from '../page/me/wallet/benevolence/transfer/index.vue';
+import benevolencetransfers from '../page/me/wallet/benevolence/transfers/index.vue';
+import whatbenevolence from '../page/me/wallet/benevolence/whatbenevolence.vue';
 
 import cash from '../page/me/wallet/cash/index.vue';
 import withdraw from '../page/me/wallet/cash/withdraw/index.vue';
 import withdrawlog from '../page/me/wallet/cash/withdraw/logs/index.vue';
 import recharge from '../page/me/wallet/cash/recharge/index.vue';
 import onlinerecharge from '../page/me/wallet/cash/recharge/onlinerecharge/index.vue';
+import cashtransfers from '../page/me/wallet/cash/transfers/index.vue';
 import cashtransfer from '../page/me/wallet/cash/transfer/index.vue';
+
+import incentive from '../page/me/wallet/incentive/index.vue';
 
 //我的订单
 import orders from '../page/me/orders/index.vue';
@@ -152,7 +161,9 @@ const routes=[
     { name: 'announcementinfo', path: '/announcementinfo', component: announcementinfo },
     //线下商家
     { name: 'offlinestore', path: '/offlinestore', component: offlinestore },
+    //店铺主页
     { name: 'store', path: '/store', component: store },
+    { name: 'subject', path: '/store/subject', component: subject },
     //基金
     { name: 'foundation', path: '/foundation', component: foundation },
     //优惠券
@@ -184,6 +195,8 @@ const routes=[
     { name: 'profile', path: '/me/profile', component: profile },
     { name: 'setnickname', path: '/me/profile/setnickname', component: setnickname },
     { name: 'myqrcode', path: '/me/profile/myqrcode', component: myqrcode },
+    //用户页面
+    { name: 'userinfo', path: '/userinfo', component: userinfo },
     
     //邀请
     { name: 'invote', path: '/me/invote', component: invote },
@@ -232,8 +245,11 @@ const routes=[
     { name: 'withdrawlog', path: '/wallet/cash/withdraw/log', component: withdrawlog },
     { name: 'rechareg', path: '/wallet/cash/recharge', component: recharge },
     { name: 'onlinerechareg', path: '/wallet/cash/recharge/onlinerecharge', component: onlinerecharge },
+    { name: 'cashtransfers', path: '/wallet/cash/transfers', component: cashtransfers },
     { name: 'cashtransfer', path: '/wallet/cash/transfer', component: cashtransfer },
-    { name: 'benevolencetransfer', path: '/wallet/benevolence/transfer', component: benevolencetransfer },
+    { name: 'benevolencetransfers', path: '/wallet/benevolence/transfers', component: benevolencetransfers },
+    { name: 'whatbenevolence', path: '/wallet/benevolence/whatbenevolence', component: whatbenevolence },
+    { name: 'incentive', path: '/wallet/incentive', component: incentive },
     //我的订单个人
     { name: 'orders', path: '/orders', component: orders },
     { name: 'orderinfo', path: '/orders/info', component: orderinfo },

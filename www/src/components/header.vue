@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class="head_bar">
+    <div class="head_bar" :class="{whitetext:isWhiteText}">
       <div class="left" @click="backEvent">
         <svg>
           <use xlink:href="#leftarrowsline"></use>
@@ -12,13 +12,13 @@
         <p @click="rightClick">{{rightext}}</p>
       </div>
     </div>
-    <div style="height:4rem;"></div>
+    <div v-if="!notPlaceHolder" style="height:4rem;"></div>
   </header>
 </template>
 
 <script>
 export default {
-  props: ['title','rightext'],
+  props: ['title','rightext','isWhiteText','notPlaceHolder'],
   methods: {
     backEvent() {
       this.$router.go(-1);
@@ -38,10 +38,11 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #fff;
-  border-bottom:1px solid #ddd;
+  background:#fff;
+  border-bottom:1px solid #eee;
+  border-bottom-color:rgba(230,230,230,0.5);
   color: #000;
-  z-index:10000;
+  z-index:10;
   .left {
     width: 30%;
     line-height: 3.7rem;
@@ -73,6 +74,16 @@ export default {
     width: 30%;
     p{
       font-size:1.3rem;text-align: right;margin-right:1rem;margin-top:1rem;
+    }
+  }
+  &.whitetext{
+    color:#fff;
+    background:transparent;
+    border-bottom:0;
+    .left{
+      svg{
+        fill:#fff;
+      }
     }
   }
 }

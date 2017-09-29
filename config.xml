@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.lq319.shop" version="1.1.5" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.lq319.shop" version="1.3.9" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>五福天下</name>
     <description>
         五福天下，慈善商城.
@@ -47,6 +47,9 @@
     </platform>
     <engine name="android" spec="^6.2.3" />
     <engine name="browser" spec="^4.1.0" />
+    <plugin name="cordova-plugin-alipay-v2" spec="0.0.4">
+        <variable name="APP_ID" value="2088721826707404" />
+    </plugin>
     <plugin name="cordova-plugin-appversion" spec="^1.0.0" />
     <plugin name="cordova-plugin-camera" spec="^2.4.1" />
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
@@ -57,7 +60,7 @@
     <plugin name="cordova-plugin-qrscanner" spec="^2.5.0" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
     <plugin name="cordova-plugin-wechat" spec="^2.0.0">
-        <variable name="WECHATAPPID" value="wx87bf751f1614b78c" />
+        <variable name="WECHATAPPID" value="wx37bc0f55159c6704" />
     </plugin>
     <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
 </widget>

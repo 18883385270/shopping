@@ -102,13 +102,21 @@ export default {
       this.inputText = word;
     },
     doSearch(){
-      if(this.inputText.length>1)
+      //添加最近搜索
+      if(this.inputText.length>=1)
       {
-        //添加最近搜索
         this.LatestWords.pop();//删除最后一个
         this.LatestWords.splice(0,0,this.inputText);//添加到第一个
         sessionStorage.LatestWords = JSON.stringify(this.LatestWords)
-        this.$router.push({name:'goodslist',params:{type:'Search',search:this.inputText}});
+
+        //通过jumppage调整到产品列表页
+        var goodsFilter={
+            Type:'Search',
+            Search:this.inputText,
+            CategoryId:''
+        }
+        sessionStorage.GoodsFilter = JSON.stringify(goodsFilter)
+        this.$router.push({name:'goodslist'});
       }
     }
   }

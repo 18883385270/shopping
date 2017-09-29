@@ -2,7 +2,7 @@
     <div class="pagewarper">
         <div class="pageheader">购物车</div>
         <mi-cart></mi-cart>
-        <div style="height:6rem;"></div>
+        <div style="height:6.5rem;"></div>
         <mi-tabbar :selected="3"></mi-tabbar>
     </div>
 </template>

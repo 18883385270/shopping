@@ -10,7 +10,7 @@
             <div>
                 <b class="number">0 </b>店铺</div>
             <div>
-                <b class="number">0 </b>受助人</div>
+                <b class="number"> </b></div>
             <div>
                 <b class="number"> </b>
             </div>

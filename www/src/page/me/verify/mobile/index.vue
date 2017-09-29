@@ -78,14 +78,12 @@ export default {
             api.VerifyMsgCodeApi(params).then(
                 res => {
                     if (res.data.Code == 200) {
-                        //删除验证标志进入页面
-                        var verify= sessionStorage.getItem('verify');
-                        if(verify)
+                        var verify= JSON.parse(sessionStorage.verify);
+                        if(!checkJs.isNullOrEmpty(verify))
                         {
-                            verify=JSON.parse(verify);
-                            verify.verifyed=true;
+                            verify.verifyed=true;//已验证
                         }
-                        sessionStorage.setItem('verify', JSON.stringify(verify));
+                        sessionStorage.verify= JSON.stringify(verify);
                         //跳转到页面
                         this.$router.replace({name:verify.verifypage});
                     } else {
@@ -112,7 +110,7 @@ export default {
     width: 100%;
     .codeinput {
         text-align: center;
-        padding: 3rem;
+        padding: 1rem;
         input {
             width: 100%;
             border: 1px solid #ccc;

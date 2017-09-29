@@ -16,7 +16,6 @@
                 </svg>
             </div>
         </div>
-        <div class="divider"></div>
         <mi-ordergoods :StoreCartGoods="StoreCartGoods"></mi-ordergoods>
         <div class="divider"></div>
         <div class="youhuiwarp">
@@ -113,6 +112,23 @@ export default {
                     cartGoodses.push(goods);
                 });
             });
+            
+            //判断是否购买自家商品
+            var ishasmygoods=false;
+            var myStoreId=this.$store.state.global.userinfo.StoreId;
+            if(!checkJs.isNullOrEmpty(myStoreId)){
+                cartGoodses.forEach(function(goods){
+                    if(goods.StoreId==myStoreId){
+                        ishasmygoods=true;
+                    }
+                })
+            }
+            
+            if(ishasmygoods){
+                alertFuc('订单中包含自家商品，请检查')
+	            return;
+            }
+
             let totalamount=this.CalTotalAmount();
             let params = {
                 ExpressAddress:this.ExpressAddress,

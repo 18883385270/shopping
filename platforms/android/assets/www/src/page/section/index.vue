@@ -3,7 +3,7 @@
         <mi-search @searchEvent="searchHandle" @searchLeftBtnEvent="searchLeftBtnEventHandle" @searchRightBtnEvent="searchRightBtnEventHandle"  hasbg="true" hasbr="true"></mi-search>
         <div style="height: 4rem;"></div>
         <mi-section></mi-section>
-        <div style="width: 100%;height: 4rem;"></div>
+        <div style="width: 100%;height: 4.5rem;"></div>
         <mi-tabbar :selected="1"></mi-tabbar>
   </div>
 </template>

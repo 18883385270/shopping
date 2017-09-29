@@ -13,6 +13,9 @@ export const PaymentRejectedApi = (params) => {
 export const WeChatPayApi = (params) => {
   return request({method: 'post', url: '/Payment/WeChatPay', data: params})
 }
+export const AliPayApi = (params) => {
+  return request({method: 'post', url: '/Payment/AliPay', data: params})
+}
 
 
 

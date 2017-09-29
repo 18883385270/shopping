@@ -27,7 +27,6 @@ export default {
     padding: 1rem;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
-    background: #fff;
     .title {
         font-size: 1.3rem;
         display: inline-block;

@@ -175,6 +175,7 @@ export default {
 			self.$store.dispatch('remove_token', { token: '' });
             self.$store.dispatch('remove_userinfo', { userinfo: ''  });
             self.$store.dispatch('remove_walletinfo', { walletinfo: '' });
+            sessionStorage.clear();
             self.$router.replace('/');
         }
     }

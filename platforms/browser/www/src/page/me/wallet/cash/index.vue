@@ -27,7 +27,7 @@ export default {
     methods: {
         rightNavBarClickedHandle() {
             sessionStorage.MyCashTransferIndex=0
-            this.$router.push({path:'/wallet/cash/transfer'});
+            this.$router.push({path:'/wallet/cash/transfers'});
         },
         goPage(page) {
             this.$router.push({ path: page });

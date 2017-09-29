@@ -51,7 +51,7 @@ export default {
   .article{
     color:#666;
     padding:1rem;
-    border-bottom:1px solid #ccc;
+    border-bottom:0.05rem solid #ccc;
     .title{
         color:#333;
         padding:0.5rem 0;

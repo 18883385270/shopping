@@ -47,7 +47,8 @@
                     <span>下单时间：</span>{{StoreOrder.CreatedOn}}</p>
             </div>
             <div class="btntools">
-                <button v-if="StoreOrder.Status=='待发货'" class="button success" @click="toDeliver">发货</button>
+                <p v-if="StoreOrder.Status=='待发货'" class="zhuanyitip">为提高效率，发货操作已移植到电脑端，请登录 store.wftx666.com 进行发货操作，如对您造成不便还请谅解~</p>
+                <!-- <button v-if="StoreOrder.Status=='待发货'" class="button success" @click="toDeliver">发货</button> -->
                 <button v-if="StoreOrder.Status=='仅退款'" class="button err" @click="agreeRefund">同意退款</button>
             </div>
         </div>
@@ -147,6 +148,10 @@ export default {
     }
     .btntools {
         margin-top: 1rem;
+        .zhuanyitip{
+            background:#eee;
+            padding:0.5rem;
+        }
     }
 }
 

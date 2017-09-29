@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mi-header title="我的善心"></mi-header>
+        <mi-header title="我的善心" isWhiteText="true" notPlaceHolder="true"></mi-header>
         <div class="bwarp">
             <svg class="topicon">
                 <use xlink:href="#integral"></use>
@@ -9,15 +9,15 @@
             <h1>{{this.$store.state.global.walletinfo.Benevolence}}</h1>
             <p> 善心值实时更新</p>
             <div class="utils">
-                <div>
+                <div @click="toPage('whatbenevolence')">
                     <svg><use xlink:href="#bookline"></use></svg>
                     <p>善心解读</p>
                 </div>
-                <div>
+                <div @click="toPage('whatbenevolence')">
                     <svg><use xlink:href="#increaseline"></use></svg>
                     <p>分值提升</p>
                 </div>
-                <div @click="goPage('/wallet/benevolence/transfer')">
+                <div @click="goPage('/wallet/benevolence/transfers')">
                     <svg><use xlink:href="#recordline"></use></svg>
                     <p>记录明细</p>
                 </div>
@@ -25,13 +25,13 @@
         </div>
         <div class="descinfo">
             <p>善心值达到1个 即可参与善心激励</p>
-            <p class="what">什么是善心？</p>
+            <p class="what" @click="toPage('whatbenevolence')">什么是善心？</p>
         </div>
     </div>
 </template>
 
 <script>
-import header from '../../../../components/header.vue';
+import header from '../../../../components/header.vue'
 
 export default {
     components: {
@@ -40,6 +40,9 @@ export default {
     methods:{
         goPage(page){
             this.$router.push({path:page});
+        },
+        toPage(page){
+            this.$router.push({name:page})
         }
     }
 }
@@ -48,7 +51,7 @@ export default {
 <style lang="less">
 .bwarp {
     text-align: center;
-    padding: 2rem 0;background:#f90;color:#fff;
+    padding: 6rem 0 2rem 0;background:#f90;color:#fff;
     .topicon {
         width: 5rem;
         height: 5rem;

@@ -299,6 +299,14 @@ module.exports = [
         "clobbers": [
             "Wechat"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-alipay-v2/www/alipay.js",
+        "id": "cordova-plugin-alipay-v2.alipay",
+        "pluginId": "cordova-plugin-alipay-v2",
+        "clobbers": [
+            "cordova.plugins.alipay"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -315,7 +323,8 @@ module.exports.metadata =
     "cordova-plugin-file-opener2": "2.0.19",
     "cordova-plugin-appversion": "1.0.0",
     "cordova-plugin-qrscanner": "2.5.0",
-    "cordova-plugin-wechat": "2.0.0"
+    "cordova-plugin-wechat": "2.0.0",
+    "cordova-plugin-alipay-v2": "0.0.3"
 }
 // BOTTOM OF METADATA
 });

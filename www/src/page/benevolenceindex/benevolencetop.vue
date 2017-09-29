@@ -1,7 +1,7 @@
 <template>
     <div class="warp">
         <div class="control">
-            <div class="left hook" @click="goBackEvent">
+            <div class="left hook" @click="goPage('benevolencerank')">
                 <svg>
                     <use xlink:href="#star"></use>
                 </svg>
@@ -18,7 +18,7 @@
                 <use xlink:href="#index"></use>
             </svg>
             <h2>善心指数</h2>
-            <p>{{BenevolenceIndex.CurrentBenevolenceIndex}}</p>
+            <p>{{BenevolenceIndex.CurrentBenevolenceIndex*100 |currency('',3)}}</p>
             <p class="myearnings">上次激励 {{this.$store.state.global.walletinfo.YesterdayEarnings|currency('￥',2)}} 元</p>
             <p class="earningtip">注意，系统用当日23.00时的善心指数激励善心</p>
         </div>
@@ -52,8 +52,8 @@ import * as checkJs from '../../utils/pubfunc'
 export default {
     props: ['BenevolenceIndex'],
     methods: {
-        goBackEvent() {
-
+        goPage(page) {
+            this.$router.push({name:page})
         },
         showScanner(){
             this.$router.push({name:'scannerpage'});

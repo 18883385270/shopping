@@ -38,7 +38,11 @@
             "PACKAGE_NAME": "com.lq319.shop"
         },
         "cordova-plugin-wechat": {
-            "WECHATAPPID": "wx87bf751f1614b78c",
+            "WECHATAPPID": "wx37bc0f55159c6704",
+            "PACKAGE_NAME": "com.lq319.shop"
+        },
+        "cordova-plugin-alipay-v2": {
+            "APP_ID": "2088721826707404",
             "PACKAGE_NAME": "com.lq319.shop"
         }
     },

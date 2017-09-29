@@ -1,17 +1,15 @@
-/*
-* 首页
-*/
+
 <template>
   <div class="app">
     <div :style="indexStyle" ref="index">
       <mi-search @searchEvent="searchHandle" @searchLeftBtnEvent="searchLeftBtnEventHandle" @searchRightBtnEvent="searchRightBtnEventHandle" :opac="headerOpacity"></mi-search>
-      <mi-banner :banner="banner" id="bannerImg"></mi-banner>
+      <mi-banner :banners="Banners"></mi-banner>
       <mi-category></mi-category>
       <mi-announcement :Announcement="Announcement"></mi-announcement>
       <mi-stargoods :Goodses="HomeNewGoodses" title="最新单品"></mi-stargoods>
       <mi-stargoods :Goodses="HomeRateGoodses" title="好评单品"></mi-stargoods>
       <mi-stargoods :Goodses="HomeSelloutGoodses" title="热卖单品"></mi-stargoods>
-      <div style="height:8rem;"></div>
+      <div style="height:4.5rem;"></div>
       <div v-if="!IsInApp" class="appdowntip">
         <svg>
           <use xlink:href="#mobile"></use>
@@ -21,14 +19,19 @@
       <!--弹出框-->
         <mi-modal ref="confirm" type="confirm" @confirmEvent="confirmUpdate">
             <div slot="confirm" class="updateconfirm">
-                <p>
+                <p class="updatesvg">
                   <svg>
                     <use xlink:href="#updateline"></use>
                   </svg>
                 </p>
-                <p class="tlt">检测到新版本：{{ServerAppVersion.Version}},是否要更新？</p>
-                <p>更新内容</p>
-                <p v-html="ServerAppVersion.Content"></p>
+                <p class="tlt">检测到新版本</p>
+                <p>{{ServerAppVersion.Content}}，现在更新么？</p>
+            </div>
+        </mi-modal>
+        <mi-modal ref="announcementModal" type="alert" @alertEvent="alertEventHandle">
+            <div slot="alert" class="announcementAlert">
+                <p class="tlt">{{Announcement.Title}}</p>
+                <p class="anbody">{{Announcement.Body}}</p>
             </div>
         </mi-modal>
         <!--下载进度-->
@@ -49,11 +52,9 @@ import search from '../../components/search.vue'
 import banner from './banner.vue'
 import category from './category.vue'
 import announcement from './announcement.vue'
-import advertisement from './advertisement.vue'
 import stargoods from './starGoods.vue'
 import tabbar from '../../components/tabbar.vue'
 import modal from '../../components/modal.vue'
-import data from '../../../../data.json'
 import * as checkJs from '../../utils/pubfunc'
 import * as goodsapi from '../../api/goods'
 import * as announcementapi from '../../api/announcement'
@@ -66,15 +67,12 @@ export default {
     'mi-modal':modal,
     'mi-category': category,
     'mi-announcement': announcement,
-    'mi-advertisement': advertisement,
     'mi-stargoods': stargoods,
     'mi-tabbar': tabbar
   },
   data() {
     return {
-      banner: {},
-      advertisement: {},
-      bannerList: [],
+      Banners: {},
 
       HomeNewGoodses: [],
       HomeRateGoodses: [],
@@ -100,10 +98,15 @@ export default {
       downloadpersent:0
     };
   },
-  created() {
-    this.banner = data.banner;
-    this.advertisement = data.advertisement;
-    this.bannerList = data.banner.bannerTop;
+  
+  mounted() {
+    var me = this;
+    this.c_height = 0.711 * util.screenSize().width;
+    var height = util.screenSize().width * 256 / 360;
+    this.$refs.index.onscroll = function() {
+      me.headerOpacity = this.scrollTop / height;
+    };
+
 
     this.pageHeight=util.screenSize().height+'px'
     
@@ -115,30 +118,22 @@ export default {
       this.checkVersion();
     }
     //先从本地获取数据
-    if (!checkJs.isNullOrEmpty(sessionStorage.Announcement)) {
-      this.Announcement = JSON.parse(sessionStorage.Announcement)
+    if (!checkJs.isNullOrEmpty(localStorage.Announcement)) {
+      this.Announcement = JSON.parse(localStorage.Announcement)
     }
 
-    if (!checkJs.isNullOrEmpty(sessionStorage.HomeNewGoodses)) {
-      this.HomeNewGoodses = JSON.parse(sessionStorage.HomeNewGoodses)
+    if (!checkJs.isNullOrEmpty(localStorage.HomeNewGoodses)) {
+      this.HomeNewGoodses = JSON.parse(localStorage.HomeNewGoodses)
     }
-    if (!checkJs.isNullOrEmpty(sessionStorage.HomeRateGoodses)) {
-      this.HomeRateGoodses = JSON.parse(sessionStorage.HomeRateGoodses)
+    if (!checkJs.isNullOrEmpty(localStorage.HomeRateGoodses)) {
+      this.HomeRateGoodses = JSON.parse(localStorage.HomeRateGoodses)
     }
-    if (!checkJs.isNullOrEmpty(sessionStorage.HomeSelloutGoodses)) {
-      this.HomeSelloutGoodses = JSON.parse(sessionStorage.HomeSelloutGoodses)
+    if (!checkJs.isNullOrEmpty(localStorage.HomeSelloutGoodses)) {
+      this.HomeSelloutGoodses = JSON.parse(localStorage.HomeSelloutGoodses)
     }
+    this.homeBanner();
     this.GetAnnouncements();
     this.GetHomeGoodses();
-    
-  },
-  mounted() {
-    var me = this;
-    this.c_height = 0.711 * util.screenSize().width;
-    var height = util.screenSize().width * 256 / 360;
-    this.$refs.index.onscroll = function() {
-      me.headerOpacity = this.scrollTop / height;
-    };
   },
   methods: {
     checkVersion(){
@@ -153,8 +148,23 @@ export default {
         }
       );
     },
+    homeBanner(){
+      appapi.HomeBannerApi({}).then(
+        res=>{
+          if (res.data.Code == 200) {
+            this.Banners=res.data.Banners
+          }
+        }
+      );
+    },
     showUpdateConfirm(){
       this.$refs.confirm.modalOpen();
+    },
+    showAnnouncement(){
+      this.$refs.announcementModal.modalOpen();
+    },
+    alertEventHandle(){
+
     },
     confirmUpdate(num){
       //更新App
@@ -170,7 +180,6 @@ export default {
             var downloadProgress = parseInt((progressEvent.loaded / progressEvent.total) * 100);
             me.downloadpersent=downloadProgress;
             if (downloadProgress > 99){
-              console.log("下载完成")
               me.appdownloading=false;
             }
         };
@@ -206,7 +215,15 @@ export default {
         res => {
           if (res.data.Code == 200) {
             this.Announcement = res.data.Announcement;
-            sessionStorage.Announcement = JSON.stringify(this.Announcement)
+            //判断是否是新公告
+            if(!checkJs.isNullOrEmpty(localStorage.LatestAnnouncementId)){
+              if(localStorage.LatestAnnouncementId!=res.data.Announcement.Id){
+                this.showAnnouncement()
+              }
+            }
+            localStorage.LatestAnnouncementId=res.data.Announcement.Id
+            
+            localStorage.Announcement = JSON.stringify(this.Announcement)
           } else {
             console.log(res.data.Message);
           }
@@ -225,9 +242,9 @@ export default {
             this.HomeRateGoodses = res.data.RateGoodses;
             this.HomeSelloutGoodses = res.data.SellOutGoodses;
             //缓存到本地
-            sessionStorage.HomeNewGoodses = JSON.stringify(this.HomeNewGoodses)
-            sessionStorage.HomeRateGoodses = JSON.stringify(this.HomeRateGoodses)
-            sessionStorage.HomeSelloutGoodses = JSON.stringify(this.HomeSelloutGoodses)
+            localStorage.HomeNewGoodses = JSON.stringify(this.HomeNewGoodses)
+            localStorage.HomeRateGoodses = JSON.stringify(this.HomeRateGoodses)
+            localStorage.HomeSelloutGoodses = JSON.stringify(this.HomeSelloutGoodses)
           } else {
             console.log(res.data.Message);
           }
@@ -287,20 +304,46 @@ export default {
     fill: #fff;
   }
 }
-.updateconfirm{
-  text-align:center;
+.announcementAlert{
   .tlt{
+    border-bottom:1px dashed #eee;
+    text-align:center;
+    padding-bottom:1rem;
+    margin-bottom:1rem;
     font-size:1.3rem;
   }
+  .anbody{
+    max-height:20rem;
+    overflow-y:auto;
+    text-indent:2rem;
+    font-size:1.2rem;
+  }
+}
+
+.updateconfirm{
+  font-size:1.3rem;
+  .updatesvg{
+    text-align:center;
+  }
+  .tlt{
+    border-bottom:1px dashed #eee;
+    text-align:center;
+    padding-bottom:1rem;
+    margin-bottom:1rem;
+  }
   svg{
-    width:3.5rem;
-    height:3.5rem;
+    width:3rem;
+    height:3rem;
+    background:#c03;
+    border-radius:3px;
+    fill:#fff;
+    padding:0.5rem;
   }
 }
 .downloadbg{
   width:100%;
   background:#000;
-  height:20rem;
+  height:100%;
   position:absolute;
   z-index:100000;
   top:0;
@@ -308,11 +351,16 @@ export default {
   .downloadpersent{
     margin:50% 1rem 1rem 1rem;
     background:#fff;
-    height:1.3rem;
+    height:2px;
+    position: relative;
+    vertical-align: middle;
     .zhishiqi{
+      position: absolute;
+      left: 0;
+      top: 0;
       display:inline-block;
-      height:1.3rem;
       background:#096;
+      height:100%;
       width:0;
     }
   }

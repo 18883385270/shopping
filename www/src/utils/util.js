@@ -3,8 +3,8 @@ import axios from 'axios'
 
 
 export const screenSize = () => {
-  var width = window.screen.width;
-  var height = window.screen.height;
+  var width = document.documentElement.clientWidth;//window.screen.width;
+  var height = document.documentElement.clientHeight;//window.screen.height;
   return { width: width, height: height };
 }
 

@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Cordova from './Cordova.js'
+// import ElementUI from 'element-ui'
+// import 'element-ui/lib/theme-default/index.css'
+// Vue.use(ElementUI)
 
 import Vuex from 'vuex'
 Vue.use(Vuex)

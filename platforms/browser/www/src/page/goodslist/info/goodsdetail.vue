@@ -50,7 +50,7 @@ export default {
     height: 4.5rem;
     box-sizing: border-box;
     background: #fff;
-    border-top: 0.1rem solid #d5d5d5;
+    border-top: 1px solid #eee;
     span {
       font-size: 1.3rem;
       color: #333;
@@ -62,14 +62,18 @@ export default {
       display: inline-block;
       border-bottom: 1px solid #eee;
       &:first-child {
-        border-right: 0.1rem solid #d5d5d5;
+        border-right: 1px solid #eee;
       }
       &.active {
         color: #ff5722;
       }
     }
   }
-  .detail,
+  .detail{
+    img{
+      width:100%
+    }
+  }
   .attr {
     width: 100%;
     ul {

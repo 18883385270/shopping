@@ -1,14 +1,19 @@
 <template>
     <div>
-        <mi-header title="在线支付"></mi-header>
+        <mi-header title="在线支付" isWhiteText="true" notPlaceHolder="true"></mi-header>
         <div class="topayamount">
-            <p class="paytlt">待支付金额</p>
-            {{ToPayInfo.Amount |currency('￥',2)}}
+            
+            <p class="paytlt">待支付</p>
+            <p class="payamount">{{ToPayInfo.Amount |currency('￥',2)}}</p>
             <p>{{ToPayInfo.OrderNumber}}</p>
+            <p>{{ToPayInfo.Remark}}</p>
+            
         </div>
-
+        <div class="timerdown">
+                付款剩余时间：<mi-countdown :endTime="endTime" :callback="timeOutHandle" endText="已经结束了"></mi-countdown>
+        </div>
         <div class="youhuiwarp">
-            <div class="tablerow" v-if="this.$store.state.global.walletinfo.Cash>0">
+            <div class="tablerow" v-if="this.$store.state.global.walletinfo.Cash>0 && ToPayInfo.Type!='recharge'">
                 <div class="tlt">余额付款</div>
                 <div class="cnt">
                     <span class="swch">
@@ -17,7 +22,7 @@
                     <span class="txt"> 可用余额{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}</span>
                 </div>
             </div>
-            <div v-if="IsCashPay">
+            <div v-if="IsCashPay && LeftAmount==0">
                 <div class="paypd">
                     <div class="tlt">支付密码</div>
                     <div>
@@ -37,18 +42,15 @@
             <div class="total">
                 剩余待支付：
                 <span>{{LeftAmount|currency('￥',2)}}</span>
-                <p>{{ToPayInfo.Remark}}</p>
             </div>
             <div v-if="LeftAmount==0">
-                <button class="button warning" @click="walletPay">确认支付</button>
+                <button class="button warning" @click="walletPayAll">确认支付</button>
                 <p>剩余支付金额为0，无需支付，确认支付即可</p>
             </div>
-            <div v-if="LeftAmount>0">
-                <p>余额不足请，充值</p>
-                <button class="button success" @click="weixinPay">微信支付</button>
-                <!-- <button class="button primary">支付宝支付</button> -->
+            <div v-if="LeftAmount>0 && IsInApp">
+                <!-- <button class="button success" @click="weixinPay">微信支付</button> -->
+                <button class="button primary" @click="alipay">支付宝支付</button>
             </div>
-    
         </div>
         <div class="divider"></div>
         <div class="offlinepay">
@@ -57,7 +59,7 @@
                 <div class="desc">什么时候使用线下转账？</div>
             </div>
     
-            <button class="button err" @click="goPage('/pay/offlinepay')">线下转账</button>
+            <button class="button info" @click="goPage('/pay/offlinepay')">线下转账</button>
         </div>
         <mi-toast ref="toast"></mi-toast>
     </div>
@@ -67,6 +69,7 @@
 import header from '../../components/header.vue'
 import vswitch from '../../components/switch.vue';
 import toast from '../../components/toast.vue';
+import countdown from '../../components/countdown.vue';
 import * as api from '../../api/wallet'
 import * as weixinpayapi from '../../api/weixinpay'
 import * as userapi from '../../api/account'
@@ -77,7 +80,8 @@ export default {
     components: {
         'mi-header': header,
         'mi-switch': vswitch,
-        'mi-toast': toast
+        'mi-toast': toast,
+        'mi-countdown':countdown
     },
     data(){
         return{
@@ -91,15 +95,32 @@ export default {
             },
             LeftAmount: 0,
             PayPassword:'',
-            IsCashPay: false
+            IsCashPay: false,
+            endTime:0,
+            IsInApp: true
         }
     },
-    mounted(){
-        //获取待付款信息
+    created(){
         this.ToPayInfo=JSON.parse(sessionStorage.ToPayInfo)
-        this.LeftAmount=this.ToPayInfo.Amount;
+        this.LeftAmount=this.ToPayInfo.Amount
+        this.endTime=this.ToPayInfo.CreatedOn+(1000*60*30)
+        if (checkJs.isNullOrEmpty(localStorage.IsCordovaReady) || localStorage.IsCordovaReady == 'false') {
+            this.IsInApp = false;
+        }
     },
     methods:{
+        timeOutHandle(){
+            //清除付款信息
+            sessionStorage.removeItem('ToPayInfo')
+            //跳转到失败页面
+            var tipInfo={
+                Type:'PayTimeOut',
+                NextPage:'/me',
+                Message:'付款超时时间已到'
+            }
+            sessionStorage.TipInfo = JSON.stringify(tipInfo)
+            this.$router.replace({name:'error'})
+        },
         switchEventHandle(isOn) {
             this.IsCashPay = isOn;
             if (isOn) {
@@ -113,8 +134,8 @@ export default {
                 this.LeftAmount = this.ToPayInfo.Amount;
             }
         },
-        walletPay() {
-            //钱包支付
+        walletPayAll() {
+            //钱包支付钱包能全额付款的情况
             let alertFuc = (msg) => {
                 const toast = this.$refs.toast;
                 toast.show(msg);
@@ -129,15 +150,25 @@ export default {
                     alertFuc('请输入支付密码');
                     return;
                 }
+
                 let params = {
-                    OrderNumber:this.ToPayInfo.OrderNumber,
+                    Type:'Shopping',
                     Amount:this.ToPayInfo.Amount,
-                    AccessCode:this.PayPassword
+                    AccessCode:this.PayPassword,
+                    IsNotVerifyAccessCode:false,
+                    Remark:'订单付款'+this.ToPayInfo.OrderNumber
                 };
+                if(this.ToPayInfo.Type=='transfer'){
+                    params.Type='Transfer'
+                    params.Remark='转账给-'+this.ToPayInfo.PayeeName
+                }
+                if(this.ToPayInfo.Type=='recharge'){
+                    params.Type='Recharge'
+                    params.Remark='在线充值'
+                }
                 api.CashPayApi(params).then(
                     res => {
                         if (res.data.Code == 200) {
-                            console.log('余额支付成功')
                             this.paySuccess();
                         } else {
                             alertFuc(res.data.Message);
@@ -158,7 +189,8 @@ export default {
             }
 
             if(this.ToPayInfo.Type=="account")
-            {//如果是大使缴费
+            {
+                //大使缴费
                 let params = {
                     UserGiftId:this.ToPayInfo.OrderId
                 }
@@ -181,9 +213,60 @@ export default {
                         console.log('网络错误');
                     }
                 )
-            }else{
+            }
+            else if(this.ToPayInfo.Type=="transfer"){
+                //转账
+                let params = {
+                    UserId:this.ToPayInfo.PayeeId,
+                    Amount:this.ToPayInfo.Amount,
+                    Remark:'转账-'+this.$store.state.global.userinfo.NickName
+                }
+                api.AcceptTransferApi(params).then(
+                    res => {
+                        if (res.data.Code == 200) {
+                            //转到成功页面
+                            var tipInfo={
+                                Type:'PaySuccess',
+                                NextPage:'/me',
+                                Message:'转账成功'
+                            }
+                            sessionStorage.TipInfo = JSON.stringify(tipInfo)
+                            this.$router.replace({name:'success'})
+                        } else {
+                            alertFuc(res.data.Message);
+                        }
+                    },
+                    err => {
+                        console.log('网络错误');
+                    }
+                )
+            }
+            else if(this.ToPayInfo.Type=="recharge"){
+                let params = {
+                    Amount:this.ToPayInfo.Amount
+                };
+                api.RechargeApi(params).then(
+                    res => {
+                        if (res.data.Code == 200) {
+                        //转到成功页面
+                        var tipInfo={
+                            Type:'Tip',
+                            Message:'充值成功',
+                            NextPage:'/wallet'
+                        }
+                        sessionStorage.TipInfo = JSON.stringify(tipInfo)
+                        this.$router.replace({name:'success'});
+                        } else {
+                            alertFuc(res.data.Message);
+                        }
+                    },
+                    err => {
+                        alertFuc('网络错误');
+                    }
+                )
+            }
+            else{
                 //订单付款
-                //设置付款项目成功
                 let params = {
                     PaymentId:this.ToPayInfo.PaymentId,
                 }
@@ -209,7 +292,6 @@ export default {
             }
             //清除待付款信息
             sessionStorage.removeItem("ToPayInfo")
-
         },
         goPage(page){
             this.$router.push({path:page});
@@ -298,6 +380,89 @@ export default {
                     console.log('网络错误');
                 }
             )
+        },
+        onlinePaySuccess(){
+            //线上支付成功
+            let alertFuc = (msg) => {
+                const toast = this.$refs.toast;
+                toast.show(msg);
+                return false
+            }
+            if(this.IsCashPay){
+                //如果开启了余额支付请求服务器余额付款
+                let self=this;
+
+                let params = {
+                    Type:'Shopping',
+                    Amount:this.$store.state.global.walletinfo.Cash,
+                    AccessCode:this.PayPassword,
+                    IsNotVerifyAccessCode:true,
+                    Remark:'订单付款'+this.ToPayInfo.OrderNumber
+                };
+                if(this.ToPayInfo.Type=='account'){
+                    params.Type='Transfer'
+                    params.Remark='转账给-'+this.ToPayInfo.PayeeName
+                }
+                if(this.ToPayInfo.Type=='transfer'){
+                    params.Type='Transfer'
+                    params.Remark='转账给-'+this.ToPayInfo.PayeeName
+                }
+                if(this.ToPayInfo.Type=='recharge'){
+                    params.Type='Recharge'
+                    params.Remark='在线充值'
+                }
+                api.CashPayApi(params).then(
+                    res => {
+                        if (res.data.Code == 200) {
+                            this.paySuccess();
+                        } else {
+                            alertFuc(res.data.Message);
+                        }
+                    },
+                    err => {
+                        console.log('网络错误');
+                    }
+                )
+            }
+            else{
+                this.paySuccess();
+            }
+        },
+        alipay(){
+            let alertFuc = (msg) => {
+                const toast = this.$refs.toast;
+                toast.show(msg);
+                return false
+            }
+            //请求后台统一下单
+            let params = {
+                Amount:this.LeftAmount,
+                OrderNumber:" "
+            };
+            let self=this
+            paymentapi.AliPayApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        //获取调取支付
+                        var payInfo=res.data.Message
+                        cordova.plugins.alipay.payment(payInfo,function success(e){
+                            if(e.resultStatus==9000){
+                                self.onlinePaySuccess()
+                            }else{
+                                alertFuc('支付宝支付中断，可继续提交支付')
+                            }
+                            
+                        },function error(e){
+                            alertFuc('支付宝支付失败')
+                        });
+                    } else {
+                        alertFuc(res.data.Message);
+                    }
+                },
+                err => {
+                    alertFuc('网络错误');
+                }
+            )
         }
     }
 
@@ -305,33 +470,39 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .topayamount {
-    background: #fff;
-    font-size: 2rem;
-    padding: 1.5rem 1rem;
+    background: #c03;
+    padding: 6rem 1rem 2rem;
     text-align: center;
-    border-bottom:1px solid #eee;
-    color:#c03;
     .paytlt{
-        padding:1rem;font-size:1.5rem;
+        font-size:1.5rem;
+    }
+    .payamount{
+        color:#fff;
+        padding:1rem 0;
+        font-size: 2.5rem;
     }
     p{
-        font-size:1.3rem;color:#666;text-indent: 0.5rem;
+        font-size:1.2rem;color:#fff;
     }
+    
 }
-
-
-
+.timerdown{
+    text-align:center;
+    font-size:1.2rem;
+    background:#b03;
+    color:#fff;
+    padding:0.7rem;
+}
 
 .paytype {
     background: #fff;
-    margin-top: 1rem;
     padding: 1rem;
     font-size: 1.3rem;
     text-align: center;
     .total {
         color: #666;
-        padding-top: 1rem;
         span {
             color: #c03;
         }

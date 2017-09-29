@@ -26,11 +26,11 @@ export default {
   },
   mounted() {
     var mySwiper = new Swiper(this.$refs.swiper, {
-        loop: true,
-        autoplay: 3000,
-        pagination: '.swiper-pagination',
-        autoplayDisableOnInteraction: false
-      });
+      loop: true,
+      autoplay: 3000,
+      pagination: '.swiper-pagination',
+      autoplayDisableOnInteraction: false
+    });
   }
 };
 </script>
@@ -41,7 +41,8 @@ export default {
 .banner-box {
   width: 100%;
   .swiper-container {
-    width: 100%;height:20rem;
+    width: 100%;
+    height: 26rem;
     .swiper-slide {
       position: relative;
       height: 0;
@@ -50,11 +51,10 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;height:20rem;
+        width: 100%;
+        height: 26rem;
       }
     }
   }
-
-  
 }
 </style>

@@ -5,7 +5,7 @@
       <div class="right hook" @click="goodSearchEvent"><svg><use xlink:href="#share"></use></svg></div>
     </div>
 
-    <div class="swiper-container" ref="a">
+    <div class="swiper-container" ref="swipercontainer">
       <div class="swiper-wrapper">
         <div class="swiper-slide" v-for="item in bannerList"><img :src="item"/></div>
       </div>
@@ -19,14 +19,10 @@
   import data from '../../../../../data.json';
   export default {
     props:['bannerList'],
-    data () {
-      return {
-        //bannerList: []
-      };
-    },
-    components: {},
-    created () {
-      //this.bannerList = data.detail.img;
+    watch:{
+      bannerList(curVal){
+        this.initSwiper();
+      }
     },
     methods: {
       goBackEvent () {
@@ -34,16 +30,20 @@
       },
       goodSearchEvent () {
         this.$router.push({path: '/index', query: {sign: 1}});
+      },
+      initSwiper(){
+        setTimeout(()=>{
+          var mySwiper = new Swiper(this.$refs.swipercontainer, {
+            loop: true,
+            autoplay: 3000,
+            pagination: '.swiper-pagination',
+            autoplayDisableOnInteraction: false
+          });
+        },2000)
       }
-    },
-    mounted () {
-      var mySwiper = new Swiper(this.$refs.a, {
-        loop: true,
-        autoplay: 3000,
-        pagination: '.swiper-pagination',
-        autoplayDisableOnInteraction: false
-      });
     }
+    
+
   };
 </script>
 

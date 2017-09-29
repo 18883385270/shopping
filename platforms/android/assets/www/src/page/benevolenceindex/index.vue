@@ -1,5 +1,5 @@
 <template>
-    <div class="page_warp">
+    <div>
         <mi-benevolencetop :BenevolenceIndex="BenevolenceIndex"></mi-benevolencetop>
         <div class="divider"></div>
         <mi-mybenevolence></mi-mybenevolence>
@@ -63,9 +63,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .page_warp{
-        background:#eee;
-    }
+    
 </style>
 
 

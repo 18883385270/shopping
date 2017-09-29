@@ -56,7 +56,11 @@
             "PACKAGE_NAME": "com.lq319.shop"
         },
         "cordova-plugin-wechat": {
-            "WECHATAPPID": "wx87bf751f1614b78c",
+            "WECHATAPPID": "wx37bc0f55159c6704",
+            "PACKAGE_NAME": "com.lq319.shop"
+        },
+        "cordova-plugin-alipay-v2": {
+            "APP_ID": "2088721826707404",
             "PACKAGE_NAME": "com.lq319.shop"
         }
     },
@@ -361,6 +365,14 @@
             "clobbers": [
                 "Wechat"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-alipay-v2/www/alipay.js",
+            "id": "cordova-plugin-alipay-v2.alipay",
+            "pluginId": "cordova-plugin-alipay-v2",
+            "clobbers": [
+                "cordova.plugins.alipay"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -375,6 +387,7 @@
         "cordova-plugin-file-opener2": "2.0.19",
         "cordova-plugin-appversion": "1.0.0",
         "cordova-plugin-qrscanner": "2.5.0",
-        "cordova-plugin-wechat": "2.0.0"
+        "cordova-plugin-wechat": "2.0.0",
+        "cordova-plugin-alipay-v2": "0.0.3"
     }
 }

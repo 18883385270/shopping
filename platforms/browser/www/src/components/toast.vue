@@ -41,7 +41,7 @@ export default {
     box-sizing: border-box;
     padding: 0.5rem 2rem;
     text-align: center;
-    z-index: 1000;
+    z-index: 3;
 
     &.placemiddle {
         left: 50%;

@@ -12,11 +12,16 @@ export const GoodsListApi = (params) => {
 export const GoodsInfoApi = (params) => {
   return request({method: 'post', url: '/Goods/GoodsInfo', data: params})
 }
+export const CommentApi = (params) => {
+  return request({method: 'post', url: '/Goods/Comment', data: params})
+}
 
 
 export const MgrAllGoodsesApi = (params) => {
   return request({method: 'post', url: '/GoodsStoreAdmin/AllGoodses', data: params})
 }
+
+
 
 
 

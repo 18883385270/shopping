@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="storewarp" v-for="store in StoreCartGoods">
+      <div class="divider"></div>
       <div class="storetitle">
-  
         <div class="title">{{store.StoreName}}</div>
       </div>
       <div class="cuxiao">优惠信息</div>
@@ -16,11 +16,11 @@
             <p class="goodsspecification">规格：{{goods.SpecificationName}}</p>
           </div>
           <div class="buycount">
-              <p>
-                {{goods.Price|currency('￥',2)}}
-              </p>
-              {{goods.Quantity}}件
-            </div>
+            <p>
+              {{goods.Price|currency('￥',2)}}
+            </p>
+            {{goods.Quantity}}件
+          </div>
         </div>
       </div>
     </div>
@@ -29,8 +29,8 @@
 
 <script>
 export default {
-  props:['StoreCartGoods']
-  
+  props: ['StoreCartGoods']
+
 }
 </script>
 
@@ -41,7 +41,8 @@ export default {
   border-bottom: 1px solid #eee;
   background: #fff;
   .storetitle {
-    font-size: 1.3rem;text-indent: 1rem;
+    font-size: 1.3rem;
+    text-indent: 1rem;
     padding: 1rem 0;
     display: flex;
     .checkbar {
@@ -63,10 +64,11 @@ export default {
       padding-top: 1rem;
       padding-bottom: 1rem;
       border-top: 1px solid #eee;
-      
+
       .goodsimg {
         width: 20%;
-        text-align: center;padding-left:1rem;
+        text-align: center;
+        padding-left: 1rem;
         img {
           width: 100%;
         }
@@ -74,8 +76,7 @@ export default {
       .goodsinfo {
         width: 60%;
         padding-left: 1rem;
-        .goodsname {
-        }
+        .goodsname {}
         .goodsspecification {
           margin-top: 0.5rem;
           color: #666;
@@ -90,15 +91,16 @@ export default {
             color: #666;
           }
         }
-        
       }
       .buycount {
-          width:20%;
-          text-align: center;
-          p{
-            color:#C1272D;font-weight: 400;font-size:1.3rem;
-          }
+        width: 20%;
+        text-align: center;
+        p {
+          color: #C1272D;
+          font-weight: 400;
+          font-size: 1.3rem;
         }
+      }
     }
   }
 }

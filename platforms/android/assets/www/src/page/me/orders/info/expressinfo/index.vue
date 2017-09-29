@@ -40,7 +40,8 @@ export default {
     methods:{
         GetExpressSchedule(){
             let params = {
-                ExpressNumber:'9891011779787'
+                ExpressName:this.StoreOrder.DeliverExpressCode,
+                ExpressNumber:this.StoreOrder.DeliverExpressNumber
             };
             api.ExpressScheduleApi(params).then(
                 res => {

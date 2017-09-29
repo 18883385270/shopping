@@ -4,16 +4,35 @@
       <div class="scannerbox"></div>
       <p class="scantip">将二维码放入扫描框，即可自动扫描</p>
       <p class="myqrcode" @click="toPage('myqrcode')">我的二维码</p>
+      <div class="tools">
+          <span :class="{open:isLight}" @click="switchLight">
+              <svg>
+                <use xlink:href="#light"></use>
+            </svg>
+          </span>
+          <span @click="switchCamera">
+              <svg>
+                <use xlink:href="#cameratrans"></use>
+            </svg>
+          </span>
+      </div>
   </div>
 </template>
 
 <script>
 import header from '../../components/header.vue';
+import * as api from '../../api/account';
 import * as checkJs from '../../utils/pubfunc'
 
 export default {
     components:{
         'mi-header':header
+    },
+    data(){
+        return{
+            isLight:false,
+            isFront:false
+        }
     },
     mounted(){
         this.showScanner();
@@ -45,6 +64,10 @@ export default {
         });
     },
     processQResult(result) {
+        //关闭闪光灯
+        this.isLight=true;
+        this.switchLight()
+
         let self = this;
         //判断是否是用户的二维码
         var userId = checkJs.GetUserId(result);
@@ -54,9 +77,8 @@ export default {
                 sessionStorage.RecommandUserId = userId
                 self.$router.push({ name: 'register' });
             } else {
-                //登录进入扫描结果页面
-                sessionStorage.ScannerResult =userId
-                self.$router.replace({ name: 'scannerresult' });
+                //登录进入转账页面
+                self.placeTransfer(userId)
             }
         }
         else {
@@ -71,8 +93,56 @@ export default {
             }
         }
     },
+    switchLight(){
+        this.isLight=!this.isLight;
+        if(this.isLight){
+            QRScanner.enableLight(function(err, status){
+                err && console.error(err);
+                console.log(status);
+            });
+        }
+        else{
+            QRScanner.disableLight(function(err, status){
+                err && console.error(err);
+                console.log(status);
+            });
+        }
+    },
+    switchCamera(){
+        this.isFront=!this.isFront;
+        if(this.isFront){
+            QRScanner.useFrontCamera(function(err, status){
+                err && console.error(err);
+                console.log(status);
+            });
+        }
+        else{
+            QRScanner.useBackCamera(function(err, status){
+                err && console.error(err);
+                console.log(status);
+            });
+        }
+    },
     toPage(page){
         this.$router.replace({name:page})
+    },
+    placeTransfer(userId){
+        let params = {
+            Id:userId
+        };
+        api.InfoApi(params).then(
+            res => {
+                if (res.data.Code == 200) {
+                    sessionStorage.UserInfo=JSON.stringify(res.data.UserInfo)
+                    this.$router.replace({ name: 'cashtransfer' });
+                } else {
+                    console.log(res.data.Message);
+                }
+            },
+            err => {
+                console.log('网络错误');
+            }
+        )
     }
   }
 }
@@ -89,9 +159,9 @@ export default {
         color:#eee;
     }
     .scannerbox{
-        width:15rem;
-        height:15rem;
-        border:1px solid #ccc;
+        width:18rem;
+        height:18rem;
+        border:1px solid #096;
         margin:10rem auto 2rem auto;
         background: url('../../../dist/scannerbg.gif') no-repeat center center;
         background-size: cover;
@@ -101,6 +171,35 @@ export default {
         color:#096;
         margin-top:3rem;
         text-align:center;
+    }
+    .tools{
+        text-align:center;
+        width:100%;
+        position:absolute;
+        bottom:5rem;
+        span{
+            display:inline-block;
+            width:2.6rem;
+            height:2.6rem;
+            padding:1rem;
+            background:#666;
+            border-radius:50%;
+            text-align:center;
+            &.open{
+                background:#096;
+            }
+            &:last-child{
+                margin-left:2rem;
+            }
+            svg{
+                width:2rem;
+                height:2rem;
+                fill:#999;
+                margin-top:0.2rem;
+                fill:#fff;
+            }
+        }
+        
     }
 }
 </style>

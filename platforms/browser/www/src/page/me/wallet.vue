@@ -13,10 +13,10 @@
                 <b class="number text-red">{{this.$store.state.global.walletinfo.Benevolence|currency('',4)}}
                     <i>个</i>
                 </b>善心</div>
-            <div>
+            <div @click="goPage('/wallet/incentive')">
                 <b class="number text-red">{{this.$store.state.global.walletinfo.YesterdayEarnings|currency('',2)}}
                     <i>元</i>
-                </b>昨日收益</div>
+                </b>上次收益</div>
             <div @click="toCashTransferPage(4)">
                 <b class="number text-red">{{this.$store.state.global.walletinfo.Earnings|currency('',2)}}
                     <i>元</i>
@@ -33,7 +33,7 @@ export default {
         },
         toCashTransferPage(index){
             sessionStorage.MyCashTransferIndex=index
-            this.$router.push({path:'/wallet/cash/transfer'});
+            this.$router.push({path:'/wallet/cash/transfers'});
         }
     }
 }

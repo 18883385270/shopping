@@ -21,6 +21,7 @@
   border: 0;
   border-radius: 3px;
   text-decoration: none;
+  outline: none;
 }
 .button.success {
   background: #096;

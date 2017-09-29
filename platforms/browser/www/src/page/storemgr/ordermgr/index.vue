@@ -10,31 +10,36 @@
       <p> 您没有订单哟</p>
     </div>
     <div class="orderlswarp">
-          <div class="orderwarp" v-for="StoreOrder in StoreOrders" @click="goInfoPage(StoreOrder)">
-              <div class="header" @click="goInfoPage(StoreOrder)">
-                  <div class="ordernumber">订单号：{{StoreOrder.Number}}</div>
-                  <div class="orderstatus">{{StoreOrder.Status}}</div>
-              </div>
-              <div class="ordgoods" >
-                  <div class="storetlt">{{StoreOrder.StoreName}}</div>
-                  <div class="goods" v-for="Goods in StoreOrder.StoreOrderGoodses">
-                      <div class="goodspic">
-                          <img :src="Goods.GoodsPic" />
-                      </div>
-                      <div class="goodstlt">
-                          <p class="goodsname">{{Goods.GoodsName}}</p>
-                          <p>{{Goods.SpecificationName}} {{Goods.Quantity}}件</p>
-                      </div>
-                  </div>
-              </div>
-              <div class="ordertools">
-                  <div class="price">总计：<span>{{StoreOrder.Total|currency('￥',2)}}</span></div>
-                  <div class="btns">
-                      <!-- <button>再次购买</button><button class="del">删除</button> -->
-                  </div>
-              </div>
-          </div>
-            
+            <div class="orderwarp" v-for="StoreOrder in StoreOrders" @click="goInfoPage(StoreOrder)">
+                <div class="header" @click="goInfoPage(StoreOrder)">
+                    <div class="ordernumber">订单号：{{StoreOrder.Number}}</div>
+                    <div class="orderstatus">{{StoreOrder.Status}}</div>
+                </div>
+                <div class="ordgoods" >
+                    <div class="storetlt">{{StoreOrder.StoreName}}</div>
+                    <div class="goods" v-for="Goods in StoreOrder.StoreOrderGoodses">
+                        <div class="goodspic">
+                            <img :src="Goods.GoodsPic" />
+                        </div>
+                        <div class="goodstlt">
+                            <p class="goodsname">{{Goods.GoodsName}}</p>
+                            <p>{{Goods.SpecificationName}} {{Goods.Quantity}}件</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="ordertools">
+                    <div class="price">总计：<span>{{StoreOrder.Total|currency('￥',2)}}</span></div>
+                    <div class="btns">
+                        <!-- <button>再次购买</button><button class="del">删除</button> -->
+                    </div>
+                </div>
+            </div>
+            <div class="nextpage" @click="NextPage" v-if="!NotAnyMore">
+                <span>加载更多</span>
+            </div>
+            <div class="nextpage" @click="NextPage" v-if="NotAnyMore">
+                <span>没有更多了</span>
+            </div>
         </div>
   </div>
 </template>
@@ -58,7 +63,7 @@ export default {
       StoreOrderStatusValue:['All','Placed','Expressing','Success', 'OnlyRefund','ReturnAndRefund','Closed'],
       StoreInfo:{},
       CurrentIndex:0,
-      CurrentPage:0,
+      CurrentPage:1,
       NotAnyMore:false
     }
   },
@@ -69,7 +74,7 @@ export default {
   methods:{
     categoryChangedHandle(index){
         this.CurrentIndex=index;
-        this.CurrentPage=0;
+        this.CurrentPage=1;
         this.NotAnyMore=false;
         this.StoreOrders.splice(0,this.StoreOrders.length);//清空数据
         this.fetchData(this.CurrentIndex,this.CurrentPage);
@@ -83,7 +88,12 @@ export default {
       api.StoreOrdersApi(params).then(
         res => {
           if (res.data.Code == 200) {
-            this.StoreOrders=res.data.StoreOrders;
+                if(res.data.StoreOrders.length){
+                    this.StoreOrders=this.StoreOrders.concat(res.data.StoreOrders);
+                }
+                else{
+                    this.NotAnyMore=true;
+                }
           } else {
             console.log(res.data.Message);
           }
@@ -94,9 +104,12 @@ export default {
       )
     },
     goInfoPage(order){
-        //要传递的订单信息存到sessionStorage
         sessionStorage.StoreStoreOrder = JSON.stringify(order)
         this.$router.push({name:'orderinfomgr'})
+    },
+    NextPage(){
+        this.CurrentPage++;
+        this.fetchData(this.CurrentIndex,this.CurrentPage);
     }
   }
 }
@@ -163,6 +176,11 @@ export default {
             }
         }
     }
+}
+.nextpage{
+    text-align:center;
+    padding:1rem;
+    background:#fff;
 }
 </style>
 

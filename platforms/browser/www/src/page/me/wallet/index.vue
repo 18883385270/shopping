@@ -4,7 +4,7 @@
         <div class="wallettop">
             <div @click="goPage('/wallet/benevolence')">
                 <svg><use xlink:href="#integral"></use></svg>善心
-                <p>{{this.$store.state.global.walletinfo.Benevolence |currency('#',4)}}</p>
+                <p>{{this.$store.state.global.walletinfo.Benevolence |currency('',4)}}</p>
             </div>
             <div @click="goPage('/wallet/cash')">
                 <svg><use xlink:href="#cash"></use></svg>余额
@@ -30,6 +30,7 @@
                 </svg>
             </div>
         </div>
+        <div class="divider"></div>
     </div>
 </template>
 

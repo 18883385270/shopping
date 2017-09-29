@@ -1,47 +1,49 @@
 <template>
-    <div class="page">
+    <div>
         <mi-header title="订单详情"></mi-header>
         <mi-stepindicator :steps="Steps" :currentstep="CurrentStep"></mi-stepindicator>
         <div class="divider"></div>
         <div class="expressinfo">
-            <div class="exinfo" @click="goPage('/orders/info/expressinfo')">
-                【宿迁市】您的订单已签收，本人签收，感谢您使用顺丰快递，欢迎您再次光临
+            <div class="exinfo" v-if="StoreOrder.Status!='待发货'" @click="goPage('/orders/info/expressinfo')">
+                点击查看物流信息
             </div>
             <div class="orderstatus">
                 <p>
-                    <span>订单状态：</span><i class="blu">{{StoreOrder.Status}}</i></p>
+                    <span>订单状态：</span>
+                    <i class="blu">{{StoreOrder.Status}}</i>
+                </p>
                 <p>
-                    <span>订单号：</span>{{StoreOrder.Number}}</p>
+                    <span>订单编号：</span>{{StoreOrder.Number}}</p>
                 <p>
                     <span>下单时间：</span>{{StoreOrder.CreatedOn}}</p>
             </div>
             <div class="btntools" v-if="CurrentStep==3">
                 <!-- <button>去评价</button>
-                <button class="success">再次购买</button> -->
+                        <button class="success">再次购买</button> -->
                 <!-- <button>赢免单</button> -->
             </div>
             <div class="btntools" v-if="CurrentStep==1">
                 <button @click="ConfirmExpress">确认收货</button>
                 <!-- <button class="success">退货退款</button>
-                <button>赢免单</button> -->
+                        <button>赢免单</button> -->
             </div>
             <div class="btntools" v-if="CurrentStep==0">
                 <button @click="toPage('applyrefund')">申请退款</button>
                 <!-- <button class="success">提醒发货</button>
-                <button>赢免单</button> -->
+                        <button>赢免单</button> -->
             </div>
         </div>
         <div class="divider"></div>
-        <div class="expressaddress">
-            <p>
-                <span>收货地址：</span>{{StoreOrder.ExpressRegion}}{{StoreOrder.ExpressAddress}}</p>
-            <p>
-                <span>收货人：</span>{{StoreOrder.ExpressName}} {{StoreOrder.ExpressMobile|mobilehide}}</p>
-            <div v-if="CurrentStep==1">
-                <p>
-                    <span>配送方式：</span>顺丰快递</p>
-                <p>
-                    <span>运单号：</span>2324252443</p>
+        <div class="ordergoodses">
+            <div class="goods" v-for="Goods in StoreOrder.StoreOrderGoodses" @click="goGoodsInfoPage(Goods)">
+                <div class="pic">
+                    <img :src="Goods.GoodsPic" alt="">
+                </div>
+                <div class="cnt">
+                    <p>{{Goods.GoodsName}}</p>
+                    <p>{{Goods.SpecificationName}}</p>
+                    <p>数量：x{{Goods.Quantity}}</p>
+                </div>
             </div>
         </div>
         <div class="divider"></div>
@@ -57,6 +59,20 @@
                 <i class="big">{{StoreOrder.Total|currency('￥',2)}}</i>
             </p>
         </div>
+        <div class="divider"></div>
+        <div class="expressaddress">
+            <p>
+                <span>收货地址：</span>{{StoreOrder.ExpressRegion}}{{StoreOrder.ExpressAddress}}</p>
+            <p>
+                <span>收货人：</span>{{StoreOrder.ExpressName}} {{StoreOrder.ExpressMobile|mobilehide}}</p>
+            <div v-if="CurrentStep==1">
+                <p>
+                    <span>配送方式：</span>顺丰快递</p>
+                <p>
+                    <span>运单号：</span>2324252443</p>
+            </div>
+        </div>
+        <div class="divider"></div>
         <!--弹出框-->
         <mi-modal ref="confirm" type="confirm" @confirmEvent="ConfirmConfirmExpress">
             <div slot="confirm" class="confirm">
@@ -79,49 +95,52 @@ export default {
         'mi-stepindicator': stepindicator,
         'mi-modal': modal
     },
-    data(){
-        return{
-            Steps:['提交订单', '配送中','包裹服务', '交易完成'],
-            CurrentStep:0,
-            StoreOrder:{}
+    data() {
+        return {
+            Steps: ['提交订单', '配送中', '包裹服务', '交易完成'],
+            CurrentStep: 0,
+            StoreOrder: {}
         }
     },
-    mounted(){
-        this.StoreOrder=JSON.parse(sessionStorage.UserStoreOrder)
-        switch(this.StoreOrder.Status)
-        {
-        case '待发货':
-            this.CurrentStep=0;
-            break;
-        case '待收货':
-            this.CurrentStep=1;
-            break;
-        case '确认收货':
-            this.CurrentStep=3;
-            break;
-        default:
-            this.CurrentStep=2;
+    mounted() {
+        this.StoreOrder = JSON.parse(sessionStorage.UserStoreOrder)
+        switch (this.StoreOrder.Status) {
+            case '待发货':
+                this.CurrentStep = 0;
+                break;
+            case '待收货':
+                this.CurrentStep = 1;
+                break;
+            case '确认收货':
+                this.CurrentStep = 3;
+                break;
+            default:
+                this.CurrentStep = 2;
         }
     },
     methods: {
-        toPage(page){
-            this.$router.push({name:page});
+        toPage(page) {
+            this.$router.push({ name: page });
         },
-        ConfirmExpress(){
+        goGoodsInfoPage(goods){
+            sessionStorage.GoodsId = goods.GoodsId
+            this.$router.push({ name: 'goodsinfo' });
+        },
+        ConfirmExpress() {
             this.$refs.confirm.modalOpen();
         },
-        ConfirmConfirmExpress(num){
+        ConfirmConfirmExpress(num) {
             //确认收货
-            if(num==0){
+            if (num == 0) {
                 return false;
             }
             let params = {
-                Id:this.StoreOrder.Id
+                Id: this.StoreOrder.Id
             };
             api.ConfirmDeliverApi(params).then(
                 res => {
                     if (res.data.Code == 200) {
-                        this.$router.replace({name:'orders'})
+                        this.$router.replace({ name: 'orders' })
                     } else {
                         console.log(res.data.Message);
                     }
@@ -132,58 +151,24 @@ export default {
             )
 
         },
-        goPage(page){
-            this.$router.push({path:page});
+        goPage(page) {
+            this.$router.push({ path: page });
         }
     }
 }
 </script>
 
-<style lang="less">
-.page {
-    .expressinfo {
-        padding: 0 1rem 1rem 1rem;
-        background: #fff;
-        .exinfo {
-            padding:1rem 0;
-            border-top: 1px dashed #eee;
-            border-bottom: 1px dashed #eee;
-        }
-        .orderstatus {
-            p {
-                padding: 0.2rem 0;
-                span {
-                    color: #999;
-                    display: inline-block;
-                    width: 7rem;
-                }
-                .blu{
-                    color:#06c;font-style: normal;
-                }
-            }
-        }
-        .btntools {
-            margin-top: 1rem;
-            button {
-                border: 0;
-                padding: 1rem 0;
-                color: #fff;
-                background: #c66;
-                width: 30%;
-                margin-right: 5%;
-                border-radius: 3px;
-                &:last-child {
-                    margin-right: 0;
-                }
-                &.success{
-                    background:#096;
-                }
-            }
-        }
+<style lang="less" scoped>
+.expressinfo {
+    padding: 1rem;
+    padding-top: 0;
+    background: #fff;
+    .exinfo {
+        padding: 1rem 0;
+        border-bottom: 1px dashed #eee;
     }
-    .expressaddress {
-        padding: 1rem;
-        background: #fff;
+    .orderstatus {
+        padding-top:1rem;
         p {
             padding: 0.2rem 0;
             span {
@@ -191,33 +176,88 @@ export default {
                 display: inline-block;
                 width: 7rem;
             }
-        }
-    }
-    .totalinfo {
-        padding: 1rem;
-        background: #fff;
-        margin-top: 1rem;
-        p {
-            padding: 0.2rem 0;
-            text-align: right;
-            color: #c66;
-            span {
-                color: #999;
-                float: left;
-                color: #666;
-            }
-            .big {
-                font-size: 1.4rem;
-                font-weight: 400;
+            .blu {
+                color: #06c;
                 font-style: normal;
             }
         }
     }
+    .btntools {
+        margin-top: 1rem;
+        button {
+            border: 0;
+            padding: 1rem 0;
+            color: #fff;
+            background: #c66;
+            width: 30%;
+            margin-right: 5%;
+            border-radius: 3px;
+            &:last-child {
+                margin-right: 0;
+            }
+            &.success {
+                background: #096;
+            }
+        }
+    }
 }
-.confirm{
-    .tlt{
-        font-size:1.3rem;
+
+.expressaddress {
+    padding: 1rem;
+    background: #fff;
+    p {
+        padding: 0.2rem 0;
+        span {
+            color: #999;
+            display: inline-block;
+            width: 7rem;
+        }
+    }
+}
+
+.ordergoodses {
+    background: #fff;
+    .goods {
+        display: flex;
         padding:1rem 0;
+        border-bottom: 1px dashed #eee;
+        .pic {
+            width: 30%;
+            padding: 0 1rem;
+            img {
+                width: 100%;
+            }
+        }
+        .cnt {
+            width: 70%;
+        }
+    }
+}
+.totalinfo {
+    padding: 1rem;
+    background: #fff;
+    margin-top: 1rem;
+    p {
+        padding: 0.2rem 0;
+        text-align: right;
+        color: #c66;
+        span {
+            color: #999;
+            float: left;
+            color: #666;
+        }
+        .big {
+            font-size: 1.4rem;
+            font-weight: 400;
+            font-style: normal;
+        }
+    }
+}
+
+.confirm {
+    .tlt {
+        font-size: 1.3rem;
+        padding: 1rem 0;
     }
 }
 </style>

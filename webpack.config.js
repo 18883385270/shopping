@@ -13,7 +13,7 @@ module.exports = {
   entry: './www/src/main.js',
   output: {
     path: path.resolve(__dirname, './www/dist'),
-    publicPath: isProd ? '/www/dist' : '/dist',
+    publicPath: isProd ? 'dist/' : '/dist',
     filename: 'app.build.js'
   },
   resolve: {

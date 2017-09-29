@@ -45,8 +45,8 @@ export default {
 .profilewp {
     width: 100%;
     background: #fff;
+    border-bottom:1px solid #eee;
     .warp {
-
         display: flex;
         align-items: center;
         >div {

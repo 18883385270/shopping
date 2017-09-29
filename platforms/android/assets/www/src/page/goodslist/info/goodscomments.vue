@@ -2,7 +2,11 @@
 <template>
     <div class="gcmtwp">
         <div class="head">
-            <div class="title">商品评价 <span>好评率：<i>{{GoodsDetails.Rate}}</i></span></div>
+            <div class="title">商品评价
+                <span>好评率：
+                    <i>{{GoodsDetails.Rate}}</i>
+                </span>
+            </div>
             <div class="more">共 {{GoodsDetails.RateCount}} 条评价</div>
         </div>
         <div class="ratewp">
@@ -24,7 +28,8 @@
         <div class="cmtlist">
             <ul>
                 <li v-for="comment in GoodsDetails.Comments">
-                    <p class="name"><span class="ctime">{{comment.CreatedOn}}</span>{{comment.NickName}} {{comment.Rate}}</p>
+                    <p class="name">
+                        <span class="ctime">{{comment.CreatedOn}}</span>{{comment.NickName}} {{comment.Rate}}</p>
                     <p class="cmtinfo">{{comment.Body}}</p>
                     <div class="pics">
                         <img v-for="img in comment.Thumbs" :src="img" />
@@ -37,10 +42,10 @@
 
 <script>
 export default {
-    props:['GoodsDetails'],
-    data(){
-        return{
-            
+    props: ['GoodsDetails'],
+    data() {
+        return {
+
         }
     }
 }
@@ -48,19 +53,22 @@ export default {
 
 <style lang="less" scoped>
 .gcmtwp {
-    background: #fff;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
     .head {
         display: flex;
         width: 100%;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #eee;
         .title {
             width: 60%;
             font-size: 1.3rem;
             padding: 0.8rem 0;
             text-indent: 1rem;
-            span{
-                font-size:1rem;color:red;margin-left:1rem;
-                i{
+            span {
+                font-size: 1rem;
+                color: red;
+                margin-left: 1rem;
+                i {
                     font-style: normal;
                 }
             }
@@ -87,28 +95,33 @@ export default {
             }
         }
     }
-    .cmtlist{
-        padding:0 1rem 1rem 1rem;
-        li{
-            list-style:none;border-bottom:1px dashed #eee;padding:1rem 0;
-            &:first-child{
-                padding-top:0;
+    .cmtlist {
+        padding: 0 1rem 1rem 1rem;
+        li {
+            list-style: none;
+            border-bottom: 1px dashed #eee;
+            padding: 1rem 0;
+            &:first-child {
+                padding-top: 0;
             }
-            &:last-child{
-                border-bottom:0;
+            &:last-child {
+                border-bottom: 0;
             }
 
-            .name{
-                .ctime{
-                    float:right;color:#999;
+            .name {
+                .ctime {
+                    float: right;
+                    color: #999;
                 }
             }
-            .cmtinfo{
-                padding:0.5rem 0;color:#999;
+            .cmtinfo {
+                padding: 0.5rem 0;
+                color: #999;
             }
-            .pics{
-                img{
-                    width:5rem;margin-right:1rem;
+            .pics {
+                img {
+                    width: 5rem;
+                    margin-right: 1rem;
                 }
             }
         }

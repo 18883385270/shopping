@@ -3,8 +3,8 @@
         <mi-header title="公益商家"></mi-header>
         <div class="rolebanner">
             <svg><use xlink:href="#consumer"></use></svg>
-            <h1>公益商家</h1>
-            <h2>加盟慈善事业，引爆产品销售</h2>
+            <h1>加盟商家</h1>
+            <h2>加盟电商事业，引爆产品销售</h2>
         </div>
         <div class="divider"></div>
         <div class="shuoming">
@@ -88,9 +88,10 @@ export default {
 .pagewp {
     .rolebanner {
         text-align: center;
-        padding: 2rem 1rem 3rem 1rem;
+        padding: 2em 1rem;
         color: #fff;
-        background: #333;
+        background: #333 url('../../../../dist/banner.png') no-repeat center center;
+        background-size:100% 100%;
         svg {
             display: block;fill:#fff;
             width: 5rem;

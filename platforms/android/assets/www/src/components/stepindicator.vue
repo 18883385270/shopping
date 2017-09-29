@@ -62,7 +62,7 @@ export default {
                     background:#fff;
                     z-index: 2;
                     svg{
-                        width:1.5rem;height:1.5rem;fill:#666;
+                        width:1.5rem;height:1.5rem;fill:#ccc;
                     }
                 }
             }

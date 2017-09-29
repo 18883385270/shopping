@@ -156,7 +156,7 @@ export default {
 
 <style lang="less" scoped>
 .newordertip {
-  border-top: 2px solid #096;
+  border-top: 0.05rem solid #096;
   background: #fff;
   .title {
     padding: 1rem;

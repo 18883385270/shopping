@@ -45,8 +45,8 @@ export default {
   mounted(){
     this.pageheight=util.screenSize().height+'px';
     //从本地存储获取数据
-    if(!checkJs.isNullOrEmpty(sessionStorage.Categorys)){
-      this.Categorys=JSON.parse(sessionStorage.Categorys ||{})
+    if(!checkJs.isNullOrEmpty(localStorage.Categorys)){
+      this.Categorys=JSON.parse(localStorage.Categorys ||{})
     }
     this.fetchData();
   },
@@ -59,7 +59,7 @@ export default {
           if (res.data.Code == 200) {
             this.Categorys=res.data.Categorys;
             //存储到本地
-            sessionStorage.Categorys = JSON.stringify(this.Categorys)
+            localStorage.Categorys = JSON.stringify(this.Categorys)
           } else {
             console.log(res.data.Message);
           }
@@ -76,12 +76,24 @@ export default {
     goPage(category){
       if(category.Type=='Search'){
         //搜索
-        this.$router.push({name:'goodslist',params:{type:'Search',search:category.Url}});
+        var goodsFilter={
+            Type:'Search',
+            Search:category.Url,
+            CategoryId:''
+        }
+        sessionStorage.GoodsFilter = JSON.stringify(goodsFilter)
+        this.$router.push({name:'goodslist'});
       }
       else
       {
         //分类
-        this.$router.push({name:'goodslist',params:{type:'Category',categoryid:category.Url}});
+        var goodsFilter={
+            Type:'Category',
+            Search:'',
+            CategoryId:category.Url
+        }
+        sessionStorage.GoodsFilter = JSON.stringify(goodsFilter)
+        this.$router.push({name:'goodslist'});
       }
     }
   }

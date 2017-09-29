@@ -18,7 +18,7 @@
 
   .spinner {
     position: fixed;
-    z-index: 999;
+    z-index: 999999;
     transition: opacity .15s ease;
     animation: rotator @duration linear infinite;
     animation-play-state: paused;

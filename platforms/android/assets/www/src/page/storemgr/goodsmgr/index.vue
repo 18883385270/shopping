@@ -44,8 +44,10 @@ export default {
   },
   mounted() {
     //加载商品
-
-    let params = {};
+    let params = {
+      Page:1,
+      Status:'All'
+    };
     api.MgrAllGoodsesApi(params).then(
       res => {
         if (res.data.Code == 200) {

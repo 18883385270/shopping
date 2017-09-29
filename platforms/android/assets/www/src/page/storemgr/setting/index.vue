@@ -16,6 +16,7 @@
         </svg>
       </div>
     </div>
+    <div class="divider"></div>
   </div>
 </template>
 

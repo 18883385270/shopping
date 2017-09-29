@@ -27,3 +27,8 @@ export const persent = (value) => {
   if( !value || typeof value !== 'number' ) return ''
   return value*100 + '%'; 
 }
+
+export const shiftToPersent=(value)=>{
+  var persent=(value/5).toFixed(4);
+  return persent*100 +'%'
+}

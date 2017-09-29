@@ -9,11 +9,7 @@
         <!-- <span class="tag">【{{ goodsAttr.desc.tag }}】</span> -->
       </div>
       <div class="price">
-        <span class="getbenevonce">购买可得 {{SelectedSpecification.Benevolence*BuyCount}} 善心</span>{{ SelectedSpecification.Price|currency('￥',2) }}</div>
-      <!-- <div class="rangli">
-        <div class="tlt">获取善心</div>
-        <div class="cnt">购买该商品，{{GoodsDetails.Benevolence}}倍返还善心</div>
-      </div> -->
+        <span class="getbenevonce">购买可得 {{SelectedSpecification.Benevolence*BuyCount | currency('',2)}} 善心</span>{{ SelectedSpecification.Price|currency('￥',2) }}</div>
       <div class="rangli" @click="getTicket" v-if="false">
         <div class="tlt">优惠券</div>
         <div class="cnt">
@@ -61,6 +57,7 @@
         <div class="stocklf">库存：{{SelectedSpecification.AvailableQuantity}}</div>
       </div>
     </div>
+    
     <!--购物券弹出框-->
     <mi-popup ref="popup" title="领优惠券">
       <div slot="modalbody" class="ticketWarp">
@@ -94,6 +91,9 @@
         </ul>
       </div>
     </mi-popup>
+    <div class="unpubtip" v-if="!GoodsDetails.IsPublished ||GoodsDetails.Status!='Verifyed'">
+      该商品未审核，或已下柜，非常抱歉~
+    </div>
     <!--底部工具栏-->
     <div class="btnbar">
       <div class="store" @click="goStorePage">
@@ -108,9 +108,10 @@
         </svg>
         购物车
       </div>
-      <div class="cart" @click="addCartEvent">加入购物车</div>
-      <div class="buy" @click="buyEvent">
-        立即购买
+      <div class="cart">
+        <button @click="addCartEvent" :disabled="!canBuy || !GoodsDetails.IsPublished ||GoodsDetails.Status!='Verifyed'">加入购物车</button></div>
+      <div class="buy">
+         <button @click="buyEvent"  :disabled="!canBuy || !GoodsDetails.IsPublished ||GoodsDetails.Status!='Verifyed'">立即购买</button>
       </div>
       <mi-toast ref="toast"></mi-toast>
     </div>
@@ -121,6 +122,7 @@ import buycount from '../../../components/buycount.vue';
 import * as cartapi from '../../../api/cart'
 import popup from '../../../components/popup.vue';
 import toast from '../../../components/toast.vue'
+import * as checkJs from '../../../utils/pubfunc'
 
 export default {
   props: ['GoodsDetails'],
@@ -137,7 +139,8 @@ export default {
       MyGoodsDetail: this.GoodsDetails,
       SpecificationNames: [],
       SpecificationItems: [],
-      BuyCount: 1
+      BuyCount: 1,
+      canBuy:true
     }
   },
   watch: {
@@ -171,6 +174,8 @@ export default {
 
         //初始化选择的规格
         this.SelectedSpecification = this.MyGoodsDetail.Specifications[0];
+        this.canBuy=this.SelectedSpecification.AvailableQuantity>0? true:false;
+        
         //便利列
         for (var i = 0; i < names.length; i++) {
           //初始化先择数组
@@ -193,6 +198,10 @@ export default {
 
 
       }
+      else
+      {
+        this.canBuy=false
+      }
     },
     checkSpecificationEvent(index, specificationindex) {
       //直接通过数组索引设置数组不会引发更新
@@ -207,6 +216,7 @@ export default {
         }
       }
       this.SelectedSpecification = specification;
+      this.canBuy=this.SelectedSpecification.AvailableQuantity>0? true:false;
     },
     getTicket() {
       this.$refs.popup.modalOpen();
@@ -222,6 +232,11 @@ export default {
       let alertFuc = (msg) => {
         const toast = this.$refs.toast;
         toast.show(msg);
+        return false
+      }
+      //判断是否登录
+      if(checkJs.isNullOrEmpty(this.$store.state.global.token)){
+        alertFuc('您似乎还没登录，请登录后操作')
         return false
       }
       let params = {
@@ -282,7 +297,8 @@ export default {
   background: #fff;
   box-sizing: border-box;
   padding: 1rem;
-  border-top: 0.1rem solid #ddd;
+  border-top: 1px solid #eee;
+  border-bottom:1px solid #eee;
   .title {
     line-height: 2.5rem;
     font-size: 1.3rem;
@@ -305,7 +321,7 @@ export default {
   .rangli {
     display: flex;
     padding-top: 1rem;
-    border-top: 1px dashed #eee;
+    border-top: 1px solid #eee;
     margin-top: 1rem;
     .tlt {
       font-size: 1.3rem;
@@ -358,8 +374,8 @@ export default {
   background: #fff;
   width: 100%;
   padding: 1rem 0 1rem 0;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
   .attrwarp {
     display: flex;
     .attrtlt {
@@ -378,13 +394,13 @@ export default {
         li {
           list-style-type: none;
           font-size: 1rem;
-          border: 0.1rem solid #eee;
+          border: 1px solid #eee;
           padding: 0.4rem 1rem;
           margin: 0 0.5rem 1rem 0;
           display: inline-block;
           &.active {
-            border: 0.1rem solid #ff5722;
-            color: #ff5722;
+            border-color:#c03;
+            color: #c03;
           }
         }
       }
@@ -454,7 +470,16 @@ export default {
     }
   }
 }
-
+.unpubtip{
+  width: 100%;
+  background: #c03;
+  position: fixed;
+  bottom: 4rem;
+  left: 0;
+  color:#fff;
+  padding:1rem;
+  text-align:center;
+}
 .btnbar {
   width: 100%;
   background: #fff;
@@ -482,17 +507,33 @@ export default {
       width: 35%;
       color: #fff;
       text-align: center;
-      background: #F6A376;
-      font-size: 1.3rem;
-      padding: 1.1rem 0;
+      button{
+        border:0;
+        color:#fff;
+        width:100%;
+        height:100%;
+        background: #f66;
+        font-size: 1.3rem;
+        &:disabled{
+          background:#ccc;
+        }
+      }
     }
     &.buy {
       width: 35%;
-      padding: 1.1rem 0;
       color: #fff;
       text-align: center;
-      background: #FF5722;
-      font-size: 1.3rem;
+      button{
+        border:0;
+        color:#fff;
+        width:100%;
+        height:100%;
+        background: #c03;
+        font-size: 1.3rem;
+        &:disabled{
+          background:#ccc;
+        }
+      }
     }
   }
 }

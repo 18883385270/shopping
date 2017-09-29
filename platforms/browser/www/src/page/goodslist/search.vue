@@ -75,8 +75,8 @@ export default {
     },
     created(){
         //获取本地最近搜索项目
-        if(!checkJs.isNullOrEmpty(sessionStorage.LatestWords)){
-            this.LatestWords=JSON.parse(sessionStorage.LatestWords)
+        if(!checkJs.isNullOrEmpty(localStorage.LatestWords)){
+            this.LatestWords=JSON.parse(localStorage.LatestWords)
         }
     },
     methods: {
@@ -96,13 +96,20 @@ export default {
             this.$router.go(-1);
         },
         doSearch(){
-            if(this.inputText.length>1)
+            if(this.inputText.length>=1)
             {
                 //添加最近搜索
                 this.LatestWords.pop();//删除最后一个
                 this.LatestWords.splice(0,0,this.inputText);//添加到第一个
-                sessionStorage.LatestWords = JSON.stringify(this.LatestWords)
-                this.$router.replace({name:'jumppage',params:{type:'Search',search:this.inputText}});
+                localStorage.LatestWords = JSON.stringify(this.LatestWords)
+                //通过jumppage调整到产品列表页
+                var goodsFilter={
+                    Type:'Search',
+                    Search:this.inputText,
+                    CategoryId:''
+                }
+                sessionStorage.GoodsFilter = JSON.stringify(goodsFilter)
+                this.$router.replace({name:'jumppage'});
             }
         }
     }
@@ -119,6 +126,7 @@ export default {
     top: 0;
     left: 0;
     overflow: hidden;
+    z-index:2;
 }
 
 .absolute100 {

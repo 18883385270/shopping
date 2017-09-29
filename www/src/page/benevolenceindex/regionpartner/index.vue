@@ -43,10 +43,6 @@
             </div>
             <button class="button err">知道了，去申请</button>
         </div>
-        
-
-        
-    
     </div>
 </template>
 

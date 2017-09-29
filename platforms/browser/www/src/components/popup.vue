@@ -45,10 +45,7 @@ export default {
         };
     },
     mounted() {
-        console.log(this.isfullscreen);
-        if (this.isfullscreen) {
-
-        }
+        
     },
     methods: {
         popupClick: function () {

@@ -35,13 +35,13 @@ export default {
     mounted() {
         
         //检查是否验证
-        var verify= sessionStorage.getItem('verify') || JSON.stringify({verifypage:'setpaypassword',verifyed:false});
+        var verify= sessionStorage.verify || JSON.stringify({verifypage:'setpaypassword',verifyed:false});
         if(verify)
         {
             verify=JSON.parse(verify)
             if(!verify.verifyed)
             {
-                sessionStorage.setItem('verify',JSON.stringify(verify));
+                sessionStorage.verify=JSON.stringify(verify);
                 this.$router.replace({path:'/me/verify'});
             }
             
@@ -70,6 +70,8 @@ export default {
                 res => {
                     if (res.data.Code == 200) {
                         console.log('验证成功');
+                        //删除验证信息
+                        sessionStorage.removeItem('verify');
                         this.$router.replace({path:'/wallet'});
                     } else {
                         alertFuc(res.data.Message)

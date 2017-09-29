@@ -1,6 +1,4 @@
-/*
-物流详情页面
-*/
+
 <template>
     <div class="exppage">
         <mi-header title="物流信息"></mi-header>
@@ -12,6 +10,7 @@
             <p>
                 <span>货运单号：</span>{{ExpressInfo.showapi_res_body.mailNo}}</p>
         </div>
+        <div class="divider"></div>
         <mi-vstepindicator :ExpressSteps="ExpressInfo.showapi_res_body.data"></mi-vstepindicator>
     </div>
 </template>
@@ -40,7 +39,8 @@ export default {
     methods:{
         GetExpressSchedule(){
             let params = {
-                ExpressNumber:'9891011779787'
+                ExpressName:this.StoreOrder.DeliverExpressCode,
+                ExpressNumber:this.StoreOrder.DeliverExpressNumber
             };
             api.ExpressScheduleApi(params).then(
                 res => {

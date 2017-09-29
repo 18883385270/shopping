@@ -40,6 +40,8 @@ export default {
         padding:1rem;
         border:1px solid #eee;
         font-size:1.5rem;
+        word-wrap: break-word;
+        word-break:break-all;
     }
 }
 </style>

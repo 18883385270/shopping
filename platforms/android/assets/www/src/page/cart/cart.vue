@@ -19,14 +19,17 @@
             <div class="storecontent">
                 <div class="goodswarp" v-for="(goods,goodsindex) in store.CartGoodses" v-bind:class="{selected:goods.Checked}">
                     <div class="checkbar">
-                        <input type="checkbox" :id="'check'+storeindex+goodsindex" class="regular-checkbox" v-model="goods.Checked">
-                        <label :for="'check'+storeindex+goodsindex"></label>
+                        <span v-if="goods.Stock>0 && goods.IsGoodsPublished && goods.GoodsStatus=='Verifyed'">
+                            <input type="checkbox" :id="'check'+storeindex+goodsindex" class="regular-checkbox" v-model="goods.Checked">
+                            <label :for="'check'+storeindex+goodsindex"></label>
+                        </span>
+                        <p v-if="goods.Stock==0 || !goods.IsGoodsPublished || goods.GoodsStatus!='Verifyed'">失效</p>
                     </div>
-                    <div class="goodsimg">
+                    <div class="goodsimg" @click="goGoodsInfoPage(goods)">
                         <img :src="goods.GoodsPic" />
                     </div>
                     <div class="goodsinfo">
-                        <p class="goodsname">{{goods.GoodsName}}</p>
+                        <p class="goodsname" @click="goGoodsInfoPage(goods)">{{goods.GoodsName}}</p>
                         <p class="goodsspecification">规格：{{goods.SpecificationName}}</p>
                         <p class="goodsprice">{{goods.Price|currency('￥',2)}}
                             <span>库存{{goods.Stock}}件</span>
@@ -68,7 +71,7 @@
                 <p>确定删除此商品？</p>
             </div>
         </mi-modal>
-        <div style="height: 5rem;"></div>
+        <div style="height: 5.5rem;"></div>
     </div>
 </template>
 
@@ -96,6 +99,10 @@ export default {
         this.getList();
     },
     methods: {
+        goGoodsInfoPage(goods){
+            sessionStorage.GoodsId = goods.GoodsId
+            this.$router.push({ name: 'goodsinfo' });
+        },
         getList() {
             //获取购物车数据
             let params = {};
@@ -118,7 +125,9 @@ export default {
             this.StoreCartGoods.forEach(function (store, index) {
                 if (storeid == store.StoreId) {
                     store.CartGoodses.forEach(function (goods) {
-                        goods.Checked = checkbox.checked;
+                        if(goods.Stock>0 && goods.IsGoodsPublished && goods.GoodsStatus=='Verifyed'){
+                            goods.Checked = checkbox.checked;
+                        }
                     });
                 }
             });
@@ -128,7 +137,10 @@ export default {
             var checkbox = evnt.target;
             this.StoreCartGoods.forEach(function (store, index) {
                 store.CartGoodses.forEach(function (goods) {
-                    goods.Checked = checkbox.checked;
+                    if(goods.Stock>0 && goods.IsGoodsPublished && goods.GoodsStatus=='Verifyed')
+                    {
+                        goods.Checked = checkbox.checked;
+                    }
                 });
             });
         },

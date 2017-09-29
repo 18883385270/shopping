@@ -14,16 +14,20 @@
     <div class="myinvotes">
       <ul>
         <li v-for="MyInvote in MyInvotes">
-          <img :src="MyInvote.Portrait" alt="头像">
-          <p class="role">{{MyInvote.Role}}</p>
-          <p class="username">{{MyInvote.NickName}}</p>
-          <p>邀请日期：{{MyInvote.CreatedOn}}</p>
+          <div @click="goUserInfoPage(MyInvote)">
+            <img :src="MyInvote.Portrait" alt="头像">
+            <p class="role">{{MyInvote.Role}}</p>
+            <p class="username">{{MyInvote.NickName}} <span>{{MyInvote.Mobile}}</span></p>
+            <p class="invotetime"> 邀请于：{{MyInvote.CreatedOn}}</p>
+          </div>
           <ul class="childinvotes">
             <li v-for="Invote in MyInvote.Invotes">
-              <img :src="Invote.Portrait" alt="头像">
-              <p class="role">{{Invote.Role}}</p>
-              <p class="username">{{Invote.NickName}}</p>
-              <p>邀请日期：{{Invote.CreatedOn}}</p>
+              <div @click="goUserInfoPage(Invote)">
+                <img :src="Invote.Portrait" alt="头像">
+                <p class="role">{{Invote.Role}}</p>
+                <p class="username">{{Invote.NickName}} <span>{{Invote.Mobile}} </span></p>
+                <p class="invotetime">邀请于：{{Invote.CreatedOn}}</p>
+              </div>
             </li>
           </ul>
         </li>
@@ -52,6 +56,10 @@ export default {
   methods: {
     toPage(page) {
       this.$router.replace({ path: page })
+    },
+    goUserInfoPage(user){
+      sessionStorage.UserInfo=JSON.stringify(user)
+      this.$router.push({name:'userinfo'});
     },
     fetchData() {
       let params = {};
@@ -100,8 +108,14 @@ export default {
     padding:1rem 0 1rem 0;
     border-bottom:1px dashed #eee;
     .username {
-      padding: 0.3rem 0;
+      padding-bottom: 0.3rem;
       font-size: 1.3rem;
+      span{
+        font-size:1rem;
+      }
+    }
+    .invotetime{
+      color:#999;
     }
     .role{
       float:right;
@@ -117,6 +131,7 @@ export default {
       margin-right: 1rem;
     }
     .childinvotes{
+      padding-top:0.5rem;
       li{
         padding-left:3rem;
         padding-top:1rem;

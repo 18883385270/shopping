@@ -1,10 +1,10 @@
 {
-    "android": {
-      "release": {
-        "keystore": "wftx.keystore",
-        "alias": "wftx",
-        "storePassword": "sd123456",
-        "password": "sd123456"
-      }
+  "android": {
+    "release": {
+      "keystore": "release-key.keystore",
+      "alias": "cordova-shopping",
+      "storePassword": "wftx666",
+      "password": "wftx666"
     }
+  }
 }

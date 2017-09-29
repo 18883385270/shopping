@@ -38,7 +38,7 @@
 </template>
 <script>
 export default {
-  props: ['selected','cartgoodscount'],
+  props: ['selected', 'cartgoodscount'],
   data() {
     return {
       tabbarIndex: this.selected
@@ -72,7 +72,7 @@ export default {
 <style lang="less" scoped>
 .tabbar {
   display: flex;
-  height: 4rem;
+  height: 4.4rem;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -84,25 +84,25 @@ export default {
     color: #888;
     font-size: 0.9rem;
     text-align: center;
-    .bedge{
-      display:inline-block;
-      position:absolute;
-      color:#c03;
-      border:1px solid #c03;
-      padding:0 0.3rem;
+    .bedge {
+      display: inline-block;
+      position: absolute;
+      color: #fff;
+      border: 1px solid red;
+      background:red;
+      padding: 0 0.3rem;
       border-radius: 1rem;
-      font-style:normal;
-      background:#fff;
-      margin-top:0.2rem;
-      line-height:1.1rem;
+      font-style: normal;
+    margin-top: 0.2rem;
+      line-height: 1.1rem;
     }
     svg {
-      width: 1.7rem;display:block;
-      height: 1.7rem;
+      width: 1.8rem;
+      display: block;
+      height: 1.8rem;
       margin: 0.6rem auto 0.3rem auto;
       fill: #999;
     }
-    
   }
   .active {
     color: #c33;

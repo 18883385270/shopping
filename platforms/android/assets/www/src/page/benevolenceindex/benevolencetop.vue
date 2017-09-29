@@ -2,9 +2,9 @@
     <div class="warp">
         <div class="control">
             <div class="left hook" @click="goBackEvent">
-                <svg>
+                <!-- <svg>
                     <use xlink:href="#star"></use>
-                </svg>
+                </svg> -->
             </div>
             <div class="right hook" @click="showScanner">
                 <svg>
@@ -18,7 +18,7 @@
                 <use xlink:href="#index"></use>
             </svg>
             <h2>善心指数</h2>
-            <p>{{BenevolenceIndex.CurrentBenevolenceIndex}}</p>
+            <p>{{BenevolenceIndex.CurrentBenevolenceIndex*100 |currency('',3)}}</p>
             <p class="myearnings">上次激励 {{this.$store.state.global.walletinfo.YesterdayEarnings|currency('￥',2)}} 元</p>
             <p class="earningtip">注意，系统用当日23.00时的善心指数激励善心</p>
         </div>

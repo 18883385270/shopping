@@ -56,3 +56,11 @@ export const ApplyRechargeApi = (params) => {
 export const RechargeApplyLogsApi = (params) => {
   return request({method: 'post', url: '/Wallet/RechargeApplyLogs', data: params})
 }
+
+export const AcceptTransferApi = (params) => {
+  return request({method: 'post', url: '/Wallet/AcceptTransfer', data: params})
+}
+
+export const IncentiveLogsApi = (params) => {
+  return request({method: 'post', url: '/Wallet/IncentiveLogs', data: params})
+}

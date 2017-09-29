@@ -6,7 +6,7 @@
         <h1>五福天下慈善商城</h1>
         <p>For Mobile App V{{Version}} build {{Build}}</p>
         <img class="qrcode" src="../../../dist/androidapk.png" alt="apk">
-        <p class="shuoming">扫描二维码，您的朋友可以下载五福天下App</p>
+        <p class="shuoming">扫描二维码，下载五福天下App</p>
       </div>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
 
     }
     .logo{
-      width:6rem;
+      width:4rem;
     }
     .qrcode{
       width:12rem;

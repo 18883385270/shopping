@@ -1,7 +1,3 @@
-/*
-申请开店
-用户必须是传递使者才能开店
- */
 <template>
   <div>
     <mi-header title="申请开店"></mi-header>

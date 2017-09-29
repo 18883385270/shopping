@@ -6,7 +6,7 @@
 export default {
     created(){
         //获取传递过来的参数然后导航到产品列表页
-        this.$router.replace({name:'goodslist',params:this.$route.params});
+        this.$router.replace({name:'goodslist'});
     }
 }
 </script>

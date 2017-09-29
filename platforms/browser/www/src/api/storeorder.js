@@ -3,6 +3,11 @@ import {request} from './httpconfig.js'
 export const InfoApi = (params) => {
   return request({method: 'post', url: '/StoreOrder/Info', data: params})
 }
+
+export const DeleteApi = (params) => {
+  return request({method: 'post', url: '/StoreOrder/Delete', data: params})
+}
+
 export const DeliverApi = (params) => {
   return request({method: 'post', url: '/StoreOrder/Deliver', data: params})
 }

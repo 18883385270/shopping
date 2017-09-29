@@ -1,146 +1,79 @@
 <template>
-    <div class="transferpage">
-        <mi-header title="记录"></mi-header>
-        <mi-category :CurrentIndex="CurrentIndex" :categorys="TransferTypes" @categoryChanged="categoryChangedHandle"></mi-category>
-        <div class="emptybox" v-if="!Transfers.length">
-            <svg>
-                <use xlink:href="#emptyline"></use>
-            </svg>
-            <p> 没有记录</p>
-        </div>
-        <div class="transferls"v-if="Transfers.length">
-            <ul>
-                <li v-for="transfer in Transfers">
-                    <p class="tlt">
-                        <span class="time">{{transfer.CreatedOn}}</span>{{transfer.Type}}</p>
-                    <p class="cnt">
-                        <span class="amount">
-                            <span v-if="transfer.Direction=='进账'">+</span>
-                            <span v-if="transfer.Direction!='进账'">-</span>
-                            {{transfer.Amount}}
-                        </span>
-                        {{transfer.Remark}}
-                        <span v-if="transfer.Fee>0">
-                            【手续费：{{transfer.Fee}}】
-                        </span>
-                    </p>
-                </li>
-            </ul>
-            <div class="nextpage" @click="NextPage" v-if="!NotAnyMore">
-                <span>加载更多</span>
-            </div>
-            <div class="nextpage" @click="NextPage" v-if="NotAnyMore">
-                <span>没有更多了</span>
-            </div>
-        </div>
-    </div>
+  <div>
+      <mi-header title="现金转账"></mi-header>
+      <div class="payeeinfo">
+          <img :src="UserInfo.Portrait" alt="">
+          <p>向 {{UserInfo.NickName}} 转账</p>
+      </div>
+      <div class="payeeamount">
+            <input type="number" placeholder="输入转账金额" v-model="Amount">
+            <button type="button" class="button success" :disabled="Amount<=0" @click="goPay">去支付</button>
+      </div>
+  </div>
 </template>
 
 <script>
 import header from '../../../../../components/header.vue';
-import category from '../../../../../components/category.vue';
-import * as api from '../../../../../api/wallet'
-import * as checkJs from '../../../../../utils/pubfunc'
 
 export default {
     components: {
-        'mi-header': header,
-        'mi-category': category
+        'mi-header': header
     },
-    data() {
-        return {
-            TransferTypes: ['全部','充值', '提现','转账','善心激励','消费','系统操作','退款','店铺售货'],
-            TransferTypesValue:['All','Charge', 'Withdraw','Transfer','Incentive','Shopping','SystemOp','Refund','StoreSell'],
-            Transfers: [],
-            CurrentIndex:0,
-            CurrentPage:0,
-            NotAnyMore:false
+    data(){
+        return{
+            UserInfo:{},
+            Amount:0,
         }
     },
-    mounted() {
-        if(!checkJs.isNullOrEmpty(sessionStorage.MyCashTransferIndex)){
-            this.CurrentIndex=sessionStorage.MyCashTransferIndex
-        }
-        this.fetchData(this.CurrentIndex,this.CurrentPage);
+    mounted(){
+        this.UserInfo=JSON.parse(sessionStorage.UserInfo)
     },
     methods:{
-        categoryChangedHandle(index){
-            this.CurrentIndex=index;
-            this.CurrentPage=0;
-            this.NotAnyMore=false;
-            this.Transfers.splice(0,this.Transfers.length);//清空数据
-            this.fetchData(this.CurrentIndex,this.CurrentPage);
-        },
-        fetchData(index,page){
-            let params = {
-                Type:this.TransferTypesValue[index],
-                Page:page
-            };
-            api.CashTransfersApi(params).then(
-                res => {
-                    if (res.data.Code == 200) {
-                        //加入到数组
-                        if(res.data.CashTransfers.length){
-                            this.Transfers=this.Transfers.concat(res.data.CashTransfers);
-                        }
-                        else{
-                            this.NotAnyMore=true;
-                        }
-                    } else {
-                        console.log("返回错误码：" + res.data.Code);
-                    }
-                },
-                err => {
-                    console.log('网络错误');
-                }
-            )
-        },
-        NextPage(){
-            this.CurrentPage++;
-            this.fetchData(this.CurrentIndex,this.CurrentPage);
+        goPay(){
+            let toPayInfo={
+                Type:'transfer',
+                PayeeId:this.UserInfo.Id,
+                PayeeName:this.UserInfo.NickName,
+                OrderNumber:'',
+                Amount:this.Amount,
+                Remark:'转账付款',
+                CreatedOn:(new Date()).valueOf()
+            }
+            sessionStorage.ToPayInfo = JSON.stringify(toPayInfo)
+            this.$router.push({name:'pay'});
         }
     }
 }
 </script>
 
 <style lang="less" scoped>
-.transferpage {
-    width: 100%;
-    .transferls {
-        margin-top:1rem;
-        li {
-            background: #fff;
-            list-style: none;
-            padding: 1rem;
-            border-bottom: 1px solid #eee;
-            font-size: 1.3rem;
-
-            .tlt {
-                padding-bottom: 0.3rem;
-                font-size: 1.3rem;
-                .time {
-                    float: right;
-                    font-size: 1rem;
-                    color: #999;
-                }
-            }
-            .cnt {
-                font-size: 1.2rem;
-                color: #999;
-            }
-
-            .amount {
-                float: right;
-                font-size: 1.4rem;
-                color: #333;
-            }
-        }
+.payeeinfo{
+    padding-top:4rem;
+    text-align:center;
+    img{
+        width:6rem;
+        height:6rem;
+        border-radius:50%;
+        margin-bottom:1rem;
+    }
+    p{
+        font-size:1.5rem;
     }
 }
-.nextpage{
-    text-align:center;
+.payeeamount{
     padding:1rem;
-    background:#fff;
+    input{
+        padding:1rem 0;
+        text-indent:1rem;
+        font-size:1.5rem;
+        color:#999;
+        width:100%;
+        border:1px solid #eee;
+        margin-top:1rem;
+        &:focus{
+            outline:none;
+        }
+    }
 }
 </style>
 

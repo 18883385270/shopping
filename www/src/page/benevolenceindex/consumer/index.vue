@@ -4,7 +4,7 @@
         <div class="rolebanner">
             <svg><use xlink:href="#consumer"></use></svg>
             <h1>爱心使者</h1>
-            <h2>消费公益人，购物就是做公益</h2>
+            <h2>消费人，购物就是献爱心</h2>
         </div>
         <div class="timop">
             <div>有效期：永久有效</div>
@@ -14,25 +14,69 @@
         <div class="shuoming">
             <div class="tlt">为什么要做善心使者?</div>
             <div class="cont">
-                <p>【1】免费注册即可成为善心使者，在商城消费的同时就是在做公益，购物的同时还能获得善心激励</p>
-                <p>【2】每购物满100元，即可获得1个善心</p>
+                <p>【1】免费注册即可成为善心使者，</p>
+                <p>【2】在商城消费并奉献爱心，购物的同时还能获得善心激励</p>
                 <p>【3】1个善心价值100元，满1个善心可参与每日的善心激励</p>
                 <p>【4】善心激励就是将您的善心转换为人民币</p>
             </div>
-            <button class="button info">分享给好友</button>
+            <button class="button info" @click="shareToQuan">分享给好友</button>
         </div>
-
-        
-    
     </div>
 </template>
 
 <script>
 import header from '../../../components/header.vue';
+import toast from '../../../components/toast.vue'
 
 export default {
     components: {
-        'mi-header': header
+        'mi-header': header,
+        'mi-toast':toast
+    },
+    methods:{
+        shareToQuan() {
+            //分享到朋友圈
+            var param= {
+                message: {
+                    title: "用了这个APP，他们竟然都不在淘宝买东西了",
+                    description: "这个商城竟然购买东西还能赚钱，以后我就在这里买东西了，你呢？",
+                    thumb: "http://wftx-goods-img-details.oss-cn-shanghai.aliyuncs.com/logo.png",
+                    mediaTagName: "TEST-TAG-001",
+                    messageExt: "这个商城竟然购买东西还能赚钱，以后我就在这里买东西了，你呢？",
+                    messageAction: "<action>dotalist</action>",
+                    media:{
+                    type: Wechat.Type.LINK,
+                    webpageUrl:"http://m.wftx666.com/#/reg?parentid=" + this.$store.state.global.token
+                    }
+                },
+                scene: Wechat.Scene.TIMELINE 
+            }
+            this.wechartShare(param)
+        },
+        wechartShare(param){
+            let alertFuc = (msg) => {
+                const toast = this.$refs.toast;
+                toast.show(msg);
+                return false
+            }
+
+            if (typeof Wechat !== "undefined") {
+                Wechat.isInstalled(function(installed) {
+                if (installed) {
+                    Wechat.share(param, function() {
+                        alertFuc("分享成功");
+                    }, function(reason) {
+                        alertFuc("分享失败: " + reason);
+                    });
+                }
+                else {
+                    alertFuc("亲，您似乎没有安装微信");
+                }
+                }, function(reason) {
+                console("检查微信安装状态失败，原因: " + reason);
+                });
+            }
+        }
     }
 }
 </script>
@@ -41,9 +85,10 @@ export default {
 .pagewp {
     .rolebanner {
         text-align: center;
-        padding: 2rem 1rem 3rem 1rem;
+        padding: 2em 1rem;
         color: #fff;
-        background: #333;
+        background: #333 url('../../../../dist/banner.png') no-repeat center center;
+        background-size:100% 100%;
         svg {
             display: block;fill:#fff;
             width: 5rem;

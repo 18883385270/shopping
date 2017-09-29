@@ -1,8 +1,6 @@
-/*
-* 必须已经登录才能查看，未登录直接引导登录
-*/
+
 <template>
-    <div class="page_warp" :style="{height:bodyHeight}">
+    <div>
         <mi-profile @openmyqrcode="openMyQrCodeHandle"></mi-profile>
         <div class="tip error" v-if="!this.$store.state.global.walletinfo.AccessCode" @click="goPage('/wallet')">
             <svg>
@@ -34,7 +32,7 @@
         <div class="divider"></div>
         <mi-sundry></mi-sundry>
         <div class="divider"></div>
-        <div style="width: 100%;height: 4rem;"></div>
+        <div style="width: 100%;height: 4.5rem;"></div>
         <mi-tabbar :selected="4"></mi-tabbar>
     </div>
 </template>
@@ -65,8 +63,7 @@ export default {
     },
     data(){
         return{
-            HasUnPayOrder:false,
-            bodyHeight:'100%'
+            HasUnPayOrder:false
         }
     },
     mounted(){
@@ -142,10 +139,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page_warp {
-    background:#eee;
-}
-
 
 </style>
 

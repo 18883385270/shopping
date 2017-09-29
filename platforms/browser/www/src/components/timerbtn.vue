@@ -58,7 +58,7 @@ export default {
                 }
             }
         },
-        timer: function () {
+        timer() {
             if (this.time > 0) {
                 this.time--;
                 setTimeout(this.timer, 1000);

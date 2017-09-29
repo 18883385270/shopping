@@ -11,7 +11,6 @@ const router = new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes
 });
-
 router.beforeEach((to, from, next) => {
   //未登录 允许访问页面
   if (!window.localStorage.getItem('token') 
@@ -23,6 +22,9 @@ router.beforeEach((to, from, next) => {
     && to.name !== 'getpwd'
     && to.name !== 'resetpwd'
     && to.name !== 'userprotocol'
+
+    && to.name !== 'store'
+    && to.name !== 'subject'
     
     && to.name !== 'scannerpage'
     && to.name !== 'scannerresult'

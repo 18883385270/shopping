@@ -6,16 +6,21 @@
           <use xlink:href="#cashticket"></use>
         </svg>领优惠券
       </div>
-      <div>
+      <div @click="goPage('/classroom')">
+        <svg class="green">
+          <use xlink:href="#classroom"></use>
+        </svg>莱乾讲堂
+      </div>
+      <!-- <div>
         <svg class="purple">
           <use xlink:href="#sort"></use>
         </svg>都在买
-      </div>
-      <div>
+      </div> -->
+      <!-- <div>
         <svg class="pink">
           <use xlink:href="#sale"></use>
         </svg>找折扣
-      </div>
+      </div> -->
       <div @click="goPage('/offlinestore')">
         <svg class="blue">
           <use xlink:href="#store"></use>
@@ -26,8 +31,13 @@
           <use xlink:href="#vip"></use>
         </svg>会员中心
       </div>
+      <div>
+        <svg class="black">
+          <use xlink:href="#all"></use>
+        </svg>全部频道
+      </div>
     </div>
-    <div class="menuwarp">
+    <!-- <div class="menuwarp">
       <div @click="goPage('/foundation')">
         <svg class="green">
           <use xlink:href="#foundation"></use>
@@ -53,7 +63,7 @@
           <use xlink:href="#all"></use>
         </svg>全部频道
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mi-search :search="Search" title="商品列表"></mi-search>
+    <mi-search :search="GoodsFilter.Search" title="商品列表"></mi-search>
     <div class="sortwp">
       <div :class="{active:Sort=='综合'}" @click="sortEvent('综合')">综合</div>
       <div :class="{active:Sort=='销量'}" @click="sortEvent('销量')">销量</div>
@@ -12,25 +12,28 @@
       </svg>
       <p>未找到商品，试试其他关键字</p>
     </div>
-    <div class="goodsls">
+    <div class="goodslist" v-if="Goodses.length">
+      <div class="goodsboxwp">
       <div class="item" v-for="(Goods, index) in Goodses" @click="goGoodsPage(Goods)" :class="{'item2': index % 2 !== 0}">
         <div class="top">
+          <span class="benevolence">
+                {{Goods.Benevolence |currency('',2)}} 善心</span>
           <img v-lazy="Goods.Pics[0]" />
         </div>
         <div class="bottom">
-          <span class="title">{{ Goods.Name| truncate(20)}}</span>
-          <span class="desc"></span>
-          <span class="price">
-            <span>
-              {{Goods.Benevolence |currency('',2)}} 善心</span> {{ Goods.Price |currency('￥',2) }}</span>
+            <p class="title">{{ Goods.Name |truncate(20)}}</p>
+            <p class="pricewp">
+              <span class="price">{{ Goods.Price |currency('￥',2) }} <span class="sellout">{{Goods.SellOut}}人付款</span> </span>
+            </p>
         </div>
       </div>
+    </div>
       <div class="nextpage" @click="NextPage" v-if="!NotAnyMore">
-          <span>加载更多</span>
-      </div>
-      <div class="nextpage" @click="NextPage" v-if="NotAnyMore">
-          <span>没有更多了</span>
-      </div>
+            <span>加载更多</span>
+        </div>
+        <div class="nextpage" @click="NextPage" v-if="NotAnyMore">
+            <span>没有更多了</span>
+        </div>
     </div>
   </div>
 </template>
@@ -38,6 +41,7 @@
 <script>
 import search from './search.vue';
 import * as api from '../../api/goods'
+import * as checkJs from '../../utils/pubfunc'
 
 export default {
   components: {
@@ -45,32 +49,34 @@ export default {
   },
   data() {
     return {
-      Type:'Search',
-      CategoryId:'',
-      Search:'',
+      GoodsFilter:{
+        Type:'Search',
+        CategoryId:'',
+        Search:''
+      },
       Sort:'综合',
-      CurrentPage:0,
+      CurrentPage:1,
       Goodses: [],
       NotAnyMore:false
     }
   },
   mounted(){
-    this.Type=this.$route.params.type || 'Search';
-    this.Search=this.$route.params.search || '';
-    this.CategoryId=this.$route.params.categoryid || '';
-
+    if(!checkJs.isNullOrEmpty(sessionStorage.GoodsFilter)){
+      this.GoodsFilter=JSON.parse(sessionStorage.GoodsFilter)
+    }
     this.fatchData();
   },
   methods: {
     sortEvent(sort){
       this.Sort=sort;
+      this.Goodses.splice(0,this.Goodses.length)
       this.fatchData();
     },
     fatchData(){
       let params = {
-        CategoryId:this.CategoryId,
-        Type:this.Type,
-        Search:this.Search,
+        CategoryId:this.GoodsFilter.CategoryId,
+        Type:this.GoodsFilter.Type,
+        Search:this.GoodsFilter.Search,
         Sort:this.Sort,
         Page:this.CurrentPage
       };
@@ -109,21 +115,20 @@ export default {
 <style lang="less" scoped>
 .sortwp {
   display: flex;
-  background: #fff;
-  font-size: 1.3rem;
+font-size: 1.3rem;
   >div {
     width: 33.3%;
     padding: 1rem 0;
     text-align: center;
-    border-left: 1px solid #eee;
-    border-bottom:1px solid #eee;
+    border-left: 0.05rem solid #eee;
+    border-bottom:0.05rem solid #eee;
     &:first-child {
       border-left: 0;
     }
   }
   .active {
     color: #096;
-    border-bottom: 1px solid #096;
+    border-bottom: 0.05rem solid #096;
   }
 }
 
@@ -141,65 +146,79 @@ export default {
     margin-top:1rem;
   }
 }
-
-.goodsls {
-  margin-top: 2rem;
-  .item {
-    width: 50%;
-    margin-bottom: 1rem;
-    background: #fff;
-    float: left;
-    box-sizing: border-box;
-    border-right: 0.1rem solid #fff;
-    height: 25rem;
-    font-size: 0;
-    .top {
-      padding: 1rem;
-      img {
-        width: 100%;
-      }
-    }
-    .bottom {
-      width: 100%;
-      display: block;
-      padding: 0.5rem 1rem;
-      box-sizing: border-box;
-      font-size: 1.3rem;
-      .title {
-        width: 100%;
-        display: block;
-        line-height: 2.5rem;
-      }
-      .desc {
-        width: 100%;
-        display: block;
-        color: #666;
-        font-size:1rem;
-      }
-      .price {
-        width: 100%;
-        display: block;
-        font-size: 1.3rem;
-        color: #ff601e;
-        line-height: 2rem;
-        span {
-            float: right;
+.goodslist{
+  padding-top:1rem;
+}
+.goodsboxwp {
+    display:flex;
+    flex-wrap:wrap;
+    .item {
+      width: 50%;
+      border-bottom:1px solid #eee;
+      background: #fff;
+      .top {
+        padding: 0.8rem;
+        position:relative;
+        z-index:1;
+        img {
+          width: 100%;
+        }
+        .benevolence {
+            position: absolute;
+            right:0.8rem;
+            bottom:1.1rem;
             font-size: 0.8rem;
-           background:#ff601e;
-            color:#fff;
-            line-height:1rem;
-            padding:0.2rem 0.6rem;
-            border-radius:2px;
+            background: #ff601e;
+            color: #fff;
+            line-height: 1rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2px;
           }
       }
+      .bottom {
+        width: 100%;
+        display: block;
+        padding: 0.5rem;
+        box-sizing: border-box;
+        font-size: 1.3rem;
+        .title {
+          width: 100%;
+          display: block;
+          color: #333;
+          line-height: 2rem;
+          padding: 0.6rem 0;
+        }
+        .desc {
+          width: 100%;
+          font-size: 1rem;
+          color: #666;
+        }
+        .pricewp {
+          width: 100%;
+          
+          .price{
+            font-size: 1.3rem;
+            color: #ff601e;
+            line-height: 2rem;
+            .sellout{
+              float:right;
+              font-size:1rem;
+              color:#999;
+            }
+          }
+        }
+      }
+    }
+    .item2 {
+      width:49%;
+      .top{
+        border-left: 1px solid #eee;
+      }
+      .bottom{
+        border-left: 1px solid #eee;
+      }
     }
   }
-  .item2 {
-    float:right;
-    margin-right: 0;
-    border-left: 0.1px solid #eee;
-  }
-}
 .nextpage{
     text-align:center;
     clear:both;

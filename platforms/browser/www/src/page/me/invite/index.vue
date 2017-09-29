@@ -9,18 +9,18 @@
       <div class="tlt">通过一下方式邀请好友</div>
       <div>
         <div class="rowone">
-          <div @click="pengyouquan">
+          <div @click="shareToQuan">
             <svg>
               <use xlink:href="#pengyouquan"></use>
             </svg>
             <p>朋友圈邀请</p>
           </div>
-          <!-- <div>
+          <div @click="shareToFriend">
             <svg>
               <use xlink:href="#weixin"></use>
             </svg>
             <p>微信好友</p>
-          </div> -->
+          </div>
           <div @click="goPage('faceinvote')">
             <svg class="svgblue">
               <use xlink:href="#qrcode"></use>
@@ -39,24 +39,19 @@
     <div class="setmyinvote" v-if="this.$store.state.global.userinfo.ParentId=='00000000-0000-0000-0000-000000000000'">
       <router-link to="/me/setmyinvote">设置我的邀请人</router-link>
     </div>
+    <mi-toast ref='toast'></mi-toast>
   </div>
 </template>
 
 <script>
 import header from '../../../components/header.vue'
+import toast from '../../../components/toast.vue'
 import * as util from '../../../utils/util'
 
 export default {
   components: {
-    'mi-header': header
-  },
-  data() {
-    return {
-
-    }
-  },
-  mounted() {
-
+    'mi-header': header,
+    'mi-toast':toast
   },
   methods: {
     toPage(page) {
@@ -65,27 +60,68 @@ export default {
     goPage(page) {
       this.$router.push({ name: page })
     },
-    pengyouquan() {
+    shareToQuan() {
+      //分享到朋友圈
+      var param= {
+        message: {
+            title: "用了这个APP，他们竟然都不在淘宝买东西了",
+            description: "这个商城竟然购买东西还能赚钱，以后我就在这里买东西了，你呢？",
+            thumb: "http://wftx-goods-img-details.oss-cn-shanghai.aliyuncs.com/logo.png",
+            mediaTagName: "TEST-TAG-001",
+            messageExt: "这个商城竟然购买东西还能赚钱，以后我就在这里买东西了，你呢？",
+            messageAction: "<action>dotalist</action>",
+            media:{
+              type: Wechat.Type.LINK,
+              webpageUrl:"http://m.wftx666.com/#/reg?parentid=" + this.$store.state.global.token
+            }
+        },
+        scene: Wechat.Scene.TIMELINE 
+      }
+      this.wechartShare(param)
+    },
+    shareToFriend(){
+      //分享给好友
+      var param= {
+        message: {
+            title: "用了这个APP，他们竟然都不在淘宝买东西了",
+            description: "这个商城竟然购买东西还能赚钱，以后我就在这里买东西了，你呢？",
+            thumb: "http://wftx-goods-img-details.oss-cn-shanghai.aliyuncs.com/logo.png",
+            mediaTagName: "TEST-TAG-001",
+            messageExt: "这个商城竟然购买东西还能赚钱，以后我就在这里买东西了，你呢？",
+            messageAction: "<action>dotalist</action>",
+            media:{
+              type: Wechat.Type.LINK,
+              webpageUrl:"http://m.wftx666.com/#/reg?parentid=" + this.$store.state.global.token
+            }
+        },
+        scene: Wechat.Scene.SESSION 
+      }
+      this.wechartShare(param)
+    },
+    wechartShare(param){
+      let alertFuc = (msg) => {
+          const toast = this.$refs.toast;
+          toast.show(msg);
+          return false
+      }
+
       if (typeof Wechat !== "undefined") {
         Wechat.isInstalled(function(installed) {
           if (installed) {
-            Wechat.share({
-              text: "五福天下慈善商城",
-              scene: Wechat.Scene.TIMELINE   // share to Timeline
-            }, function() {
-              alert("分享成功");
+            Wechat.share(param, function() {
+              alertFuc("分享成功");
             }, function(reason) {
-              alert("分享失败: " + reason);
+              alertFuc("分享失败: " + reason);
             });
           }
           else {
-            alert("亲，您似乎没有安装微信");
+            alertFuc("亲，您似乎没有安装微信");
           }
         }, function(reason) {
           console("检查微信安装状态失败，原因: " + reason);
         });
       }
-    },
+    }
 
   }
 }

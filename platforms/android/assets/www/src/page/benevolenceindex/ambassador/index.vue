@@ -29,7 +29,7 @@
         <div class="shuoming">
             <div class="tlt">物料</div>
             <div class="cont">
-                <p>免费提供五福填写善商公益工作服一件</p>
+                <p>免费提供五福填写善商爱心工作服一件</p>
                 <p>公司免费邮递</p>
             </div>
             <router-link to="/bindex/ambassador/open" class="button block success">立即开通</router-link>
@@ -51,9 +51,10 @@ export default {
 .pagewp {
     .rolebanner {
         text-align: center;
-        padding: 2rem 1rem 3rem 1rem;
+        padding: 2em 1rem;
         color: #fff;
-        background: #333;
+        background: #333 url('../../../../dist/banner2.png') no-repeat center center;
+        background-size:100% 100%;
         svg {
             display: block;fill:#fff;
             width: 5rem;

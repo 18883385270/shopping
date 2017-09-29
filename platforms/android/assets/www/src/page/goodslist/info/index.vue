@@ -3,19 +3,22 @@
 */
 <template>
   <div class="wripper">
-    <mi-goodsimg :bannerList="GoodsDetails.Pics"></mi-goodsimg>
-     <mi-goodsinfo :GoodsDetails="GoodsDetails" ref="control"></mi-goodsinfo> 
-     <div class="divider"></div>
-    <mi-goodscomments :GoodsDetails="GoodsDetails"></mi-goodscomments>
-    <div class="divider"></div>
-    <mi-goodsdetail :GoodsDetails="GoodsDetails"></mi-goodsdetail>
-    <div style="height:5rem;"></div>
+      <mi-goodsimg :bannerList="GoodsDetails.Pics"></mi-goodsimg>
+      <mi-goodsinfo :GoodsDetails="GoodsDetails" ref="control"></mi-goodsinfo> 
+      <div class="divider"></div>
+      <mi-goodscomments :GoodsDetails="GoodsDetails"></mi-goodscomments>
+      <div class="divider"></div>
+      <mi-goodsstoreinfo :StoreInfo="GoodsDetails.StoreInfo"></mi-goodsstoreinfo>
+      <div class="divider"></div>
+      <mi-goodsdetail :GoodsDetails="GoodsDetails"></mi-goodsdetail>
+      <div style="height:5rem;"></div>
   </div>
 </template>
 <script>
 import goodsimg from './goodsimg.vue'
 import goodsinfo from './goodsinfo.vue'
 import goodsdetail from './goodsdetail.vue'
+import goodsstoreinfo from './goodsstoreinfo.vue'
 import goodscomments from './goodscomments.vue'
 
 import modal from '../../../components/modal.vue'
@@ -26,6 +29,7 @@ export default {
     'mi-goodsimg': goodsimg,
     'mi-goodsinfo': goodsinfo,
     'mi-goodsdetail': goodsdetail,
+    'mi-goodsstoreinfo':goodsstoreinfo,
     'mi-goodscomments': goodscomments,
     'mi-modal': modal
   },
@@ -49,6 +53,7 @@ export default {
         if (res.data.Code == 200) {
           this.GoodsDetails=res.data.GoodsDetails;
           this.GoodsDetails.Specifications=res.data.Specifications;
+          this.GoodsDetails.StoreInfo=res.data.StoreInfo;
           this.GoodsDetails.Comments=res.data.Comments;
           this.GoodsDetails.GoodsParams=res.data.GoodsParams;
         } else {

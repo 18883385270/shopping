@@ -94,7 +94,25 @@
         },
         "is_top_level": true,
         "variables": {
-            "WECHATAPPID": "wx87bf751f1614b78c"
+            "WECHATAPPID": "wx37bc0f55159c6704"
+        }
+    },
+    "cordova-plugin-offbye-alipay": {
+        "source": {
+            "type": "local",
+            "path": "C:\\Users\\xiazhaowei\\Documents\\HybridAPP\\shopping\\node_modules\\cordova-plugin-offbye-alipay"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-alipay-v2": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-alipay-v2"
+        },
+        "is_top_level": true,
+        "variables": {
+            "APP_ID": "2088721826707404"
         }
     }
 }

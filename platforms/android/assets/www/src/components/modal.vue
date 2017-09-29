@@ -25,7 +25,7 @@
         <div class="shade" v-show="isModalShow" @click="modalBgHide">
             <div class="modal-box">
                 <div class="modal">
-                    <div class="main" @click.stop="popupClick" :class="{fullscreen:isfullscreen}">
+                    <div class="main" @click.stop="popupClick">
                         <div class="pop" v-if="type == 'pop'"><!-- modal 弹窗 -->
                             <div class="head" v-show="isHeadShow">
                                 <span class="title">{{title}}</span>
@@ -58,8 +58,8 @@
                                     <slot name="confirm"></slot>
                                 </div>
                                 <div class="bottom">
-                                    <button @click="confirm_BtnEvent(1)" class="radius-left">确 认</button>
-                                    <button @click="confirm_BtnEvent(0)" class="radius-right">取 消</button>
+                                    <button @click="confirm_BtnEvent(0)" class="radius-left ">取 消</button>
+                                    <button @click="confirm_BtnEvent(1)" class="radius-right primary">确 认</button>
                                 </div>
                             </div>
                         </div>
@@ -72,23 +72,14 @@
 </template>
 
 <script>
-import * as util from '../utils/util.js';
 
 export default {
-    props: ['isHeadShow', 'type','title','isfullscreen'],
+    props: ['isHeadShow', 'type','title'],
     data () {
         return {
             isModalShow: false,
-            bodyHeight:'100',
-            fullscreen:this.isfullscreen? this.isfullscreen:false
+            bodyHeight:'100'
         };
-    },
-    mounted(){
-        console.log(this.fullscreen);
-        if(this.fullscreen){
-            console.log(util.screenSize().height);
-            this.bodyHeight=util.screenSize().height+'px';
-        }
     },
     methods: {
         popupClick: function () {
@@ -117,7 +108,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
     .shade {
         width: 100%;
@@ -170,7 +160,7 @@ export default {
                     .alert {
                         width: 100%;
                         display: block;
-                        border-radius: 1rem;
+                        border-radius: 4px;
                         background: #fff;
                         .top {
                             width: 92%;
@@ -179,15 +169,15 @@ export default {
                         .bottom {
                             width: 100%;
                             height: 4.5rem;
+                            padding:1rem;
                             button {
-                                width: 100%;
+                                width:93%;
                                 height: 100%;
-                                background: #fff;
-                                border: none;
-                                border-top: 0.1rem solid #56aeb0;
+                                background:#c03;
+                                border: 1px solid #c03;
+                                color:#fff;
                                 font-size: 1.3rem;
-                                color: #108d93;
-                                border-radius: 0 0 1rem 1rem;
+                                border-radius: 3px;
                                 outline: none;
                                 &:active {
                                     transition: background 0.2s ease;
@@ -199,7 +189,7 @@ export default {
                     .confirm {
                         width: 100%;
                         display: block;
-                        border-radius: 1rem;
+                        border-radius: 4px;
                         background: #fff;
                         .top {
                             width: 92%;
@@ -208,32 +198,28 @@ export default {
                         .bottom {
                             width: 100%;
                             height: 4.5rem;
+                            padding:1rem;
                             button {
-                                width: 50%;
+                                width: 45%;
+                                margin-right:2.5%;
                                 height: 100%;
                                 background: #fff;
-                                border: 0.1rem solid #ddd;
+                                border: 1px solid #c03;
                                 float: left;
                                 font-size: 1.3rem;
                                 color: #333;
                                 outline: none;
-                                &:active {
-                                    transition: background 0.2s ease;
-                                    background: #ddd;
+                                border-radius:3px;
+                                &:last-child{
+                                    margin-right:0;
                                 }
-                                &.radius-left {
-                                    border-radius: 0 0 0 1rem;
-                                    border-right: none !important;
-                                }
-                                &.radius-right {
-                                    border-radius: 0 0 1rem 0;
+                                &.primary{
+                                    background:#c03;
+                                    color:#fff;
                                 }
                             }
                         }
                     }
-                }
-                .fullscreen{
-                    width:100%;
                 }
             }
         }

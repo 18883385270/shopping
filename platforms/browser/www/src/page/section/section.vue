@@ -2,20 +2,20 @@
   <div class="section_warp" :style="{height:pageheight}">
     <div class="left_menu">
       <ul>
-        <li v-for="(Category,index) in Categorys" :class="{active:selectedindex==index}">
+        <li v-for="(Category,index) in Categorys" :key="index" :class="{active:selectedindex==index}">
           <span @click="tabEvent(index)">{{Category.Name}}</span>
         </li>
         <li></li>
       </ul>
     </div>
     <div class="right_menu">
-      <div v-for="(Category,index) in Categorys" v-if="selectedindex==index">
+      <div v-for="(Category,index) in Categorys" :key="index" v-if="selectedindex==index">
         <img src="https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/a425e85fa21ed71c2a8d64fe86f833f9.jpg?width=720&heihgt=200">
-        <div class="submenu_warp" v-for="SubCategory in Category.Children">
+        <div class="submenu_warp" v-for="SubCategory in Category.Children" :key="SubCategory.Id">
           <div class="title">{{SubCategory.Name}}</div>
           <div class="item_warp">
             <ul>
-              <li v-for="SubSubCategory in SubCategory.Children" @click="goPage(SubSubCategory)">
+              <li v-for="SubSubCategory in SubCategory.Children" :key="SubSubCategory.Id" @click="goPage(SubSubCategory)">
                 <img :src="SubSubCategory.Thumb" />
                 <p>{{SubSubCategory.Name}}</p>
               </li>

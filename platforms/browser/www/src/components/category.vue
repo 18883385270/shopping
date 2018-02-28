@@ -52,8 +52,7 @@ export default {
         border-bottom: 1px solid #fff;
         div {
           min-width:6rem;
-          padding: 1rem;
-          font-size: 1.3rem;
+          padding: 0.8rem 0.3rem;
         }
         &.active {
           color: green;

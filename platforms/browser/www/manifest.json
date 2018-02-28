@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "五福商城",
+  "short_name": "五福商城",
+  "version": "com.lq319.shop",
+  "description": "五福慈善商城.",
+  "author": "悟行电商团队",
+  "icons": [],
+  "start_url": "index.html"
+}

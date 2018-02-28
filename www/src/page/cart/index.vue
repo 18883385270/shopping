@@ -1,8 +1,18 @@
 <template>
-    <div class="pagewarper">
-        <div class="pageheader">购物车</div>
+    <div>
+        <div class="pageheader">
+            <div class="left">
+                购物车
+            </div>
+            <div class="center"></div>
+            <div class="right">
+                <svg @click="goPage('scannerpage')">
+                    <use xlink:href="#qrscanline"></use>
+                </svg>
+            </div>
+        </div>
         <mi-cart></mi-cart>
-        <div style="height:6.5rem;"></div>
+        <div style="height:4rem;"></div>
         <mi-tabbar :selected="3"></mi-tabbar>
     </div>
 </template>
@@ -16,14 +26,16 @@ export default {
     components:{
         'mi-cart':cart,
         'mi-tabbar':tabbar
+    },
+    methods:{
+        goPage(name){
+            this.$router.push({name:name});
+        },
     }
 }
 </script>
 
 <style lang="less" scoped>
-    
-    .pagewarper{
-        padding:0;
-    }
+   
 </style>
 

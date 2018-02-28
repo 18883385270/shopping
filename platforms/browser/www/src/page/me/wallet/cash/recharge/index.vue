@@ -2,7 +2,7 @@
   <div>
     <mi-header title="选择充值方式"></mi-header>
     <div class="divider"></div>
-    <div class="tablerow" @click="goPage('/wallet/cash/recharge/onlinerecharge')">
+    <div class="tablerow" @click="goPage('onlinerechareg')">
       <div class="tlt">线上充值</div>
       <div class="cnt">
         <svg>
@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="tablerow" @click="goPage('/pay/offlinepay')">
+    <div class="tablerow" @click="goPage('offlinepay')">
       <div class="tlt">线下充值</div>
       <div class="cnt">
         <svg>
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     goPage(page) {
-      this.$router.push({ path: page });
+      this.$router.push({ name: page });
     },
   }
 }

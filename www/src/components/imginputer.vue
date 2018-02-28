@@ -18,7 +18,7 @@
             <p class="change" v-else>{{bottomText}}</p>
         </div>
         <!-- input主体-->
-        <input ref="inputer" v-if="capture" type="file" :name="name" :id="inputId" :accept="accept" capture="video" class="inputer" @change="handleFileChange" />
+        <input ref="inputer" v-if="capture" type="file" :name="name" :id="inputId" :accept="accept" class="inputer" @change="handleFileChange" />
         <input ref="inputer" v-else type="file" :name="name" :id="inputId" :accept="accept" class="inputer" @change="handleFileChange" />
         <transition name="vip-fade">
             <div class="err" v-if="errText.length">{{errText}}</div>

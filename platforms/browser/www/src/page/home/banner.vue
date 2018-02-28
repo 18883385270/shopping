@@ -2,8 +2,8 @@
   <div class="banner-box">
     <div class="swiper-container" ref="swiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="item in bannerTop">
-          <img :src="item" />
+        <div class="swiper-slide" v-for="banner in banners">
+          <img :src="banner.Img" @click="parseCommand(banner)"/>
         </div>
       </div>
       <div class="swiper-pagination"></div>
@@ -11,26 +11,47 @@
   </div>
 </template>
 <script>
-import data from '../../../../data.json';
-import Swiper from '../../utils/swiper-3.4.2.min.js';
+import Swiper from '../../utils/swiper-3.4.2.min.js'
+import * as checkJs from '../../utils/pubfunc'
 
 export default {
-  props: ['banner'],
-  data() {
-    return {
-      bannerTop: []
-    };
+  props: ['banners'],
+  watch:{
+    banners(curVal){
+      this.initSwiper();
+    }
   },
-  created() {
-    this.bannerTop = data.banner.bannerTop;
-  },
-  mounted() {
-    var mySwiper = new Swiper(this.$refs.swiper, {
-      loop: true,
-      autoplay: 3000,
-      pagination: '.swiper-pagination',
-      autoplayDisableOnInteraction: false
-    });
+  methods:{
+    initSwiper(){
+      setTimeout(()=>{
+        var mySwiper = new Swiper(this.$refs.swiper, {
+          loop: true,
+          autoplay: 3000,
+          pagination: '.swiper-pagination',
+          autoplayDisableOnInteraction: false
+        });
+      },2000)
+    },
+    parseCommand(banner){
+      let self=this;
+      if(checkJs.isCommand(banner.Link)){
+        var commandAndId=banner.Link.split(':');
+        var command=commandAndId[0];
+        var id=commandAndId[1];
+        if(command=='GoodsBlock'){
+            self.processGoodsBlockCommand(id)
+        }
+        else if(command=='GoodsPreview'){
+            self.processGoodsPreviewCommand(id)
+        }
+      }
+    },
+    processGoodsBlockCommand(goodsBlockId){
+        this.$router.push({ name: 'goodsblockinfo',params:{id:goodsBlockId} });
+    },
+    processGoodsPreviewCommand(goodsId){
+        this.$router.replace({ name: 'goodsinfo',params:{id:goodsId} });
+    },
   }
 };
 </script>
@@ -42,7 +63,7 @@ export default {
   width: 100%;
   .swiper-container {
     width: 100%;
-    height: 26rem;
+    height: 18rem;
     .swiper-slide {
       position: relative;
       height: 0;
@@ -52,7 +73,7 @@ export default {
         top: 0;
         left: 0;
         width: 100%;
-        height: 26rem;
+        height: 18rem;
       }
     }
   }

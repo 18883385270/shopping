@@ -1,8 +1,8 @@
 <template>
-    <div class="mobilevfwp">
+    <div>
         <mi-header title="手机验证"></mi-header>
-        <div class="desc">验证码将发送到尾号为 {{Mobile |mobilehide}} 的手机上，请获取验证码
-            <p style="margin-top:1rem;">
+        <div class="text-gray text-center marg-top-xlg">验证码将发送到尾号为 {{Mobile |mobilehide}} 的手机上，请获取验证码
+            <p class="marg-top-lg">
                <timerbtn :mobile="Mobile" :second="60" @sendmsg="sendmsgHandler"></timerbtn>
             </p>
         </div>
@@ -101,13 +101,7 @@ export default {
 
 
 <style lang="less" scoped>
-.desc {
-    margin-top: 3rem;
-    text-align: center;
-}
 
-.mobilevfwp {
-    width: 100%;
     .codeinput {
         text-align: center;
         padding: 1rem;
@@ -119,6 +113,5 @@ export default {
             text-indent: 1rem;
         }
     }
-}
 </style>
 

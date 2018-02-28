@@ -1,7 +1,7 @@
 <template>
   <div>
       <mi-header title="提现记录"></mi-header>
-      <div class="emptybox" v-if="!WithdrawApplys.length">
+      <div class="emptybox" v-if="!WithdrawApplys">
             <svg>
                 <use xlink:href="#emptyline"></use>
             </svg>
@@ -9,7 +9,7 @@
         </div>
       <div class="transferls">
             <ul>
-                <li v-for="WithdrawApply in WithdrawApplys">
+                <li v-for="WithdrawApply in WithdrawApplys" :key="WithdrawApply.Id">
                     <p class="tlt">
                         <span class="time">{{WithdrawApply.CreatedOn}}</span>{{WithdrawApply.Status}}</p>
                     <p class="cnt">
@@ -32,26 +32,28 @@ export default {
     },
     data(){
         return{
-            WithdrawApplys:[]
+            WithdrawApplys:null
         }
     },
     mounted(){
-        let params = {};
-        api.WithdrawApplyLogsApi(params).then(
-            res => {
-                if (res.data.Code == 200) {
-                    this.WithdrawApplys=res.data.WithdrawApplys;
-                } else {
-                    console.log(res.data.Message);
-                }
-            },
-            err => {
-                console.log('网络错误');
-            }
-        )
+        this.fatchData();
     },
     methods:{
-        
+        fatchData(){
+            let params = {};
+            api.WithdrawApplyLogsApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        this.WithdrawApplys=res.data.WithdrawApplys;
+                    } else {
+                        console.log(res.data.Message);
+                    }
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
+        }
     }
 }
 </script>

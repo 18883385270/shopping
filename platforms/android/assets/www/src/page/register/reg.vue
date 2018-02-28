@@ -22,6 +22,9 @@
     <div class="loginbtn">
       <button type="button" class="button success" @click="register">注册</button>
     </div>
+    <div class="loginlink">
+      <router-link to="/login">已有账户？现在登录</router-link>
+    </div>
     <div class="protocol">注册/登录即代表同意
       <router-link to="/login/protocol">《五福天下商城用户使用协议》</router-link>
     </div>
@@ -39,6 +42,7 @@ import * as checkJs from '../../utils/pubfunc';
 import * as util from '../../utils/util.js';
 
 export default {
+  props:["parentId"],
   components: {
     'mi-header': header,
     'mi-toast': toast,
@@ -56,8 +60,7 @@ export default {
     }
   },
   mounted() {
-      //从参数中获取推荐人ID
-      this.Parent.Id=this.$route.query.parentid;
+      this.Parent.Id=this.parentId;
   },
   methods: {
     sendmsgHandler() {
@@ -117,7 +120,7 @@ export default {
       api.RegisterApi(params).then(
         res => {
           if (res.data.Code == 200) {
-            self.$router.push({ path: '/login' });
+            self.$router.push({ name: 'login' });
           } else {
             alertFuc(res.data.Message)
           }
@@ -185,6 +188,15 @@ h1 {
   a {
     color: #09c;
     text-decoration: none;
+  }
+}
+.loginlink{
+  text-align:center;
+  padding:1.5rem 0;
+  a{
+    color:#999;
+    text-decoration:none;
+    font-size:1.2rem;
   }
 }
 </style>

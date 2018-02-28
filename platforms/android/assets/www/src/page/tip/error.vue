@@ -1,6 +1,12 @@
 <template>
     <div>
-        <div class="pageheader">失败</div>
+        <div class="pageheader">
+            <div class="left">
+            </div>
+            <div class="center">失败</div>
+            <div class="right">
+            </div>
+        </div>
         <div class="succinfo">
             <svg>
                 <use xlink:href="#x"></use>
@@ -8,7 +14,7 @@
             <div class="tlt">{{TipInfo.Message}}</div>
             <div class="remark">{{TipInfo.Remark}}</div>
         </div>
-        <div class="pd1">
+        <div class="pd">
             <button class="button err" @click="goPage">确定</button>
         </div>
     </div>
@@ -24,7 +30,7 @@ export default {
         return {
             TipInfo:{
                 Type:'',
-                Message:'',
+                Message:'付款时间已到',
                 NextPage:'',
                 Remark:''
             }
@@ -37,7 +43,7 @@ export default {
     },
     methods:{
         goPage(){
-            this.$router.replace({path:this.TipInfo.NextPage})
+            this.$router.replace({name:this.TipInfo.NextPage})
         }
     }
 }
@@ -55,7 +61,7 @@ export default {
         margin:1rem auto;
     }
     .tlt {
-        font-size: 2rem;
+        font-size: 1.6rem;
         color: #c03;
         margin-top:1rem;
     }

@@ -2,64 +2,57 @@
     <div class="profilepgwp" :style="{height:bodyHeight}">
         <mi-header title="个人资料"></mi-header>
         <div class="divider"></div>
-        <div class="tablerow">
-            <div class="tlt">我的头像</div>
-            <div class="cnt">
-                <img class="portrait" @click="openSelectImg($event)" :src="this.$store.state.global.userinfo.Portrait" />
+        <div class="flexwarp bg-white pd-topbtn bd-btn">
+            <div class="wd-80p"><p class="text-md marg-lf">我的头像</p></div>
+            <div class="wd-20p marg-rt">
+                <img class="wd-100p img-round" @click="openSelectImg($event)" :src="this.$store.state.global.userinfo.Portrait" />
                 <input type="file" id="fileElem" multiple accept="image/*" style="width:5rem;height:5rem;background:#000;position:absolute;right:1rem;opacity:0" @change="handleFiles($event)">
             </div>
         </div>
-        <div class="tablerow" @click="goPage('/me/profile/setnickname')">
-            <div class="tlt">昵称</div>
-            <div class="cnt">
-                {{this.$store.state.global.userinfo.NickName}}
-                <svg>
+        <div class="flexwarp bg-white pd-topbtn bd-btn" @click="goPage('setnickname')">
+            <div class="wd-50p"><p class="text-md marg-lf">昵称</p></div>
+            <div class="wd-50p text-right">
+                <span class="text-lightgray text-md marg-rt">{{this.$store.state.global.userinfo.NickName}}</span>
+                <svg class="icon icon-sm marg-rt">
                     <use xlink:href="#rightarrowsline"></use>
                 </svg>
             </div>
         </div>
-        <!-- <div class="tablerow" @click="openSetGender">
-            <div class="tlt">性别</div>
-            <div class="cnt">
-                {{this.$store.state.global.userinfo.gender}}
-            </div>
-        </div> -->
-        <div class="tablerow" @click="goPage('/me/profile/myqrcode')">
-            <div class="tlt">二维码名片</div>
-            <div class="cnt">
-                <svg>
-                    <use xlink:href="#qrcodeline"></use>
-                </svg>
+        <div class="flexwarp bg-white pd-topbtn bd-btn">
+            <div class="wd-50p"><p class="text-md marg-lf">手机号</p></div>
+            <div class="wd-50p text-right">
+                <span class="marg-rt text-md text-lightgray">{{this.$store.state.global.userinfo.Mobile|mobilehide}}</span>
             </div>
         </div>
-        <div class="divider"></div>
-        <div class="tablerow">
-            <div class="tlt">手机号</div>
-            <div class="cnt">
-                {{this.$store.state.global.userinfo.Mobile|mobilehide}}
-            </div>
-        </div>
-        <div class="tablerow" @click="goPage('/me/profile/expressaddress')">
-            <div class="tlt">收货地址管理</div>
-            <div class="cnt">
-                <svg>
+        <div class="flexwarp bg-white pd-topbtn bd-btn" @click="goPage('expressaddress')">
+            <div class="wd-50p"><p class="text-md marg-lf">收货地址</p></div>
+            <div class="wd-50p text-right">
+                <svg class="icon icon-sm marg-rt">
                     <use xlink:href="#rightarrowsline"></use>
                 </svg>
             </div>
         </div>
         <div class="divider"></div>
-        <div class="tablerow" @click="goPage('/me/profile/changepassword')">
-            <div class="tlt">修改登录密码</div>
-            <div class="cnt">
-                <svg>
+        <div class="flexwarp bg-white pd-topbtn bd-btn" v-if="this.$store.state.global.userinfo.ParentId=='00000000-0000-0000-0000-000000000000'" @click="goPage('setmyinvote')">
+            <div class="wd-50p"><p class="text-md marg-lf">设置推荐人</p></div>
+            <div class="wd-50p text-right">
+                <svg class="icon icon-sm marg-rt">
+                    <use xlink:href="#rightarrowsline"></use>
+                </svg>
+            </div>
+        </div>
+        <div class="flexwarp bg-white pd-topbtn bd-btn" @click="goPage('changepassword')">
+            <div class="wd-50p"><p class="text-md marg-lf">登录密码</p></div>
+            <div class="wd-50p text-right">
+                <svg class="icon icon-sm marg-rt">
                     <use xlink:href="#rightarrowsline"></use>
                 </svg>
             </div>
         </div>
         <div class="divider"></div>
-        <div class="tablerow" @click="logout">
-            <div class="tlt">退出登录</div>
-            <div class="cnt">
+        <div class="flexwarp bg-white pd-topbtn bd-btn" @click="logout">
+            <div class="wd-50p"><p class="text-md marg-lf">退出登录</p></div>
+            <div class="wd-50p text-right">
                 
             </div>
         </div>
@@ -152,7 +145,7 @@ export default {
             );
         },
         goPage(page) {
-            this.$router.push({ path: page });
+            this.$router.push({ name: page });
         },
         openSetGender() {
             this.$refs.popup.modalOpen();

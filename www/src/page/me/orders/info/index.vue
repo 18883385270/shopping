@@ -1,88 +1,79 @@
 <template>
     <div>
         <mi-header title="订单详情"></mi-header>
-        <mi-stepindicator :steps="Steps" :currentstep="CurrentStep"></mi-stepindicator>
+        <mi-stepindicator :steps="Steps" :currentstep="Step"></mi-stepindicator>
         <div class="divider"></div>
         <div class="expressinfo">
-            <div class="exinfo" v-if="StoreOrder.Status!='待发货'" @click="goPage('/orders/info/expressinfo')">
-                点击查看物流信息
-                <svg>
+            <div class="pd bd-btn" v-if="StoreOrder.Status!='待发货'" @click="viewExpress">
+                <svg class="icon icon-sm pull-right">
                     <use xlink:href="#rightarrowsline"></use>
                 </svg>
+                <p class="text-md">点击查看物流信息</p>
             </div>
-            <div class="orderstatus">
-                <p>
-                    <span>订单状态：</span>
-                    <i class="blu">{{StoreOrder.Status}}</i>
+            <div class="pd">
+                <p class="pd-btn-sm">
+                    <span class="lineblock pd-rt">订单状态：</span>
+                    <span class="text-primary">{{StoreOrder.Status}}</span>
                 </p>
+                <p class="pd-btn-sm">
+                    <span class="inlineblock pd-rt">订单编号：</span><span class="text-gray">{{StoreOrder.Number}}</span></p>
                 <p>
-                    <span>订单编号：</span>{{StoreOrder.Number}}</p>
-                <p>
-                    <span>下单时间：</span>{{StoreOrder.CreatedOn}}</p>
+                    <span class="inlineblock pd-rt">下单时间：</span><span class="text-gray">{{StoreOrder.CreatedOn}}</span></p>
             </div>
         </div>
         <div class="divider"></div>
-        <div class="ordergoodses">
-            <div class="goods" v-for="Goods in StoreOrder.StoreOrderGoodses" >
-                <div class="pic" @click="goGoodsInfoPage(Goods)">
-                    <img :src="Goods.GoodsPic" alt="">
+        <div>
+            <div class="flexwarp pd bd-btn" v-for="(Goods,goodsindex) in StoreOrder.StoreOrderGoodses" :key="goodsindex" >
+                <div class="wd-20p" @click="goGoodsInfoPage(Goods)">
+                    <img class="wd-100p img-round" :src="Goods.GoodsPic" alt="">
                 </div>
-                <div class="cnt">
+                <div class="wd-80p marg-lf">
                     <p>{{Goods.GoodsName}}</p>
-                    <p>{{Goods.SpecificationName}}</p>
+                    <p class="text-gray pd-topbtn-sm">规格：{{Goods.SpecificationName}}</p>
                     <p>数量：x{{Goods.Quantity}}</p>
-                    <p class="goodsbtns" v-if="CurrentStep==3">
-                        <button @click="comment(Goods)">去评价</button>
+                    <p v-if="CurrentStep==3">
+                        <button class="pull-right smbtn success" @click="comment(Goods)">去评价</button>
                     </p>
                 </div>
             </div>
         </div>
         <div class="divider"></div>
-        <div class="totalinfo">
-            <p>
-                <span>商品总额：</span>{{StoreOrder.Total|currency('￥',2)}}</p>
-            <p>
-                <span>优惠：</span>￥0.00</p>
-            <p>
-                <span>运费：</span>￥0.00</p>
+        <div class="pd">
+            <p class="pd-btn-sm">
+                <span>商品总额：</span><span class="pull-right text-danger">{{StoreOrder.Total|currency('￥',2)}}</span></p>
+            <p class="pd-btn-sm">
+                <span>购物券付款金额：</span><span class="pull-right text-danger">{{StoreOrder.ShopCash|currency('￥',2)}}</span></p>
+            <p class="pd-btn-sm">
+                <span>运费：</span><span class="pull-right text-danger">￥0.00</span></p>
             <p>
                 <span>实付金额：</span>
-                <i class="big">{{StoreOrder.Total|currency('￥',2)}}</i>
+                <span  class="pull-right text-lg text-danger">{{StoreOrder.Total|currency('￥',2)}}</span>
             </p>
         </div>
         <div class="divider"></div>
-        <div class="expressaddress">
-            <p>
-                <span>收货地址：</span>{{StoreOrder.ExpressRegion}}{{StoreOrder.ExpressAddress}}</p>
-            <p>
-                <span>收货人：</span>{{StoreOrder.ExpressName}} {{StoreOrder.ExpressMobile|mobilehide}}</p>
+        <div class="pd">
+            <p class="pd-btn-sm">
+                <span class="inlineblock pd-rt">收货地址：</span><span class="text-gray">{{StoreOrder.ExpressRegion}}{{StoreOrder.ExpressAddress}}</span></p>
+            <p class="pd-btn-sm">
+                <span class="inlineblock pd-rt">收 货 人：</span><span class="text-gray">{{StoreOrder.ExpressName}} {{StoreOrder.ExpressMobile|mobilehide}}</span></p>
             <div v-if="CurrentStep>0">
+                <p class="pd-btn-sm">
+                    <span class="inlineblock pd-rt">配送方式：</span><span class="text-gray">{{StoreOrder.DeliverExpressName}}</span></p>
                 <p>
-                    <span>配送方式：</span>{{StoreOrder.DeliverExpressName}}</p>
-                <p>
-                    <span>运单号：</span>{{StoreOrder.DeliverExpressNumber}}</p>
+                    <span class="inlineblock pd-rt">运 单 号：</span><span class="text-gray">{{StoreOrder.DeliverExpressNumber}}</span></p>
             </div>
         </div>
-        <div class="btntools" v-if="CurrentStep==3">
-            <!-- <button>去评价</button>
-                    <button class="success">再次购买</button> -->
-            <!-- <button>赢免单</button> -->
+        <div class="pd">
+            <button v-if="CurrentStep==1" class="button success" @click="ConfirmExpress">确认收货</button>
+            <button v-if="CurrentStep==0 || CurrentStep==1" class="button err" @click="goPage('orderservice')">申请退款</button>
+            <button v-if="CurrentStep==4 || CurrentStep==7" class="button err" @click="goPage('refundinfo')">退款详情</button>
+            <button v-if="CurrentStep==5 || CurrentStep==6 || CurrentStep==8" class="button err" @click="goPage('returnandrefundinfo')">退款详情</button>
         </div>
-        <div class="btntools" v-if="CurrentStep==1">
-            <button class="button success" @click="ConfirmExpress">确认收货</button>
-            <!-- <button class="success">退货退款</button>
-                    <button>赢免单</button> -->
-        </div>
-        <div class="btntools" v-if="CurrentStep==0">
-            <button class="button err" @click="toPage('applyrefund')">申请退款</button>
-            <!-- <button class="success">提醒发货</button>
-                    <button>赢免单</button> -->
-        </div>
-        <div class="divider"></div>
+        
         <!--弹出框-->
         <mi-modal ref="confirm" type="confirm" @confirmEvent="ConfirmConfirmExpress">
-            <div slot="confirm" class="confirm">
-                <p class="tlt">您确认已经收到包裹？</p>
+            <div slot="confirm">
+                <p class="pd-topbtn text-md">您确认已经收到包裹？</p>
                 <p>请确认，否是可能会导致您财货两空</p>
             </div>
         </mi-modal>
@@ -103,8 +94,9 @@ export default {
     },
     data() {
         return {
-            Steps: ['提交订单', '配送中', '包裹服务', '交易完成'],
+            Steps: ['提交订单', '配送中', '订单服务', '交易完成'],
             CurrentStep: 0,
+            Step:0,
             StoreOrder: {}
         }
     },
@@ -113,24 +105,50 @@ export default {
         switch (this.StoreOrder.Status) {
             case '待发货':
                 this.CurrentStep = 0;
+                this.Setp=0;
                 break;
             case '待收货':
                 this.CurrentStep = 1;
+                this.Step=1;
                 break;
             case '确认收货':
                 this.CurrentStep = 3;
+                this.Step=3;
+                break;
+            case '仅退款':
+                this.CurrentStep = 4;
+                this.Step=2;
+                break;
+            case '退货退款':
+                this.CurrentStep = 5;
+                this.Step=2;
+                break;
+            case '同意退货':
+                this.CurrentStep = 6;
+                this.Step=2;
+                break;
+            case '退货发货':
+                this.CurrentStep = 8;
+                this.Step=2;
+                break;
+            case '已关闭':
+                this.CurrentStep = 7;
+                this.Step=3;
                 break;
             default:
-                this.CurrentStep = 2;
+                this.Step=2;
         }
     },
     methods: {
-        toPage(page) {
+        goPage(page) {
             this.$router.push({ name: page });
         },
+        viewExpress(){
+            //sessionStorage.UserStoreOrder = JSON.stringify(order)
+            this.$router.push({ name: 'expressinfo' })
+        },
         goGoodsInfoPage(goods){
-            sessionStorage.GoodsId = goods.GoodsId
-            this.$router.push({ name: 'goodsinfo' });
+            this.$router.push({ name: 'goodsinfo',params:{id:goods.GoodsId} });
         },
         comment(goods){
             sessionStorage.ToCommentGoods = JSON.stringify(goods)
@@ -170,111 +188,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.expressinfo {
-    padding: 1rem;
-    padding-top: 0;
-    background: #fff;
-    .exinfo {
-        padding: 1rem 0;
-        border-bottom: 1px dashed #eee;
-        font-size:1.2rem;
-        svg{
-            width:1.2rem;
-            height:1.2rem;
-            float:right;
-        }
-    }
-    .orderstatus {
-        padding-top:1rem;
-        p {
-            padding: 0.2rem 0;
-            span {
-                color: #999;
-                display: inline-block;
-                width: 7rem;
-            }
-            .blu {
-                color: #06c;
-                font-style: normal;
-            }
-        }
-    }
-    
-}
 
-.expressaddress {
-    padding: 1rem;
-    background: #fff;
-    p {
-        padding: 0.2rem 0;
-        span {
-            color: #999;
-            display: inline-block;
-            width: 7rem;
-        }
-    }
-}
-
-.btntools {
-        padding:1rem;
-    }
-
-.ordergoodses {
-    background: #fff;
-    .goods {
-        display: flex;
-        padding:1rem 0;
-        border-bottom: 1px dashed #eee;
-        .pic {
-            width: 30%;
-            padding: 0 1rem;
-            img {
-                width: 100%;
-            }
-        }
-        .cnt {
-            width: 70%;
-            .goodsbtns{
-                padding-top:1rem;
-                button{
-                    padding:0.3rem 1.5rem;
-                    background:#096;
-                    color:#fff;
-                    border:0;
-                    outline:none;
-                    border-radius:2px;
-                }
-            }
-        }
-    }
-}
-.totalinfo {
-    padding: 1rem;
-    background: #fff;
-    margin-top: 1rem;
-    p {
-        padding: 0.2rem 0;
-        text-align: right;
-        color: #c66;
-        span {
-            color: #999;
-            float: left;
-            color: #666;
-        }
-        .big {
-            font-size: 1.4rem;
-            font-weight: 400;
-            font-style: normal;
-        }
-    }
-}
-
-.confirm {
-    .tlt {
-        font-size: 1.3rem;
-        padding: 1rem 0;
-    }
-}
 </style>
 
 

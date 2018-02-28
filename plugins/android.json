@@ -1,54 +1,57 @@
 {
-    "prepare_queue": {
-        "installed": [],
-        "uninstalled": []
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.lq319.shop"
     },
-    "config_munge": {
-        "files": {}
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "com.lq319.shop"
     },
-    "installed_plugins": {
-        "cordova-plugin-camera": {
-            "PACKAGE_NAME": "com.lq319.shop"
-        },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.lq319.shop"
-        },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "com.lq319.shop"
-        },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.lq319.shop"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.lq319.shop"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.lq319.shop"
-        },
-        "cordova-plugin-file-transfer": {
-            "PACKAGE_NAME": "com.lq319.shop"
-        },
-        "cordova-plugin-file-opener2": {
-            "PACKAGE_NAME": "com.lq319.shop"
-        },
-        "cordova-plugin-appversion": {
-            "PACKAGE_NAME": "com.lq319.shop"
-        },
-        "cordova-plugin-qrscanner": {
-            "PACKAGE_NAME": "com.lq319.shop"
-        },
-        "cordova-plugin-wechat": {
-            "WECHATAPPID": "wx37bc0f55159c6704",
-            "PACKAGE_NAME": "com.lq319.shop"
-        },
-        "cordova-plugin-alipay-v2": {
-            "APP_ID": "2088721826707404",
-            "PACKAGE_NAME": "com.lq319.shop"
-        }
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.lq319.shop"
     },
-    "dependent_plugins": {
-        "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.lq319.shop"
-        }
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.lq319.shop"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.lq319.shop"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.lq319.shop"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.lq319.shop"
+    },
+    "cordova-plugin-file-opener2": {
+      "PACKAGE_NAME": "com.lq319.shop"
+    },
+    "cordova-plugin-appversion": {
+      "PACKAGE_NAME": "com.lq319.shop"
+    },
+    "cordova-plugin-qrscanner": {
+      "PACKAGE_NAME": "com.lq319.shop"
+    },
+    "cordova-plugin-wechat": {
+      "WECHATAPPID": "wx37bc0f55159c6704",
+      "PACKAGE_NAME": "com.lq319.shop"
+    },
+    "cordova-plugin-alipay-v2": {
+      "APP_ID": "2088721826707404",
+      "PACKAGE_NAME": "com.lq319.shop"
+    },
+    "cordova-plugin-media": {
+      "PACKAGE_NAME": "com.lq319.shop"
     }
+  },
+  "dependent_plugins": {
+    "cordova-plugin-compat": {
+      "PACKAGE_NAME": "com.lq319.shop"
+    }
+  }
 }

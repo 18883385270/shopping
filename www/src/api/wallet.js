@@ -14,7 +14,7 @@ export const AddBankCardApi = (params) => {
 }
 //删除银行卡
 export const DeleteBankCardApi = (params) => {
-  return request({method: 'post', url: '/Wallet/DeleteBankCard', data: params})
+  return request({method: 'post', url: '/Wallet/DelBankCard', data: params})
 }
 //设置支付密码
 export const SetAccessCodeApi = (params) => {
@@ -22,8 +22,8 @@ export const SetAccessCodeApi = (params) => {
 }
 
 //余额支付
-export const CashPayApi = (params) => {
-  return request({method: 'post', url: '/Wallet/CashPay', data: params})
+export const WalletPayApi = (params) => {
+  return request({method: 'post', url: '/Wallet/WalletPay', data: params})
 }
 
 //线上充值
@@ -34,6 +34,12 @@ export const RechargeApi = (params) => {
 export const CashTransfersApi = (params) => {
   return request({method: 'post', url: '/Wallet/CashTransfers', data: params})
 }
+
+//余额记录
+export const ShopCashTransfersApi = (params) => {
+  return request({method: 'post', url: '/Wallet/ShopCashTransfers', data: params})
+}
+
 //善心记录
 export const BenevolenceTransfersApi = (params) => {
   return request({method: 'post', url: '/Wallet/BenevolenceTransfers', data: params})

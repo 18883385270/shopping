@@ -1,52 +1,49 @@
 <template>
-    <div class="cartwarper">
-        <div class="emptybox" v-if="!StoreCartGoods.length">
-            <svg>
-                <use xlink:href="#cartline"></use>
+    <div>
+        <div class="pd-topbtn-xlg text-center" v-if="!StoreCartGoods.length">
+            <svg class="icon-xxxlg">
+                <use xlink:href="#shoppingcart"></use>
             </svg>
-            <p> 购物车中，没有任何商品，去逛逛吧</p>
+            <p class="pd-top-lg text-md text-gray"> 购物车中，没有任何商品，去逛逛吧</p>
         </div>
-        <div class="storewarp" v-for="(store,storeindex) in StoreCartGoods">
+        <div v-for="(store,storeindex) in StoreCartGoods" :key="storeindex">
             <div class="divider"></div>
-            <div class="storetitle">
-                <div class="checkbar">
+            <div class="flexwarp pd-topbtn bd-btn text-lg">
+                <div class="wd-10p text-center">
                     <input type="checkbox" :id="'stcheck'+storeindex" class="regular-checkbox" @click="storeCheckAll(store.StoreId,$event)">
                     <label :for="'stcheck'+storeindex"></label>
                 </div>
-                <div class="title">{{store.StoreName}}</div>
+                <div class="wd-90p">{{store.StoreName}}</div>
             </div>
-            <div class="cuxiao">店铺的优惠信息</div>
-            <div class="storecontent">
-                <div class="goodswarp" v-for="(goods,goodsindex) in store.CartGoodses" v-bind:class="{selected:goods.Checked}">
-                    <div class="checkbar">
+            <div>
+                <div class="goodswarp bd-btn flexwarp pd-topbtn" v-for="(goods,goodsindex) in store.CartGoodses" :key="goodsindex" v-bind:class="{selected:goods.Checked}">
+                    <div class="wd-10p text-center pd-top-xlg">
                         <span v-if="goods.Stock>0 && goods.IsGoodsPublished && goods.GoodsStatus=='Verifyed'">
                             <input type="checkbox" :id="'check'+storeindex+goodsindex" class="regular-checkbox" v-model="goods.Checked">
                             <label :for="'check'+storeindex+goodsindex"></label>
                         </span>
                         <p v-if="goods.Stock==0 || !goods.IsGoodsPublished || goods.GoodsStatus!='Verifyed'">失效</p>
                     </div>
-                    <div class="goodsimg" @click="goGoodsInfoPage(goods)">
-                        <img :src="goods.GoodsPic" />
+                    <div class="wd-20p text-center" @click="goGoodsInfoPage(goods)">
+                        <img class="wd-100p img-round" :src="goods.GoodsPic" />
                     </div>
-                    <div class="goodsinfo">
-                        <p class="goodsname" @click="goGoodsInfoPage(goods)">{{goods.GoodsName}}</p>
-                        <p class="goodsspecification">规格：{{goods.SpecificationName}}</p>
-                        <p class="goodsprice">{{goods.Price|currency('￥',2)}}
-                            <span>库存{{goods.Stock}}件</span>
+                    <div class="wd-70p pd-lf">
+                        <p @click="goGoodsInfoPage(goods)">{{goods.GoodsName}}</p>
+                        <p class="text-gray pd-top">规格：{{goods.SpecificationName}}</p>
+                        <p class="text-danger text-lg pd-topbtn">{{goods.Price|currency('￥',2)}}
+                            <span class="text-gray text-sm">库存{{goods.Stock}}件</span>
                         </p>
-                        <p class="buycount">
-                            <span class="del" @click="delGoods(goods)">
-                                <svg>
-                                    <use xlink:href="#delline"></use>
-                                </svg>
-                            </span>
-                            <mi-buycount v-model="goods.Quantity" :stock="goods.Stock"></mi-buycount>
+                        <p>
+                            <svg class="pull-right icon icon-sm marg-rt icon-lightgray" @click="delGoods(goods)">
+                                <use xlink:href="#delline"></use>
+                            </svg>
+                            <mi-buycount v-model="goods.Quantity" :max="goods.Stock"></mi-buycount>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <div class="buttombar">
             <div class="checkbar">
                 <input type="checkbox" id="checkall_checkbox" class="regular-checkbox" @click="checkAll($event)">
@@ -92,24 +89,37 @@ export default {
             todelgoods: {}
         }
     },
-    created() {
-        //this.mycart = data.mycart;
-    },
+    
     mounted() {
-        this.getList();
+        this.fatchData();
     },
     methods: {
         goGoodsInfoPage(goods){
-            sessionStorage.GoodsId = goods.GoodsId
-            this.$router.push({ name: 'goodsinfo' });
+            this.$router.push({ name: 'goodsinfo',params:{id:goods.GoodsId} });
         },
-        getList() {
+        fatchData() {
             //获取购物车数据
+            let self=this;
             let params = {};
             api.InfoApi(params).then(
                 res => {
                     if (res.data.Code == 200) {
                         this.StoreCartGoods = res.data.StoreCartGoods;
+                        //delLocalGoods();
+                        self.$store.dispatch('update_userinfo',{
+                            userinfo:{
+                                Id:self.$store.state.global.userinfo.Id,
+                                ParentId:self.$store.state.global.userinfo.ParentId,
+                                NickName:self.$store.state.global.userinfo.NickName,
+                                Portrait:self.$store.state.global.userinfo.Portrait,
+                                Gender:self.$store.state.global.userinfo.Gender,
+                                Region:self.$store.state.global.userinfo.Region,
+                                Mobile:self.$store.state.global.userinfo.Mobile,
+                                Role:self.$store.state.global.userinfo.Role,
+                                StoreId:self.$store.state.global.userinfo.StoreId,
+                                CartGoodsCount:res.data.GoodsCount
+                            }
+                        });
                     } else {
                         console.log(res.data.Message);
                     }
@@ -149,7 +159,6 @@ export default {
             this.$refs.confirm.modalOpen();
         },
         confirmDelGoods(num) {
-            console.log(this.todelgoods);
             let self = this;
             //删除本地数据方法
             let delLocalGoods = () => {
@@ -168,8 +177,7 @@ export default {
                 api.RemoveCartGoodsApi(params).then(
                     res => {
                         if (res.data.Code == 200) {
-                            delLocalGoods();
-                            this.getList();
+                            this.fatchData();
                         } else {
                             console.log(res.data.Message);
                         }
@@ -205,22 +213,25 @@ export default {
             return amount;
         },
         postOrder() {
-            var storecartgoodses = [];
+            let storecartgoodses = [];
             //找到选中的商品提交到订单页面
-            this.StoreCartGoods.forEach(function (store, index) {
-                store.CartGoodses.forEach(function (goods, goodsindex) {
-                    if (goods.Checked) {
-                        if (checkJs.isNullOrEmpty(storecartgoodses[index])) {
-                            storecartgoodses.push({
-                                StoreId: store.StoreId,
-                                StoreName: store.StoreName,
-                                CartGoodses: []
-                            });
-                        }
-                        storecartgoodses[index].CartGoodses.push(goods);
-                    }
+                    this.StoreCartGoods.forEach(function (store, index) {
+                storecartgoodses.push({
+                    StoreId: store.StoreId,
+                    StoreName: store.StoreName,
+                    CartGoodses: []
                 });
-            });
+                store.CartGoodses.forEach(function (goods, goodsindex) {
+                        if (goods.Checked) {
+                            storecartgoodses[index].CartGoodses.push(goods)
+                        }
+                    });
+               });
+            storecartgoodses.forEach(function(item,index){
+                if(item.CartGoodses.length==0){
+                    storecartgoodses.splice(index,1);
+                }
+            })
             //提交到确认订单页面
             sessionStorage.StoreCartGoods = JSON.stringify(storecartgoodses)
             this.$router.push({ name: 'postorder' });
@@ -230,142 +241,69 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.cartwarper {
-    padding: 0;
+.goodswarp {
+    width:100%;
+    &.selected {
+        background: lightyellow;
+    }   
+}
 
-    .storewarp {
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-        background: #fff;
-        .storetitle {
-            font-size: 1.3rem;
-            padding: 1rem 0;
-            display: flex;
-            .checkbar {
-                width: 10%;
-                text-align: center;
-            }
-            .title {
-                width: 90%;
-            }
-        }
-        .cuxiao {
-            line-height: 1.4rem;
-            border-top: 1px solid #eee;
-            padding: 1rem;
-        }
-        .storecontent {
-            .goodswarp {
-                display: flex;
-                padding-top: 1rem;
-                padding-bottom: 1rem;
-                border-top: 1px solid #eee;
-                &.selected {
-                    background: lightyellow;
-                }
-                .checkbar {
-                    width: 10%;
-                    text-align: center;
-                    padding-top: 3rem;
-                }
-                .goodsimg {
-                    width: 20%;
-                    text-align: center;
-                    img {
-                        width: 100%;
-                    }
-                }
-                .goodsinfo {
-                    width: 70%;
-                    padding-left: 1rem;
-                    .goodsname {}
-                    .goodsspecification {
-                        margin-top: 0.5rem;
-                        color: #666;
-                    }
-                    .goodsprice {
-                        color: #C1272D;
-                        font-size: 1.4rem;
-                        margin-top: 0.5rem;
-                        margin-bottom: 0.5rem;
-                        span {
-                            font-size: 1rem;
-                            color: #666;
-                        }
-                    }
-                    .buycount {
-                        .del {
-                            float: right;
-                            display: inline-block;
-                            padding: 0.5rem 2rem 0.5rem 0;
-                            svg {
-                                width: 1.5rem;
-                                height: 1.5rem;
-                                fill: #666;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    .buttombar {
-        position: fixed;
-        bottom: 4rem;
-        left: 0;
-        display: flex;
-        height: 4rem;
-        width: 100%;
-        background: #fff;
-        border-top: 1px solid #eee;
-        .checkbar {
-            width: 10%;
-            padding-top: 0.3rem;
-            text-align: center;
-        }
-        .total {
-            width: 60%;
-            text-align: right;
-            font-size: 1.3rem;
-            padding: 0.5rem 1rem 0.5rem 0;
-            .price {
-                color: #C1272D;
-            }
-            .youhui {
-                font-size: 1rem;
-                font-weight: 400;
-            }
-        }
-        .jiesuanbtn {
-            width: 30%;
-            text-align: center;
-            background: #ddd;
-            button {
-                display: block;
-                width: 100%;
-                height: 4rem;
-                text-align: center;
-                font-size: 1.3rem;
-                background: #C1272D;
-                border: 0;
-                color: #fff;
-                span {
-                    font-size: 1rem;
-                }
-                &:disabled {
-                    background: #ddd;
-                    color: #666;
-                }
-            }
-        }
-    }
-    .confirm {
+.buttombar {
+    position: fixed;
+    bottom: 4rem;
+    left: 0;
+    display: flex;
+    height: 4.3rem;
+    width: 100%;
+    background: #fff;
+    border-top: 1px solid #eee;
+    .checkbar {
+        width: 10%;
+        padding-top: 0.3rem;
         text-align: center;
-        p {
-            font-size:1.3rem;
+    }
+    .total {
+        width: 60%;
+        text-align: right;
+        font-size: 1.3rem;
+        padding: 0.5rem 1rem 0.5rem 0;
+        .price {
+            color: #C1272D;
+        }
+        .youhui {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+    }
+    .jiesuanbtn {
+        width: 30%;
+        text-align: center;
+        background: #ddd;
+        button {
+            display: block;
+            width: 100%;
+            height: 4rem;
+            text-align: center;
+            font-size: 1.3rem;
+            background: #C1272D;
+            border: 0;
+            color: #fff;
+            span {
+                font-size: 1rem;
+            }
+            &:disabled {
+                background: #ddd;
+                color: #666;
+            }
         }
     }
 }
+.confirm {
+    text-align: center;
+    p {
+        font-size:1.3rem;
+    }
+}
+
 </style>
 

@@ -11,10 +11,10 @@
                 选择银行卡
             </div>
     
-            <div class="bankitem" v-for="(bankcard,index) in bankcards" @click="selectit(index)">
+            <div class="bankitem" v-for="(BankCard,index) in BankCards" :key="index" @click="selectit(index)">
                 <div class="cnt">
-                    <p>{{bankcard.BankName}}</p>
-                    <p>{{bankcard.Number}}</p>
+                    <p>{{BankCard.BankName}}</p>
+                    <p>{{BankCard.Number}}</p>
                 </div>
                 <div class="mark">
                     <svg :class="{selected:index==currentindex}">
@@ -22,7 +22,7 @@
                     </svg>
                 </div>
             </div>
-            <div class="bankitem" @click="toPage('/wallet/cardsmgr/add')">
+            <div class="bankitem" @click="goPage('addbankcard')">
                 <div class="cnt newcard">
                     <p>使用新卡</p>
                 </div>
@@ -40,7 +40,7 @@ export default {
         return {
             isModalShow: false,
             currentindex: 0,
-            bankcards: []
+            BankCards: []
         }
     },
     mounted() {
@@ -49,7 +49,7 @@ export default {
         api.BankCardsApi(params).then(
             res => {
                 if (res.data.Code == 200) {
-                    this.bankcards = res.data.BankCards;
+                    this.BankCards = res.data.BankCards;
                     this.selectit(0);
                 } else {
                     console.log("返回错误码：" + res.data.Code);
@@ -74,11 +74,11 @@ export default {
         },
         selectit(index) {
             this.currentindex=index;
-            this.$emit('bankcardPickerEvent', this.bankcards[index]);
+            this.$emit('bankcardPickerEvent', this.BankCards[index]);
             this.close();
         },
-        toPage(page) {
-            this.$router.push({ path: page })
+        goPage(page) {
+            this.$router.push({ name: page })
         }
     }
 }

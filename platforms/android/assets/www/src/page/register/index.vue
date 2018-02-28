@@ -29,6 +29,12 @@
     <div class="loginbtn">
       <button type="button" class="button success" @click="register">注册</button>
     </div>
+    <div class="marg-top-lg">
+      <input type="number" v-model="ParentMobile" class="recmdtxt" placeholder="如果有推荐人，在此输入推荐人手机号">
+    </div>
+    <div class="loginlink">
+      <router-link to="/login">已有账户？现在登录</router-link>
+    </div>
     <div class="protocol">注册/登录即代表同意
       <router-link to="/login/protocol">《五福天下商城用户使用协议》</router-link>
     </div>
@@ -54,6 +60,7 @@ export default {
   data() {
     return {
       ParentId: '',
+      ParentMobile:'',
       Mobile: '',
       MsgCode: '',
       Password: '',
@@ -123,11 +130,20 @@ export default {
         toast.show(msg);
         return false
       }
-
-
       let self = this;
       if (!checkJs.isPhone(this.Mobile)) {
         alertFuc('请输入正确的手机号码！')
+        return;
+      }
+      if (!checkJs.isNullOrEmpty(this.ParentMobile)) {
+        if(!checkJs.isPhone(this.Mobile))
+        {
+          alertFuc('请输入正确的推荐人手机号码！')
+          return;
+        }
+      }
+      if (this.Mobile==this.ParentMobile) {
+        alertFuc('推荐人不能是自己')
         return;
       }
       if (checkJs.isNullOrEmpty(this.MsgCode)) {
@@ -147,6 +163,7 @@ export default {
         Region: '+86',
         ParentId: this.Parent.Id,
         Mobile: this.Mobile,
+        ParentMobile: this.ParentMobile,
         MsgCode: this.MsgCode,
         Password: this.Password,
         Token: this.Token
@@ -216,7 +233,16 @@ h1 {
   margin-top: 3rem;
 }
 
-
+.recmdtxt{
+  border:0;
+  background:#eee;
+  font-size:1.3rem;
+  padding:1.2rem 0;
+  width:100%;
+  text-indent:1.3rem;
+  outline:none;
+  border-radius:3px;
+}
 .protocol {
   margin-top: 2rem;
   text-align: center;
@@ -226,6 +252,15 @@ h1 {
   a {
     color: #09c;
     text-decoration: none;
+  }
+}
+.loginlink{
+  text-align:center;
+  padding:1.5rem 0;
+  a{
+    color:#999;
+    text-decoration:none;
+    font-size:1.2rem;
   }
 }
 </style>

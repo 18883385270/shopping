@@ -1,42 +1,41 @@
-/*
-我的订单
-*/
+
 <template>
   <div class="ordspage">
       <mi-header title="我的订单"></mi-header>
       <mi-category :CurrentIndex="CurrentIndex" :categorys="StoreOrderStatus" @categoryChanged="categoryChangedHandle"></mi-category>
-      <div class="emptybox" v-if="!StoreOrders.length">
-            <svg>
-                <use xlink:href="#empty"></use>
+      
+        <div class="pd-topbtn-xlg text-center" v-if="!StoreOrders.length">
+            <svg class="icon-xxxlg">
+                <use xlink:href="#norecord"></use>
             </svg>
-            <p> 没有订单，去逛逛吧</p>
+            <p class="pd-top-lg text-md text-gray"> 没有订单，去逛逛吧</p>
         </div>
-        <div class="orderlswarp">
-            <div class="orderwarp" v-for="StoreOrder in StoreOrders">
+        <div>
+            <div class="bd-topbtn" v-for="StoreOrder in StoreOrders" :key="StoreOrder.Id">
                 <div class="divider"></div>
-                <div class="header" :class="{placed:StoreOrder.Status=='待发货',comfirmexpress:StoreOrder.Status=='确认收货',closed:StoreOrder.Status=='已关闭'}" @click="goInfoPage(StoreOrder)">
-                    <div class="ordernumber">订单号：{{StoreOrder.Number}}</div>
-                    <div class="orderstatus">{{StoreOrder.Status}}</div>
+                <div class="header flexwarp pd" :class="{placed:StoreOrder.Status=='待发货',comfirmexpress:StoreOrder.Status=='确认收货',closed:StoreOrder.Status=='已关闭'}" @click="goInfoPage(StoreOrder)">
+                    <div class="wd-50p">订单号：{{StoreOrder.Number}}</div>
+                    <div class="wd-50p text-right text-danger">{{StoreOrder.Status}}</div>
                 </div>
-                <div class="ordgoods" @click="goInfoPage(StoreOrder)">
-                    <div class="storetlt">{{StoreOrder.StoreName}}</div>
-                    <div class="goods" v-for="Goods in StoreOrder.StoreOrderGoodses">
-                        <div class="goodspic">
-                            <img :src="Goods.GoodsPic" />
+                <div class="pd bd-btn bg-xlightgray" @click="goInfoPage(StoreOrder)">
+                    <div class="flexwarp marg-btn-sm" v-for="Goods in StoreOrder.StoreOrderGoodses" :key="Goods.Id">
+                        <div class="wd-20p">
+                            <img class="wd-100p img-round" :src="Goods.GoodsPic" />
                         </div>
-                        <div class="goodstlt">
+                        <div class="wd-80p marg-lf">
                             <p class="goodsname">{{Goods.GoodsName}}</p>
-                            <p>{{Goods.SpecificationName}} {{Goods.Quantity}}件</p>
+                            <p class="text-gray pd-top">{{Goods.SpecificationName}} {{Goods.Quantity}}件</p>
                         </div>
                     </div>
                 </div>
-                <div class="ordertools">
-                    <div class="price">总计：
-                        <span>{{StoreOrder.Total|currency('￥',2)}}</span>
+                <div class="flexwarp pd">
+                    <div class="wd-50p">总计：<span>{{StoreOrder.Total|currency('￥',0)}}</span> (免运费)
                     </div>
-                    <div class="btns">
-                        <button v-if="StoreOrder.Status!='待发货'" @click="viewExpress(StoreOrder)">查看物流</button>
-                        <button v-if="StoreOrder.Status=='已关闭'" class="del" @click="delOrder(StoreOrder)">删除订单</button>
+                    <div class="wd-50p text-right">
+                        <button class="smbtn" v-if="StoreOrder.Status=='已发货' || StoreOrder.Status=='确认收货'" @click="viewExpress(StoreOrder)">查看物流</button>
+                        <button class="smbtn" v-if="StoreOrder.Status=='仅退款'" @click="viewRefund(StoreOrder)">退款信息</button>
+                        <button class="smbtn" v-if="StoreOrder.Status=='退货退款'" @click="viewReturnAndRefund(StoreOrder)">退货信息</button>
+                        <button class="smbtn danger" v-if="StoreOrder.Status=='已关闭'"  @click="delOrder(StoreOrder)">删除订单</button>
                     </div>
                 </div>
             </div>
@@ -128,9 +127,16 @@ export default {
         this.$refs.confirm.modalOpen();
     },
     viewExpress(order){
-        //要传递的订单信息存到sessionStorage
         sessionStorage.UserStoreOrder = JSON.stringify(order)
-        this.$router.push({ path: '/orders/info/expressinfo' })
+        this.$router.push({ name: 'expressinfo' })
+    },
+    viewRefund(order){
+        sessionStorage.UserStoreOrder = JSON.stringify(order)
+        this.$router.push({ name: 'refundinfo' })
+    },
+    viewReturnAndRefund(order){
+        sessionStorage.UserStoreOrder = JSON.stringify(order)
+        this.$router.push({ name: 'returnandrefundinfo' })
     },
     ConfirmDeleteOrder(num){
         if(num==0){
@@ -171,11 +177,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .orderwarp {
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+ 
     .header {
-        display: flex;
         border-top: 1px solid #eee;
         border-bottom: 1px solid #eee;
         &.placed{
@@ -187,55 +190,15 @@ export default {
         &.comfirmexpress{
             border-top-color:#096;
         }
-        .ordernumber {
-            width: 50%;
-            padding: 1rem 0;
-            text-indent: 1rem;
-        }
-        .orderstatus {
-            width: 50%;
-            text-align: right;
-            margin-right: 1rem;
-            padding: 1rem 0;
-        }
+        
     }
-    .ordgoods {
-        padding: 0 1rem;
-        border-bottom: 1px solid #eee;
-        .storetlt {
-            font-size: 1.3rem;
-            font-weight: 400;
-            padding: 1rem 0;
-        }
-        .goods {
-            display: flex;
-            margin-bottom: 0.5rem;
-            .goodspic {
-                width: 20%;
-                img {
-                    width: 100%;
-                }
-            }
-            .goodstlt {
-                width: 80%;
-                margin-left: 1rem;
-                .goodsname {
-                    margin-bottom: 0.7rem;
-                }
-            }
-        }
-    }
-    .ordertools {
-        display: flex;
-        >div {
-            width: 50%;
+    
             &.price {
-                font-size: 1.2rem;
+                font-size: 1rem;
                 margin-left: 1rem;
                 padding: 1rem 0;
                 span {
-                    color: #c33;
-                    font-weight: 400;
+                    font-size:1.2rem;
                 }
             }
             &.btns {
@@ -247,7 +210,7 @@ export default {
                     padding: 0.3rem 1rem;
                     margin-left: 0.5rem;
                     border-radius: 2px;
-                    background:#eee;
+                    background:#fff;
                     color:#666;
                     &.del {
                         background: #c33;
@@ -255,9 +218,7 @@ export default {
                     }
                 }
             }
-        }
-    }
-}
+    
 .confirm{
     font-size:1.3rem;
     .tlt{

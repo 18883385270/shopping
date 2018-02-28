@@ -47,9 +47,6 @@ export default {
             Password: ''
         }
     },
-    mounted() {
-
-    },
     methods: {
         login() {
             let alertFuc = (msg) => {
@@ -102,6 +99,7 @@ export default {
                                     Id:res.data.WalletInfo.Id,
                                     AccessCode:res.data.WalletInfo.AccessCode,
                                     Cash:res.data.WalletInfo.Cash,
+                                    ShopCash:res.data.WalletInfo.ShopCash,
                                     Benevolence:res.data.WalletInfo.Benevolence,
                                     Earnings:res.data.WalletInfo.Earnings,
                                     YesterdayEarnings:res.data.WalletInfo.YesterdayEarnings

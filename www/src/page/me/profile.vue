@@ -1,111 +1,47 @@
-/*
-* 个人信息
-*/
+
 <template>
-    <div class="profilewp">
-        <div class="warp">
-            <div class="portrait">
-                <img :src="this.$store.state.global.userinfo.Portrait" />
+    <div class="bgprofile text-white">
+        <div class="flexwarp pd-topbtn-sm">
+            <div class="wd-20p text-center pd marg-lf"  @click="goPage('profile')">
+                <img class="wd-100p img-round" :src="this.$store.state.global.userinfo.Portrait"  />
             </div>
-            <div class="name" @click="goPage('/me/profile')">
+            <div class="wd-50p pd-lf pd-top" @click="goPage('profile')">
                 <h3>{{this.$store.state.global.userinfo.NickName}}
                 </h3>
-                <span class="phone">{{this.$store.state.global.userinfo.Mobile|mobilehide}}</span>
+                <div class="text-sm pd-top-sm">{{this.$store.state.global.userinfo.Mobile|mobilehide}}</div>
+                <div class="marg-top">
+                    <span class="label label-success">{{this.$store.state.global.userinfo.Role}}</span>
+                    <span class="label label-warning" v-if="this.$store.state.global.userinfo.StoreId">已开店</span>
+                </div>
             </div>
-            <div class="qrCode">
-                <svg @click="openMyQrCode">
-                    <use xlink:href="#qrcodeline"></use>
+            <div class="wd-20p text-right pd-top marg-rt">
+                <svg class="icon icon-white" @click="goPage('notifications')">
+                    <use xlink:href="#msgline"></use>
                 </svg>
-                <svg @click="goPage('/me/profile')">
-                    <use xlink:href="#rightarrowsline"></use>
+                <svg class="icon icon-white marg-lf" @click="goPage('scannerpage')">
+                    <use xlink:href="#qrscanline"></use>
                 </svg>
             </div>
         </div>
-        <div class="rolelist">
-            <span class="primary">{{this.$store.state.global.userinfo.Role}}</span>
-            <span class="warning" v-if="this.$store.state.global.userinfo.StoreId">已开店</span>
-        </div>
+        
     </div>
 </template>
 
 <script>
 export default {
     methods: {
-        openMyQrCode() {
-            this.$emit('openmyqrcode');
-        },
         goPage(page) {
-            this.$router.push({ path: page });
+            this.$router.push({ name: page });
         }
     }
 }
 </script>
 
 <style lang="less" scoped>
-.profilewp {
-    width: 100%;
-    background: #fff;
-    border-bottom:1px solid #eee;
-    .warp {
-        display: flex;
-        align-items: center;
-        >div {
-            padding: 1rem 1.6rem;
-        }
-        .portrait {
-            width: 20%;
-            img {
-                width: 100%;
-                border-radius: 4px;
-            }
-        }
-        .name {
-            width: 40%;
-            padding-left: 0;
-            h3 {
-                font-weight: 400;
-                font-size: 1.3rem;
-                margin-bottom: 0.8rem;
-                text-indent: 0.5rem;
-            }
-            .phone {
-                display: inline-block;
-                padding: 0 0.6rem;
-            }
-        }
-        .qrCode {
-            width: 35%;
-            text-align: right;
-            padding-right: 0rem;
-            svg {
-                fill: #666;
-                width: 2rem;
-                height: 2rem;
-                margin-right: 1rem;
-            }
-        }
+    .bgprofile{
+        padding-top:1rem;
+        background:#a1afc9 url('../../../dist/profilebg.png') no-repeat center center;
     }
-    .rolelist {
-        padding: 0 1.5rem 1rem 1.5rem;
-        span {
-            display: inline-block;
-            padding: 0.2rem 0.6rem;
-            background: #c33;
-            border-radius: 1rem;
-            margin-right: 0.6rem;
-            color: #fff;
-        }
-        .primary{
-            background:#096;
-        }
-        .warning{
-            background:#f90;
-        }
-        .success{
-            background:#c33;
-        }
-    }
-}
 </style>
 
 

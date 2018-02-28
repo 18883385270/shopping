@@ -1,15 +1,15 @@
 <template>
   <div class="mainmenuwarp">
     <div class="menuwarp">
-      <div @click="goPage('/ticket')">
+      <div @click="goPage('ticket')">
         <svg>
           <use xlink:href="#cashticket"></use>
         </svg>领优惠券
       </div>
-      <div @click="goPage('/classroom')">
+      <div @click="goPage('classroom')">
         <svg class="green">
           <use xlink:href="#classroom"></use>
-        </svg>莱乾讲堂
+        </svg>五福课堂
       </div>
       <!-- <div>
         <svg class="purple">
@@ -21,12 +21,12 @@
           <use xlink:href="#sale"></use>
         </svg>找折扣
       </div> -->
-      <div @click="goPage('/offlinestore')">
+      <div @click="goPage('offlinestore')">
         <svg class="blue">
           <use xlink:href="#store"></use>
         </svg>线下商家
       </div>
-      <div @click="goPage('/me')">
+      <div @click="goPage('me')">
         <svg class="green">
           <use xlink:href="#vip"></use>
         </svg>会员中心
@@ -38,25 +38,25 @@
       </div>
     </div>
     <!-- <div class="menuwarp">
-      <div @click="goPage('/foundation')">
+      <div @click="goPage('foundation')">
         <svg class="green">
           <use xlink:href="#foundation"></use>
-        </svg>五福基金
+        </svg>基金
       </div>
-      <div @click="goPage('/grantee')">
+      <div @click="goPage('grantee')">
         <svg>
           <use xlink:href="#oldman"></use>
         </svg>受助人
       </div>
-      <div @click="goPage('/bindex')">
+      <div @click="goPage('bindex')">
         <svg class="yellow">
           <use xlink:href="#heart"></use>
-        </svg>善心指数
+        </svg>福豆指数
       </div>
-      <div @click="goPage('/classroom')">
+      <div @click="goPage('classroom')">
         <svg class="green">
           <use xlink:href="#classroom"></use>
-        </svg>莱乾讲堂
+        </svg>五福课堂
       </div>
       <div>
         <svg class="black">
@@ -71,7 +71,7 @@
 export default {
   methods: {
     goPage(pageName) {
-      this.$router.push({ path: pageName });
+      this.$router.push({ name: pageName });
     }
   }
 }

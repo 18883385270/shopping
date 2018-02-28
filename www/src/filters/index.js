@@ -12,7 +12,11 @@ export const mobilehide = (value) => {
 
   return value.substring(0, 3) + '****' + value.substring(7); 
 }
-
+export const formatbankcardnumber=(value)=>{
+  if(/\S{5}/.test(value)){
+    return value.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, "$1 ");
+  }
+}
 export const fee = (value,persent) => {
   if( !value || typeof value !== 'number' ) return ''
   return value*persent/100; 

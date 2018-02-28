@@ -6,5 +6,5 @@ export const CheckVersionApi = (params) => {
 }
 
 export const HomeBannerApi = (params) => {
-  return request({method: 'post', url: '/App/HomeBanner', data: params})
+  return request({method: 'post', url: 'App/HomeBanner', data: params})
 }

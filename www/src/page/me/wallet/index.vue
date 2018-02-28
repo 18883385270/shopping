@@ -1,31 +1,46 @@
 <template>
     <div class="pagewp" :style="{height:pageHeight}">
-        <mi-header title="我的钱包" isWhiteText="true" notPlaceHolder="true"></mi-header>
-        <div class="wallettop">
-            <div @click="goPage('/wallet/benevolence')">
-                <svg><use xlink:href="#integral"></use></svg>善心
-                <p>{{this.$store.state.global.walletinfo.Benevolence |currency('',4)}}</p>
+        <mi-header title="我的钱包"></mi-header>
+        <div class="bg-darkgray flexwarp pd-topbtn-xlg text-center text-white">
+            <div class="wd-33p" @click="goPage('shopcash')">
+                <svg class="icon icon-white icon-lg"><use xlink:href="#cashticket"></use></svg>
+                <p class="text-md pd-topbtn-sm">购物券</p>
+                <p class="text-lightgray">{{this.$store.state.global.walletinfo.ShopCash|currency('',2)}}</p>
             </div>
-            <div @click="goPage('/wallet/cash')">
-                <svg><use xlink:href="#cash"></use></svg>余额
-                <p>{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}</p>
+            <div class="wd-33p" @click="goPage('cash')">
+                <svg class="icon icon-white icon-lg"><use xlink:href="#cash"></use></svg>
+                <p class="text-md pd-topbtn-sm">余额</p>
+                <p class="text-lightgray">{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}</p>
+            </div>
+            <div class="wd-33p" @click="goPage('benevolence')">
+                <svg class="icon icon-white icon-lg"><use xlink:href="#integral"></use></svg>
+                <p class="text-md pd-topbtn-sm">福豆</p>
+                <p class="text-lightgray">{{this.$store.state.global.walletinfo.Benevolence |currency('',4)}}</p>
             </div>
         </div>
         <div class="divider"></div>
-        <div class="tablerow" @click="goPage('/wallet/setpaypassword')">
-            <div class="tlt">设置支付密码</div>
-            <div class="cnt">
+        <div class="flexwarp bg-white pd-topbtn" @click="goPage('setpaypassword')">
+            <div class="wd-50p"><p class="text-md marg-lf">支付密码</p></div>
+            <div class="wd-50p text-right">
                 <span class="warning" v-if="!this.$store.state.global.walletinfo.AccessCode">您还未设置支付密码</span>
-                <svg>
+                <svg class="icon icon-sm marg-rt">
                     <use xlink:href="#rightarrowsline"></use>
                 </svg>
             </div>
         </div>
         <div class="divider"></div>
-        <div class="tablerow" @click="goPage('/wallet/cardsmgr')">
-            <div class="tlt">银行卡管理</div>
-            <div class="cnt">
-                <svg>
+        <div class="flexwarp bg-white pd-topbtn bd-btn" @click="goPage('myqrcode')">
+            <div class="wd-50p"><p class="text-md marg-lf">收款码</p></div>
+            <div class="wd-50p text-right">
+                <svg class="icon icon-sm marg-rt">
+                    <use xlink:href="#qrcodeline"></use>
+                </svg>
+            </div>
+        </div>
+        <div class="flexwarp bg-white pd-topbtn" @click="goPage('cardsmgr')">
+            <div class="wd-50p"><p class="text-md marg-lf">银行卡管理</p></div>
+            <div class="wd-50p text-right">
+                <svg class="icon icon-sm marg-rt">
                     <use xlink:href="#rightarrowsline"></use>
                 </svg>
             </div>
@@ -54,7 +69,7 @@ export default {
     },
     methods:{
         goPage(page){
-            this.$router.push({path:page});
+            this.$router.push({name:page});
         },
         fatchData(){
             //请求数据
@@ -69,6 +84,7 @@ export default {
                                 Id:res.data.WalletInfo.Id,
                                 AccessCode:res.data.WalletInfo.AccessCode,
                                 Cash:res.data.WalletInfo.Cash,
+                                ShopCash:res.data.WalletInfo.ShopCash,
                                 Benevolence:res.data.WalletInfo.Benevolence,
                                 Earnings:res.data.WalletInfo.Earnings,
                                 YesterdayEarnings:res.data.WalletInfo.YesterdayEarnings
@@ -90,26 +106,6 @@ export default {
 <style lang="less" scoped>
 .pagewp{
     background:#eee;
-}
-.wallettop {
-    background:#333;
-    display: flex;
-    padding:5rem 0 1rem 0;
-    >div {
-        width: 50%;
-        text-align: center;
-        margin: 1rem;color:#fff;font-size:1.3rem;
-        svg {
-            display: block;
-            margin: 0.3rem auto 0.8rem auto;
-            width: 3.5rem;
-            height: 3.5rem;
-            fill: #fff;
-        }
-        p{
-            padding-top:0.2rem;
-        }
-    }
 }
 
 </style>

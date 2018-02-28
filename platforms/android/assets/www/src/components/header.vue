@@ -42,7 +42,7 @@ export default {
   border-bottom:1px solid #eee;
   border-bottom-color:rgba(230,230,230,0.5);
   color: #000;
-  z-index:10000;
+  z-index:10;
   .left {
     width: 30%;
     line-height: 3.7rem;
@@ -79,6 +79,7 @@ export default {
   &.whitetext{
     color:#fff;
     background:transparent;
+    border-bottom:0;
     .left{
       svg{
         fill:#fff;

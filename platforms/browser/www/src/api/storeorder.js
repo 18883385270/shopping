@@ -5,12 +5,17 @@ export const InfoApi = (params) => {
 }
 
 export const DeleteApi = (params) => {
-  return request({method: 'post', url: '/StoreOrder/Delete', data: params})
+  return request({method: 'post', url: '/StoreOrder/DelStoreOrder', data: params})
 }
 
 export const DeliverApi = (params) => {
   return request({method: 'post', url: '/StoreOrder/Deliver', data: params})
 }
+
+export const ReturnDeliverApi = (params) => {
+  return request({method: 'post', url: '/StoreOrder/ReturnDeliver', data: params})
+}
+
 export const ConfirmDeliverApi = (params) => {
   return request({method: 'post', url: '/StoreOrder/ConfirmDeliver', data: params})
 }

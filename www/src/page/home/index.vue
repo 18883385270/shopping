@@ -1,21 +1,20 @@
 
 <template>
   <div class="app">
-    <div :style="indexStyle" ref="index">
-      <mi-search @searchEvent="searchHandle" @searchLeftBtnEvent="searchLeftBtnEventHandle" @searchRightBtnEvent="searchRightBtnEventHandle" :opac="headerOpacity"></mi-search>
+    <div>
+      <mi-searchbar @searchEvent="searchHandle" @searchLeftBtnEvent="searchLeftBtnEventHandle" @searchRightBtnEvent="searchRightBtnEventHandle" :opac="headerOpacity"></mi-searchbar>
       <mi-banner :banners="Banners"></mi-banner>
-      <mi-category></mi-category>
-      <mi-announcement :Announcement="Announcement"></mi-announcement>
-      <mi-stargoods :Goodses="HomeNewGoodses" title="最新单品"></mi-stargoods>
-      <mi-stargoods :Goodses="HomeRateGoodses" title="好评单品"></mi-stargoods>
-      <mi-stargoods :Goodses="HomeSelloutGoodses" title="热卖单品"></mi-stargoods>
+      <!-- <mi-category></mi-category> -->
+      <!-- <mi-announcement :Announcement="Announcement"></mi-announcement> -->
+      <mi-goodsblockwarp></mi-goodsblockwarp>
+      <!-- <mi-stargoods :Goodses="HomeNewGoodses" title="最新单品"></mi-stargoods> -->
       <div style="height:4.5rem;"></div>
-      <div v-if="!IsInApp" class="appdowntip">
+      <!-- <div v-if="!IsInApp" class="appdowntip">
         <svg>
           <use xlink:href="#mobile"></use>
         </svg>
         <span> <a href="http://download.wftx666.com" target="_blank"> 点击下载五福天下商城App，随时随地更精彩</a></span>
-      </div>
+      </div> -->
       <!--弹出框-->
         <mi-modal ref="confirm" type="confirm" @confirmEvent="confirmUpdate">
             <div slot="confirm" class="updateconfirm">
@@ -36,10 +35,9 @@
         </mi-modal>
         <!--下载进度-->
         <div class="downloadbg" :style="{height:pageHeight}" v-if="appdownloading">
-            <div class="downloadpersent">
-              <span class="zhishiqi" :style="{width:downloadpersent+'%'}"></span>
-            </div>
-            <div class="downpersent">下载进度:{{downloadpersent}}%</div>
+            <div class="pd-xlg"></div>
+            <mi-progress :persent="downloadpersent"></mi-progress>
+            <div class="text-center text-white">下载进度:{{downloadpersent}}%</div>
         </div>
       <mi-tabbar :selected="0"></mi-tabbar>
     </div>
@@ -48,68 +46,54 @@
 
 <script>
 import * as util from '../../utils/util.js'
-import search from '../../components/search.vue'
+import searchbar from '../../components/searchbar.vue'
 import banner from './banner.vue'
 import category from './category.vue'
+import goodsblockwarp from './goodsblockwarp.vue'
 import announcement from './announcement.vue'
 import stargoods from './starGoods.vue'
 import tabbar from '../../components/tabbar.vue'
+import progress from '../../components/progress.vue'
 import modal from '../../components/modal.vue'
 import * as checkJs from '../../utils/pubfunc'
 import * as goodsapi from '../../api/goods'
 import * as announcementapi from '../../api/announcement'
 import * as appapi from '../../api/app'
 
+
 export default {
+  props:["openId"],
   components: {
-    'mi-search': search,
+    'mi-searchbar': searchbar,
     'mi-banner': banner,
     'mi-modal':modal,
     'mi-category': category,
     'mi-announcement': announcement,
+    'mi-goodsblockwarp':goodsblockwarp,
     'mi-stargoods': stargoods,
-    'mi-tabbar': tabbar
+    'mi-tabbar': tabbar,
+    'mi-progress':progress
   },
   data() {
     return {
       Banners: {},
-
       HomeNewGoodses: [],
-      HomeRateGoodses: [],
-      HomeSelloutGoodses: [],
       Announcement: {},
-
-      scrollX: 0,
-      scrollY: 0,
       searchState: false,
-      headOpac: '',
-      c_height: 0,
-      indexStyle: {
-        height: util.screenSize().height / 10 + 'rem',
-        'overflow-y': 'scroll',
-        width: '100%'
-      },
       headerOpacity: 0,
       IsInApp: true,
-
       pageHeight:'100%',
       ServerAppVersion:{},
       appdownloading:false,
       downloadpersent:0
     };
   },
-  
   mounted() {
-    var me = this;
-    this.c_height = 0.711 * util.screenSize().width;
-    var height = util.screenSize().width * 256 / 360;
-    this.$refs.index.onscroll = function() {
-      me.headerOpacity = this.scrollTop / height;
-    };
-
-
     this.pageHeight=util.screenSize().height+'px'
-    
+    var self = this;
+    window.addEventListener('scroll',()=>{
+      self.headerOpacity = window.scrollY / 200;
+    })
     //判断是否在App中打开
     if (checkJs.isNullOrEmpty(localStorage.IsCordovaReady) || localStorage.IsCordovaReady == 'false') {
       this.IsInApp = false;
@@ -121,19 +105,8 @@ export default {
     if (!checkJs.isNullOrEmpty(localStorage.Announcement)) {
       this.Announcement = JSON.parse(localStorage.Announcement)
     }
-
-    if (!checkJs.isNullOrEmpty(localStorage.HomeNewGoodses)) {
-      this.HomeNewGoodses = JSON.parse(localStorage.HomeNewGoodses)
-    }
-    if (!checkJs.isNullOrEmpty(localStorage.HomeRateGoodses)) {
-      this.HomeRateGoodses = JSON.parse(localStorage.HomeRateGoodses)
-    }
-    if (!checkJs.isNullOrEmpty(localStorage.HomeSelloutGoodses)) {
-      this.HomeSelloutGoodses = JSON.parse(localStorage.HomeSelloutGoodses)
-    }
     this.homeBanner();
     this.GetAnnouncements();
-    this.GetHomeGoodses();
   },
   methods: {
     checkVersion(){
@@ -164,7 +137,6 @@ export default {
       this.$refs.announcementModal.modalOpen();
     },
     alertEventHandle(){
-
     },
     confirmUpdate(num){
       //更新App
@@ -239,12 +211,8 @@ export default {
         res => {
           if (res.data.Code == 200) {
             this.HomeNewGoodses = res.data.NewGoodses;
-            this.HomeRateGoodses = res.data.RateGoodses;
-            this.HomeSelloutGoodses = res.data.SellOutGoodses;
             //缓存到本地
             localStorage.HomeNewGoodses = JSON.stringify(this.HomeNewGoodses)
-            localStorage.HomeRateGoodses = JSON.stringify(this.HomeRateGoodses)
-            localStorage.HomeSelloutGoodses = JSON.stringify(this.HomeSelloutGoodses)
           } else {
             console.log(res.data.Message);
           }
@@ -255,7 +223,7 @@ export default {
       );
     },
     searchLeftBtnEventHandle() {
-
+      this.$router.push({name:'offlinestore'})
     },
     searchRightBtnEventHandle() {
         this.$router.push({name:'scannerpage'});
@@ -348,25 +316,6 @@ export default {
   z-index:100000;
   top:0;
   opacity:0.7;
-  .downloadpersent{
-    margin:50% 1rem 1rem 1rem;
-    background:#fff;
-    height:2px;
-    position: relative;
-    vertical-align: middle;
-    .zhishiqi{
-      position: absolute;
-      left: 0;
-      top: 0;
-      display:inline-block;
-      background:#096;
-      height:100%;
-      width:0;
-    }
-  }
-  .downpersent{
-      text-align:center;
-      color:#fff;
-  }
+  
 }
 </style>

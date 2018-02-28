@@ -8,10 +8,9 @@
                 <div class="bg_focus" v-show="focus"></div>
     
                 <div class="main-head">
-                    <div class="left" v-if="!focus">
-                        <span>宿迁</span>
-                        <svg class="down">
-                            <use xlink:href="#downarrows"></use>
+                    <div class="left" v-if="!focus" @click="goBackPage">
+                        <svg>
+                            <use xlink:href="#leftarrowsline"></use>
                         </svg>
                     </div>
                     <div class="left" v-if="focus" @click="goBackEvent">
@@ -24,19 +23,17 @@
                         <input type="text" placeholder="输入店铺名称" @focus="handleFocus" v-model="inputText" />
                     </div>
                     <div class="right" v-if="!focus">
+                        <span>宿迁</span>
+                        <svg class="down">
+                            <use xlink:href="#downarrows"></use>
+                        </svg>
                     </div>
                     <div class="right searchbtn" v-if="focus">
-                        <button>搜索</button>
+                        <button @click="doSearch">搜索</button>
                     </div>
                 </div>
             </div>
             <div class="main" v-show="focus">
-                <div>
-                    <div class="title">最近搜索</div>
-                    <ul>
-                        <li v-for="item in hotWord" @click="inputFillEvent(item)">{{ item }}</li>
-                    </ul>
-                </div>
                 <div>
                     <div class="title">热门搜索</div>
                     <ul>
@@ -52,15 +49,20 @@
 
 <script>
 export default {
-    props: [],
+    props: ['search'],
     data() {
         return {
             focus: false,
             hasbackground: this.hasbg,
             hasborder: this.hasbr,
             inputText: '',
-            hotWord: ['红米4 超长续航', '小米Note 2', '小米5s', '笔记本', '小米电视3s', '智能电饭煲']
+            hotWord: ['蛋糕店', '火锅', '烧烤', '美容美发', 'SPA', '超市','KTV']
         };
+    },
+    watch: {
+        search(val){
+            this.inputText=val;
+        }
     },
     created() {
     },
@@ -76,6 +78,13 @@ export default {
         },
         inputFillEvent(word) {
             this.inputText = word;
+        },
+        goBackPage(){
+            this.$router.go(-1);
+        },
+        doSearch(){
+            this.focus = false;
+            this.$emit('doSearchEvent', this.inputText);
         }
     }
 };
@@ -182,6 +191,20 @@ export default {
                 background: #096;
                 color: white;
                 border: 0;
+            }
+            span {
+                margin-top: 0.9rem;
+                line-height: 3.6rem;
+                font-size: 1.3rem;
+                color: #666;
+                font-weight: 400;
+            }
+            svg.down {
+                width: 0.7rem;
+                height: 0.7rem;
+                fill: #666;
+                float: none;
+                margin-left: 0.3rem;
             }
         }
     }

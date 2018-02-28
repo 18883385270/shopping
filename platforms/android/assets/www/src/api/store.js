@@ -25,4 +25,9 @@ export const AllGoodsesApi = (params) => {
   return request({method: 'post', url: '/Store/AllGoodses', data: params})
 }
 
+export const ReturnAddressInfoApi = (params) => {
+  return request({method: 'post', url: '/Store/ReturnAddressInfo', data: params})
+}
+
+
 

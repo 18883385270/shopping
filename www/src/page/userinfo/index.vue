@@ -19,7 +19,7 @@
             </div>
       </div>
       <div class="divider"></div>
-      <div class="pd1">
+      <div class="pd-md">
           <button class="button success" @click="goTransferPage">转账</button>
       </div>
   </div>

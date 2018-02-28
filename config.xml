@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.lq319.shop" version="1.3.9" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>五福天下</name>
+<widget id="com.lq319.shop" version="3.1.4" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>五福商城</name>
     <description>
-        五福天下，慈善商城.
+        五福慈善商城.
     </description>
-    <author email="xiazhaoweiii@126.com" href="http://cordova.io">
+    <author email="xiazhaoweiii@126.com" href="http://www.wftx666.com">
         悟行电商团队
     </author>
     <content src="index.html" />
@@ -46,21 +46,22 @@
         <splash height="1136" src="res/screen/ios/screen-iphone-portrait-568h-2x.png" width="640" />
     </platform>
     <engine name="android" spec="^6.2.3" />
-    <engine name="browser" spec="^4.1.0" />
-    <plugin name="cordova-plugin-alipay-v2" spec="0.0.4">
-        <variable name="APP_ID" value="2088721826707404" />
-    </plugin>
-    <plugin name="cordova-plugin-appversion" spec="^1.0.0" />
-    <plugin name="cordova-plugin-camera" spec="^2.4.1" />
-    <plugin name="cordova-plugin-file" spec="^4.3.3" />
-    <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
-    <plugin name="cordova-plugin-file-transfer" spec="^1.6.3" />
-    <plugin name="cordova-plugin-geolocation" spec="^2.4.3" />
+    <engine name="browser" spec="^5.0.0" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
     <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />
-    <plugin name="cordova-plugin-qrscanner" spec="^2.5.0" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
+    <plugin name="cordova-plugin-camera" spec="^2.4.1" />
+    <plugin name="cordova-plugin-geolocation" spec="^2.4.3" />
+    <plugin name="cordova-plugin-file" spec="^4.3.3" />
+    <plugin name="cordova-plugin-file-transfer" spec="^1.6.3" />
+    <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
+    <plugin name="cordova-plugin-appversion" spec="^1.0.0" />
+    <plugin name="cordova-plugin-qrscanner" spec="^2.5.0" />
     <plugin name="cordova-plugin-wechat" spec="^2.0.0">
         <variable name="WECHATAPPID" value="wx37bc0f55159c6704" />
     </plugin>
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
+    <plugin name="cordova-plugin-alipay-v2" spec="0.0.4">
+        <variable name="APP_ID" value="2088721826707404" />
+    </plugin>
+    <plugin name="cordova-plugin-media" spec="^3.0.1" />
 </widget>

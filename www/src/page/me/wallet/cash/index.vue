@@ -1,16 +1,15 @@
 <template>
-    <div class="cashpage">
-        <mi-header title="余额" rightext="账单明细" @rightNavBarClicked="rightNavBarClickedHandle"></mi-header>
-        <div class="cashwarp">
-            <svg>
+    <div>
+        <mi-header title="余额" rightext="账单" @rightNavBarClicked="rightNavBarClickedHandle"></mi-header>
+        <div class="pd-lg text-center ">
+            <svg class="pd-topbtn icon icon-xlg icon-warning">
                 <use xlink:href="#cash"></use>
             </svg>
-            <h2>我的现金</h2>
-            <h1>{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}</h1>
-    
-            <div class="btns">
-                <button type="button" class="button success" @click="goPage('/wallet/cash/recharge')">充值</button>
-                <button type="button" class="button gray" @click="goPage('/wallet/cash/withdraw')">提现</button>
+            <p class="pd-topbtn text-lg">我的余额</p>
+            <h1 class="text-light">{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}</h1>
+            <div class="marg-top-lg">
+                <button type="button" class="button success" @click="goPage('rechareg')">充值</button>
+                <button type="button" class="button gray" @click="goPage('withdraw')">提现</button>
             </div>
         </div>
     </div>
@@ -27,10 +26,10 @@ export default {
     methods: {
         rightNavBarClickedHandle() {
             sessionStorage.MyCashTransferIndex=0
-            this.$router.push({path:'/wallet/cash/transfers'});
+            this.$router.push({name:'cashtransfers'});
         },
         goPage(page) {
-            this.$router.push({ path: page });
+            this.$router.push({ name: page });
         }
         
     }
@@ -39,9 +38,7 @@ export default {
 
 
 <style lang="less" scoped>
-.cashpage {
-    width: 100%;
-}
+
 
 .cashwarp {
     text-align: center;

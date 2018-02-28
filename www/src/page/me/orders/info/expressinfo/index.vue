@@ -2,13 +2,13 @@
 <template>
     <div class="exppage">
         <mi-header title="物流信息"></mi-header>
-        <div class="exinfo">
+        <div class="pd">
+            <p class="pd-btn-sm">
+                <span class="inlineblock pd-rt">订单编号：</span><span class="text-gray">{{StoreOrder.Number}}</span></p>
+            <p class="pd-btn-sm">
+                <span class="inlineblock pd-rt">物流公司：</span><span class="text-gray">{{ExpressInfo.showapi_res_body.expTextName}}</span></p>
             <p>
-                <span>订单编号：</span>{{StoreOrder.Number}}</p>
-            <p>
-                <span>物流公司：</span>{{ExpressInfo.showapi_res_body.expTextName}}</p>
-            <p>
-                <span>货运单号：</span>{{ExpressInfo.showapi_res_body.mailNo}}</p>
+                <span class="inlineblock pd-rt">货运单号：</span><span class="text-gray">{{ExpressInfo.showapi_res_body.mailNo}}</span></p>
         </div>
         <div class="divider"></div>
         <mi-vstepindicator :ExpressSteps="ExpressInfo.showapi_res_body.data"></mi-vstepindicator>
@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import header from '../../../../../components/header.vue';
-import vstepindicator from '../../../../../components/vstepindicator.vue';
-import * as api from '../../../../../api/storeorder';
+import header from '../../../../../components/header.vue'
+import vstepindicator from '../../../../../components/vstepindicator.vue'
+import * as api from '../../../../../api/storeorder'
 
 
 export default {
@@ -56,21 +56,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.exppage {
-    .exinfo {
-        padding: 1rem;
-        border-bottom: 1px solid #ddd;
-        background: #fff;
-        p {
-            padding: 0.3rem 0;
-            span {
-                display: inline-block;
-                color: #666;
-                width: 7rem;
-            }
-        }
-    }
-}
+
 </style>
 
 

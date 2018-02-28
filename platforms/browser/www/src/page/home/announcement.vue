@@ -1,12 +1,15 @@
 <template>
     <div v-if="Announcement.Title">
-        <div class="announcementwarp" @click="GoAnnouncementInfo">
-            <span class="title">
-                <svg>
-                    <use xlink:href="#notice"></use>
+        <div class="flexwarp pd bd-topbtn" @click="GoAnnouncementInfo">
+            <div class="wd-20p">
+                <svg style="width:3rem;height:3rem;">
+                    <use xlink:href="#gonggao"></use>
                 </svg>
-                系统公告：</span>
-            <span class="info">{{Announcement.Title|truncate(20)}}</span>
+            </div>
+            <div class="wd-80p">
+                <p class="text-sm text-gray">{{Announcement.Title|truncate(40)}}</p>
+                <p class="text-sm text-gray">{{Announcement.Title|truncate(30)}}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -23,26 +26,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.announcementwarp {
-    padding: 1rem;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    .title {
-        font-size: 1.3rem;
-        display: inline-block;
-        width: 30%;
-        svg{
-            width:1.3rem;
-            height: 1.3rem;
-            fill:#333;
-        }
-    }
-    .info {
-        display: inline-block;
-        width: 70%;
-        text-align: right;
-    }
-}
+
 </style>
 
 

@@ -11,10 +11,10 @@
                 选择收货地址
             </div>
     
-            <div class="bankitem" v-for="(expressaddress,index) in expressaddresses" @click="selectit(index)">
+            <div class="bankitem" v-for="(ExpressAddress,index) in ExpressAddresses" :key="index" @click="selectit(index)">
                 <div class="cnt">
-                    <p>{{expressaddress.Region}} {{expressaddress.Address}}</p>
-                    <p>{{expressaddress.Name}} {{expressaddress.Mobile|mobilehide}}</p>
+                    <p>{{ExpressAddress.Region}} {{ExpressAddress.Address}}</p>
+                    <p>{{ExpressAddress.Name}} {{ExpressAddress.Mobile|mobilehide}}</p>
                 </div>
                 <div class="mark">
                     <svg :class="{selected:index==currentindex}">
@@ -22,7 +22,7 @@
                     </svg>
                 </div>
             </div>
-            <div class="bankitem" @click="toPage('/me/profile/expressaddress/add')">
+            <div class="bankitem" @click="goPage('addexpressaddress')">
                 <div class="cnt newcard">
                     <p>使用新地址</p>
                 </div>
@@ -40,25 +40,11 @@ export default {
         return {
             isModalShow: false,
             currentindex: 0,
-            expressaddresses: []
+            ExpressAddresses: []
         }
     },
     mounted() {
-        //请求用户收件地址数据
-        let params = {};
-        api.GetUserExpressAddressesApi(params).then(
-            res => {
-                if (res.data.Code == 200) {
-                    this.expressaddresses = res.data.ExpressAddresses;
-                    this.selectit(0);
-                } else {
-                    console.log("返回错误码：" + res.data.Code);
-                }
-            },
-            err => {
-                console.log('网络错误');
-            }
-        )
+        this.fatchData();
     },
     methods: {
         close: function () {
@@ -72,13 +58,30 @@ export default {
             this.close();
             return;
         },
+        fatchData(){
+            //请求用户收件地址数据
+            let params = {};
+            api.GetUserExpressAddressesApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        this.ExpressAddresses = res.data.ExpressAddresses;
+                        this.selectit(0);
+                    } else {
+                        console.log("返回错误码：" + res.data.Code);
+                    }
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
+        },
         selectit(index) {
             this.currentindex=index;
-            this.$emit('expressaddressPickerEvent', this.expressaddresses[index]);
+            this.$emit('expressaddressPickerEvent', this.ExpressAddresses[index]);
             this.close();
         },
-        toPage(page) {
-            this.$router.push({ path: page })
+        goPage(page) {
+            this.$router.push({ name: page })
         }
     }
 }

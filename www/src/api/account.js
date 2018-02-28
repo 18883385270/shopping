@@ -31,63 +31,67 @@ export const checkPhoneAvailableApi = (params) =>{
 }
 //发送短信验证码
 export const SendMsgCodeApi=(params)=>{
-  return request({method:'post',url:'User/SendMsgCode',data:params})
+  return request({method:'post',url:'/User/SendMsgCode',data:params})
 }
 //验证验证码
 export const VerifyMsgCodeApi=(params)=>{
-  return request({method:'post',url:'User/VerifyMsgCode',data:params})
+  return request({method:'post',url:'/User/VerifyMsgCode',data:params})
 }
 
 //改名
 export const SetNickNameApi=(params)=>{
-  return request({method:'post',url:'User/SetNickName',data:params})
+  return request({method:'post',url:'/User/SetNickName',data:params})
 }
 export const ChangePasswordApi=(params)=>{
-  return request({method:'post',url:'User/ChangePassword',data:params})
+  return request({method:'post',url:'/User/ChangePassword',data:params})
 }
 //改地区
 export const SetRegionApi=(params)=>{
-  return request({method:'post',url:'User/SetRegion',data:params})
+  return request({method:'post',url:'/User/SetRegion',data:params})
 }
 //改性别
 export const SetGenderApi=(params)=>{
-  return request({method:'post',url:'User/SetGender',data:params})
+  return request({method:'post',url:'/User/SetGender',data:params})
 }
 //改头像
 export const SetPortraitApi=(params)=>{
-  return request({method:'post',url:'User/SetPortrait',data:params})
+  return request({method:'post',url:'/User/SetPortrait',data:params})
 }
 
 
 export const GetUserExpressAddressesApi=(params)=>{
-  return request({method:'post',url:'User/ExpressAddresses',data:params})
+  return request({method:'post',url:'/User/ExpressAddresses',data:params})
 }
 export const AddExpressAddressApi=(params)=>{
-  return request({method:'post',url:'User/AddExpressAddress',data:params})
+  return request({method:'post',url:'/User/AddExpressAddress',data:params})
 }
 export const DeleteExpressAddressApi=(params)=>{
-  return request({method:'post',url:'User/DeleteExpressAddress',data:params})
+  return request({method:'post',url:'/User/DelExpressAddress',data:params})
 }
 
 export const AddUserGiftApi=(params)=>{
-  return request({method:'post',url:'User/AddUserGift',data:params})
+  return request({method:'post',url:'/User/AddUserGift',data:params})
+}
+
+export const MyTeamInfoApi=(params)=>{
+  return request({method:'post',url:'/User/MyTeamInfo',data:params})
 }
 
 export const GetUserUnPayGiftApi=(params)=>{
-  return request({method:'post',url:'User/GetUserUnPayGift',data:params})
+  return request({method:'post',url:'/User/GetUserUnPayGift',data:params})
 }
 export const SetUserGiftPayedApi=(params)=>{
-  return request({method:'post',url:'User/SetUserGiftPayed',data:params})
+  return request({method:'post',url:'/User/SetUserGiftPayed',data:params})
 }
 
 export const MyInvotesApi=(params)=>{
-  return request({method:'post',url:'User/MyInvotes',data:params})
+  return request({method:'post',url:'/User/MyInvotes',data:params})
 }
 
 export const SetMyParentApi=(params)=>{
-  return request({method:'post',url:'User/SetMyParent',data:params})
+  return request({method:'post',url:'/User/SetMyParent',data:params})
 }
 
 export const ResetPasswordApi=(params)=>{
-  return request({method:'post',url:'User/ResetPassword',data:params})
+  return request({method:'post',url:'/User/ResetPassword',data:params})
 }

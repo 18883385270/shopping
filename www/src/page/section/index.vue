@@ -1,6 +1,10 @@
 <template>
   <div class="page_warp">
-        <mi-search @searchEvent="searchHandle" @searchLeftBtnEvent="searchLeftBtnEventHandle" @searchRightBtnEvent="searchRightBtnEventHandle"  hasbg="true" hasbr="true"></mi-search>
+        <mi-searchbar @searchEvent="searchHandle"
+         @searchLeftBtnEvent="searchLeftBtnEventHandle"
+          @searchRightBtnEvent="searchRightBtnEventHandle"
+           hasbg="true"
+           hasborder="true"></mi-searchbar>
         <div style="height: 4rem;"></div>
         <mi-section></mi-section>
         <div style="width: 100%;height: 4.5rem;"></div>
@@ -9,14 +13,14 @@
 </template>
 
 <script>
-import search from '../../components/search.vue';
+import searchbar from '../../components/searchbar.vue';
 import section from './section.vue';
 import tabbar from '../../components/tabbar.vue';
 import * as checkJs from '../../utils/pubfunc'
 
 export default {
     components: {
-        'mi-search':search,
+        'mi-searchbar':searchbar,
         'mi-section':section,
         'mi-tabbar': tabbar
     },
@@ -34,7 +38,7 @@ export default {
         }
       },
       searchLeftBtnEventHandle(){
-        this.$router.replace({name:'home'})
+        this.$router.push({name:'offlinestore'})
       },
       searchRightBtnEventHandle(){
         this.$router.push({name:'scannerpage'});

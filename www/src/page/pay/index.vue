@@ -2,8 +2,6 @@
     <div>
         <mi-header title="在线支付" isWhiteText="true" notPlaceHolder="true"></mi-header>
         <div class="topayamount">
-            
-            <p class="paytlt">待支付</p>
             <p class="payamount">{{ToPayInfo.Amount |currency('￥',2)}}</p>
             <p>{{ToPayInfo.OrderNumber}}</p>
             <p>{{ToPayInfo.Remark}}</p>
@@ -13,35 +11,43 @@
                 付款剩余时间：<mi-countdown :endTime="endTime" :callback="timeOutHandle" endText="已经结束了"></mi-countdown>
         </div>
         <div class="youhuiwarp">
+            <div class="tablerow" v-if="this.$store.state.global.walletinfo.ShopCash>0 && ToPayInfo.Type=='order'">
+                <div class="tlt">购物券付款</div>
+                <div class="cnt">
+                    <span class="swch">
+                        <mi-switch @switchEvent="shopcashSwitchEventHandle"></mi-switch>
+                    </span>
+                    <span class="txt"> 可用余额{{this.$store.state.global.walletinfo.ShopCash|currency('￥',2)}}</span>
+                </div>
+            </div>
             <div class="tablerow" v-if="this.$store.state.global.walletinfo.Cash>0 && ToPayInfo.Type!='recharge'">
                 <div class="tlt">余额付款</div>
                 <div class="cnt">
                     <span class="swch">
-                        <mi-switch @switchEvent="switchEventHandle"></mi-switch>
+                        <mi-switch @switchEvent="cashSwitchEventHandle"></mi-switch>
                     </span>
                     <span class="txt"> 可用余额{{this.$store.state.global.walletinfo.Cash|currency('￥',2)}}</span>
                 </div>
             </div>
-            <div v-if="IsCashPay && LeftAmount==0">
+            <div v-if="(IsCashPay || IsShopCashPay) && LeftAmount==0">
                 <div class="paypd">
                     <div class="tlt">支付密码</div>
-                    <div>
-                        <div class="paypassword">
-                            <input type="password" maxlength="6" pattern="[0-9]*" v-model="PayPassword">
-                        </div>
+                    <div class="cnt">
+                       <mi-paypassword :issmall="true" v-model="PayPassword"></mi-paypassword>
                     </div>
                 </div>
                 <div style="padding:0 1rem 1rem 1rem;color:#999">
                     使用部分虚拟资产（包含积分，购物券，余额）时，为保障资产安全，请输入支付密码
-                    <router-link to="/wallet">重置支付密码</router-link>
+                    <router-link to="/me/wallet">重置支付密码</router-link>
                 </div>
             </div>
         </div>
         <div class="divider"></div>
         <div class="paytype">
             <div class="total">
-                剩余待支付：
-                <span>{{LeftAmount|currency('￥',2)}}</span>
+                <span v-if="ShopCashPayAmount>0">购物券付: <span class="text-warning"> {{ShopCashPayAmount |currency('￥',2)}}  </span></span> 
+                <span v-if="CashPayAmount>0"> 现金付: <span class="text-warning">{{CashPayAmount |currency('￥',2)}}  </span> </span>
+                <div class="pd-top-sm">剩余待支付：<span class="text-red text-xlg">{{LeftAmount|currency('￥',2)}}</span></div>
             </div>
             <div v-if="LeftAmount==0">
                 <button class="button warning" @click="walletPayAll">确认支付</button>
@@ -58,8 +64,7 @@
                 <div class="tlt">线下转账</div>
                 <div class="desc">什么时候使用线下转账？</div>
             </div>
-    
-            <button class="button info" @click="goPage('/pay/offlinepay')">线下转账</button>
+            <button class="button info" @click="goPage('offlinepay')">线下转账</button>
         </div>
         <mi-toast ref="toast"></mi-toast>
     </div>
@@ -67,10 +72,12 @@
 
 <script>
 import header from '../../components/header.vue'
+import paypassword from '../../components/paypassword.vue'
 import vswitch from '../../components/switch.vue';
 import toast from '../../components/toast.vue';
 import countdown from '../../components/countdown.vue';
 import * as api from '../../api/wallet'
+import * as offlinestoreapi from '../../api/offlinestore'
 import * as weixinpayapi from '../../api/weixinpay'
 import * as userapi from '../../api/account'
 import * as paymentapi from '../../api/payment'
@@ -80,6 +87,7 @@ export default {
     components: {
         'mi-header': header,
         'mi-switch': vswitch,
+        'mi-paypassword': paypassword,
         'mi-toast': toast,
         'mi-countdown':countdown
     },
@@ -96,17 +104,25 @@ export default {
             LeftAmount: 0,
             PayPassword:'',
             IsCashPay: false,
+            CashPayAmount:0,
+            IsShopCashPay: false,
+            ShopCashPayAmount:0,
             endTime:0,
             IsInApp: true
         }
     },
     created(){
+        if(checkJs.isNullOrEmpty(sessionStorage.ToPayInfo))
+        {
+            this.$router.replace({name:'home'})
+        }
         this.ToPayInfo=JSON.parse(sessionStorage.ToPayInfo)
         this.LeftAmount=this.ToPayInfo.Amount
         this.endTime=this.ToPayInfo.CreatedOn+(1000*60*30)
         if (checkJs.isNullOrEmpty(localStorage.IsCordovaReady) || localStorage.IsCordovaReady == 'false') {
             this.IsInApp = false;
         }
+        this.getWalletInfo()
     },
     methods:{
         timeOutHandle(){
@@ -121,18 +137,76 @@ export default {
             sessionStorage.TipInfo = JSON.stringify(tipInfo)
             this.$router.replace({name:'error'})
         },
-        switchEventHandle(isOn) {
+        getWalletInfo(){
+            //获取钱包信息
+            let self=this;
+            let params={};
+            api.InfoApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        //钱包信息
+                        self.$store.dispatch('update_walletinfo',{
+                            walletinfo:{
+                                Id:res.data.WalletInfo.Id,
+                                AccessCode:res.data.WalletInfo.AccessCode,
+                                Cash:res.data.WalletInfo.Cash,
+                                ShopCash:res.data.WalletInfo.ShopCash,
+                                Benevolence:res.data.WalletInfo.Benevolence,
+                                Earnings:res.data.WalletInfo.Earnings,
+                                YesterdayEarnings:res.data.WalletInfo.YesterdayEarnings
+                            }
+                        });
+                    } else {
+                        console.log("返回错误码："+res.data.Code);
+                    }
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
+        },
+        cashSwitchEventHandle(isOn) {
             this.IsCashPay = isOn;
-            if (isOn) {
-                if (this.$store.state.global.walletinfo.Cash > this.ToPayInfo.Amount) {//如果余额大于待支付金额
+            this.calPayInfo()
+        },
+        shopcashSwitchEventHandle(isOn) {
+            this.IsShopCashPay = isOn;
+            this.calPayInfo();
+        },
+        calPayInfo(){
+            this.LeftAmount=Number(this.ToPayInfo.Amount);
+            this.CashPayAmount=0;
+            this.ShopCashPayAmount=0;
+
+            if (this.IsShopCashPay) {
+                if (Number(this.$store.state.global.walletinfo.ShopCash) > Number(this.LeftAmount)) {//如果余额大于待支付金额
+                    this.ShopCashPayAmount=Number(this.LeftAmount);
                     this.LeftAmount = 0;
                 } else {
-                    this.LeftAmount = this.ToPayInfo.Amount - this.$store.state.global.walletinfo.Cash;
+                    this.LeftAmount -= Number(this.$store.state.global.walletinfo.ShopCash);
+                    this.ShopCashPayAmount=Number(this.$store.state.global.walletinfo.ShopCash);
                 }
             }
             else {
-                this.LeftAmount = this.ToPayInfo.Amount;
+                this.LeftAmount += Number(this.ShopCashPayAmount);
+                this.ShopCashPayAmount=0;
             }
+
+            if (this.IsCashPay) {
+                if (Number(this.$store.state.global.walletinfo.Cash) > Number(this.LeftAmount)) {//如果余额大于待支付金额
+                    this.CashPayAmount=Number(this.LeftAmount);
+                    this.LeftAmount = 0;
+                } else {
+                    this.LeftAmount -= Number(this.$store.state.global.walletinfo.Cash);
+                    this.CashPayAmount= Number(this.$store.state.global.walletinfo.Cash);
+                }
+            }
+            else {
+                this.LeftAmount += Number(this.CashPayAmount);
+                this.CashPayAmount=0;
+            }
+
+            
         },
         walletPayAll() {
             //钱包支付钱包能全额付款的情况
@@ -143,42 +217,12 @@ export default {
             }
 
             let self=this;
-            if(this.IsCashPay)
+            if(!checkJs.isPayPassword(this.PayPassword))
             {
-                if(!checkJs.isPayPassword(this.PayPassword))
-                {
-                    alertFuc('请输入支付密码');
-                    return;
-                }
-
-                let params = {
-                    Type:'Shopping',
-                    Amount:this.ToPayInfo.Amount,
-                    AccessCode:this.PayPassword,
-                    IsNotVerifyAccessCode:false,
-                    Remark:'订单付款'+this.ToPayInfo.OrderNumber
-                };
-                if(this.ToPayInfo.Type=='transfer'){
-                    params.Type='Transfer'
-                    params.Remark='转账给-'+this.ToPayInfo.PayeeName
-                }
-                if(this.ToPayInfo.Type=='recharge'){
-                    params.Type='Recharge'
-                    params.Remark='在线充值'
-                }
-                api.CashPayApi(params).then(
-                    res => {
-                        if (res.data.Code == 200) {
-                            this.paySuccess();
-                        } else {
-                            alertFuc(res.data.Message);
-                        }
-                    },
-                    err => {
-                        console.log('网络错误');
-                    }
-                )
+                alertFuc('请输入支付密码');
+                return;
             }
+            this.walletpay(false);
         },
         paySuccess(){
             //支付成功回调处理函数
@@ -188,20 +232,21 @@ export default {
                 return false
             }
 
-            if(this.ToPayInfo.Type=="account")
-            {
-                //大使缴费
+            if(this.ToPayInfo.Type=='offlinespend'){
+                //线下消费
                 let params = {
-                    UserGiftId:this.ToPayInfo.OrderId
+                    OfflineStoreId:this.ToPayInfo.OfflineStoreId,
+                    Amount:this.ToPayInfo.Amount,
                 }
-                userapi.SetUserGiftPayedApi(params).then(
+                offlinestoreapi.AcceptNewSaleApi(params).then(
                     res => {
                         if (res.data.Code == 200) {
                             //转到成功页面
                             var tipInfo={
                                 Type:'PaySuccess',
-                                NextPage:'/me',
-                                Message:'支付成功'
+                                Amount:this.ToPayInfo.Amount,
+                                NextPage:'me',
+                                Message:'付款成功'
                             }
                             sessionStorage.TipInfo = JSON.stringify(tipInfo)
                             this.$router.replace({name:'success'})
@@ -227,7 +272,8 @@ export default {
                             //转到成功页面
                             var tipInfo={
                                 Type:'PaySuccess',
-                                NextPage:'/me',
+                                Amount:this.ToPayInfo.Amount,
+                                NextPage:'me',
                                 Message:'转账成功'
                             }
                             sessionStorage.TipInfo = JSON.stringify(tipInfo)
@@ -250,9 +296,10 @@ export default {
                         if (res.data.Code == 200) {
                         //转到成功页面
                         var tipInfo={
-                            Type:'Tip',
+                            Type:'PaySuccess',
                             Message:'充值成功',
-                            NextPage:'/wallet'
+                            Amount:this.ToPayInfo.Amount,
+                            NextPage:'wallet'
                         }
                         sessionStorage.TipInfo = JSON.stringify(tipInfo)
                         this.$router.replace({name:'success'});
@@ -269,6 +316,9 @@ export default {
                 //订单付款
                 let params = {
                     PaymentId:this.ToPayInfo.PaymentId,
+                    Total:this.ToPayInfo.Amount,
+                    Cash:this.CashPayAmount,
+                    ShopCash:this.ShopCashPayAmount
                 }
                 paymentapi.PaymentAcceptedApi(params).then(
                     res => {
@@ -276,7 +326,8 @@ export default {
                             //转到成功页面
                             var tipInfo={
                                 Type:'PaySuccess',
-                                NextPage:'/me',
+                                NextPage:'me',
+                                Amount:this.ToPayInfo.Amount,
                                 Message:'支付成功'
                             }
                             sessionStorage.TipInfo = JSON.stringify(tipInfo)
@@ -294,10 +345,7 @@ export default {
             sessionStorage.removeItem("ToPayInfo")
         },
         goPage(page){
-            this.$router.push({path:page});
-        },
-        replacePage(page){
-            this.$router.replace({path:page});
+            this.$router.push({name:page});
         },
         jsApiCall(param){
             var _this = this;
@@ -382,51 +430,57 @@ export default {
             )
         },
         onlinePaySuccess(){
-            //线上支付成功
+            if(this.IsCashPay || this.IsShopCashPay){
+                //如果开启了余额支付请求服务器余额付款
+                this.walletpay(true);
+            }
+            else{
+                this.paySuccess();
+            }
+        },
+        walletpay(isnotaccesscode){
             let alertFuc = (msg) => {
                 const toast = this.$refs.toast;
                 toast.show(msg);
                 return false
             }
-            if(this.IsCashPay){
-                //如果开启了余额支付请求服务器余额付款
-                let self=this;
-
-                let params = {
-                    Type:'Shopping',
-                    Amount:this.$store.state.global.walletinfo.Cash,
-                    AccessCode:this.PayPassword,
-                    IsNotVerifyAccessCode:true,
-                    Remark:'订单付款'+this.ToPayInfo.OrderNumber
-                };
-                if(this.ToPayInfo.Type=='account'){
-                    params.Type='Transfer'
-                    params.Remark='转账给-'+this.ToPayInfo.PayeeName
-                }
-                if(this.ToPayInfo.Type=='transfer'){
-                    params.Type='Transfer'
-                    params.Remark='转账给-'+this.ToPayInfo.PayeeName
-                }
-                if(this.ToPayInfo.Type=='recharge'){
-                    params.Type='Recharge'
-                    params.Remark='在线充值'
-                }
-                api.CashPayApi(params).then(
-                    res => {
-                        if (res.data.Code == 200) {
-                            this.paySuccess();
-                        } else {
-                            alertFuc(res.data.Message);
-                        }
-                    },
-                    err => {
-                        console.log('网络错误');
+            
+            let params = {
+                Type:'Shopping',
+                Amount:this.ToPayInfo.Amount,
+                CashPayAmount:this.CashPayAmount,
+                ShopCashPayAmount:this.ShopCashPayAmount,
+                AccessCode:this.PayPassword,
+                IsNotVerifyAccessCode:isnotaccesscode,
+                Remark:'订单付款'+this.ToPayInfo.OrderNumber
+            };
+            if(this.ToPayInfo.Type=='offlinespend'){
+                params.Remark='线下消费'
+            }
+            if(this.ToPayInfo.Type=='transfer'){
+                params.Type='Transfer'
+                params.Remark='转账给-'+this.ToPayInfo.PayeeName
+            }
+            if(this.ToPayInfo.Type=='recharge'){
+                params.Type='Recharge'
+                params.Remark='在线充值'
+            }
+            api.WalletPayApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        this.paySuccess();
+                    } else if(res.data.Code==404) {
+                        this.PayPassword='';
+                        alertFuc(res.data.Message);
                     }
-                )
-            }
-            else{
-                this.paySuccess();
-            }
+                    else{
+                        alertFuc(res.data.Message);
+                    }
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
         },
         alipay(){
             let alertFuc = (msg) => {
@@ -473,7 +527,7 @@ export default {
 
 .topayamount {
     background: #c03;
-    padding: 6rem 1rem 2rem;
+    padding: 3rem 1rem 2rem;
     text-align: center;
     .paytlt{
         font-size:1.5rem;
@@ -503,9 +557,6 @@ export default {
     text-align: center;
     .total {
         color: #666;
-        span {
-            color: #c03;
-        }
         p {
             font-size: 1rem;
         }
@@ -544,6 +595,10 @@ export default {
             font-size: 1.3rem;
             line-height: 3.3rem;
             padding-right: 2rem;
+            width:20%;
+        }
+        .cnt{
+            width:60%;
         }
     }
 }

@@ -12,15 +12,7 @@
                     首页
                 </p>
             </div>
-            <!-- <div class="item">
-                <svg>
-                    <use xlink:href="#newline"></use>
-                </svg>
-                <p>
-                    上新
-                </p>
-            </div> -->
-            <div class="item" @click="goPageWithName('subject')">
+            <div class="item" @click="goSubjectPage">
                 <svg>
                     <use xlink:href="#identitycardline"></use>
                 </svg>
@@ -40,6 +32,12 @@ import goodses from './goodses.vue'
 import * as api from '../../api/store'
 
 export default {
+    props:{
+        id:{
+            type:String,
+            default:''
+        }
+    },
     components: {
         'mi-header': header,
         'mi-banner': banner,
@@ -52,12 +50,12 @@ export default {
         }
     },
     mounted(){
-        this.StoreId=sessionStorage.StoreId
+        this.StoreId=this.id
         this.fatchData()
     },
     methods:{
-        goPageWithName(pageName){
-            this.$router.replace({name:pageName})
+        goSubjectPage(){
+            this.$router.replace({name:'subject',params:{id:this.StoreId}})
         },
         fatchData(){
             let params = {
@@ -95,7 +93,6 @@ export default {
         svg{
             width:2rem;
             height:2rem;
-            margin-bottom:0.2rem;
         }
     }
     .active{

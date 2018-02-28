@@ -1,14 +1,21 @@
 <template>
     <div>
-        <div class="pageheader">成功</div>
+        <div class="pageheader">
+            <div class="left">
+            </div>
+            <div class="center">成功</div>
+            <div class="right">
+            </div>
+        </div>
         <div class="succinfo">
             <svg>
                 <use xlink:href="#ok"></use>
             </svg>
             <div class="tlt">{{TipInfo.Message}}</div>
-            <div class="remark">{{TipInfo.Remark}}</div>
+            <div v-if="TipInfo.Amount>0" class="amount pd">{{TipInfo.Amount | currency('￥',2)}}</div>
+            <div class="pd-top text-gray">{{TipInfo.Remark}}</div>
         </div>
-        <div class="pd1">
+        <div class="pd">
             <button class="button success" @click="goPage">确定</button>
         </div>
     </div>
@@ -23,9 +30,10 @@ export default {
     data() {
         return {
             TipInfo:{
-                Type:'',
+                Type:'PaySuccess',
+                Amount:0,
                 Message:'',
-                NextPage:'',
+                NextPage:'/me',
                 Remark:''
             }
         }
@@ -37,7 +45,7 @@ export default {
     },
     methods:{
         goPage(){
-            this.$router.replace({path:this.TipInfo.NextPage})
+            this.$router.replace({name:this.TipInfo.NextPage})
         }
     }
 }
@@ -55,9 +63,12 @@ export default {
         margin:1rem auto;
     }
     .tlt {
-        font-size: 2rem;
+        font-size: 1.6rem;
         color: #096;
         margin-top:1rem;
+    }
+    .amount{
+        font-size:3rem;
     }
 }
 </style>

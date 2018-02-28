@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray">
+  <div>
       <mi-header title="充值"></mi-header>
       <div class="rechargewp">
           <p>输入充值金额</p> 
@@ -27,9 +27,6 @@ export default {
   },
   
   methods:{
-    goPage(page){
-      this.$router.push({path:page});
-    },
     recharge(){
       let alertFuc = (msg) => {
         const toast = this.$refs.toast;

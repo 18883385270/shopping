@@ -69,6 +69,20 @@ export const GetUserId=(value)=>{
 	}
 }
 
+export const isCommand=(value)=>{
+	var arrcommand=value.split(':');
+	var result=false;
+	let commands=['GoodsPreview','User','OfflineStorePayeeCode','GoodsBlock'];
+	if(arrcommand.length==2){
+		for(var i=0;i<commands.length;i++){
+			if(commands[i]==arrcommand[0]){
+				result= true;
+			}
+		}
+	}
+	return result
+}
+
 export const isUrl=(value)=>{
 	var reg=/^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/;
 	if(reg.test(value)){

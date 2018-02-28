@@ -19,7 +19,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "cordova-android": "^6.2.3",
-    "cordova-browser": "^4.1.0",
+    "cordova-browser": "^5.0.0",
     "cordova-plugin-alipay-v2": "0.0.4",
     "cordova-plugin-appversion": "^1.0.0",
     "cordova-plugin-battery-status": "^1.2.4",
@@ -30,7 +30,7 @@
     "cordova-plugin-file-transfer": "^1.6.3",
     "cordova-plugin-geolocation": "^2.4.3",
     "cordova-plugin-inappbrowser": "^1.7.1",
-    "cordova-plugin-offbye-alipay": "file:///C:\\cordova-plugin-alipay-master",
+    "cordova-plugin-media": "^3.0.1",
     "cordova-plugin-qrscanner": "^2.5.0",
     "cordova-plugin-splashscreen": "^4.0.3",
     "cordova-plugin-wechat": "^2.0.0",
@@ -39,8 +39,9 @@
     "js-md5": "^0.5.0",
     "vue": "^2.3.3",
     "vue-infinite-scroll": "^2.0.1",
+    "vue-lazyload": "^1.1.4",
     "vue-loadmore": "^2.0.0",
-    "vue-qr": "^1.2.3",
+    "vue-qrcode-component": "^2.1.1",
     "vue-router": "^2.5.3",
     "vue2-filters": "^0.1.9",
     "vuex": "^2.3.1",
@@ -68,7 +69,6 @@
     "sass-loader": "^6.0.6",
     "svg-url-loader": "^2.1.1",
     "url-loader": "^0.5.9",
-    "vue-html5-editor": "^1.1.1",
     "vue-loader": "^12.1.0",
     "vue-style-loader": "^1.0.0",
     "vue-template-compiler": "^2.3.3",
@@ -92,7 +92,8 @@
       },
       "cordova-plugin-alipay-v2": {
         "APP_ID": "2088721826707404"
-      }
+      },
+      "cordova-plugin-media": {}
     },
     "platforms": [
       "android",

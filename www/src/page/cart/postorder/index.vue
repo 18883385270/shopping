@@ -18,16 +18,14 @@
         </div>
         <mi-ordergoods :StoreCartGoods="StoreCartGoods"></mi-ordergoods>
         <div class="divider"></div>
-        <div class="youhuiwarp">
-            <div class="tablerow">
-                <div class="tlt">发票信息</div>
-                <div class="cnt">个人</div>
+            <div class="flexwarp bg-white pd-topbtn bd-btn">
+                <div class="wd-50p"><p class="text-lg marg-lf">发票信息</p></div>
+                <div class="wd-50p text-right"><p class="marg-rt text-md text-lightgray">个人</p></div>
             </div>
-            <div class="tablerow">
-                <div class="tlt">优惠券</div>
-                <div class="cnt">未使用优惠券</div>
+            <div class="flexwarp bg-white pd-topbtn bd-btn">
+                <div class="wd-50p"><p class="text-lg marg-lf">优惠券</p></div>
+                <div class="wd-50p text-right"><p class="marg-rt text-md text-lightgray">未使用优惠券</p></div>
             </div>
-        </div>
         <div class="divider"></div>
         <div class="remark">
             <div class="info">
@@ -35,11 +33,10 @@
             </div>
         </div>
         <div class="divider"></div>
-        <div class="paytype">
-            <div class="total">
-                总价：
-                <span>￥{{CalTotalAmount()}}</span>
-                <!-- <p>包含运费:4.5元</p> -->
+        <div class="bg-white pd text-md">
+            <div class="text-center">
+                订单小计：
+                <span class="text-danger">￥{{CalTotalAmount()}}</span>
             </div>
             <button class="button warning" @click="PostOrderEvent">提交订单</button>
         </div>
@@ -91,9 +88,6 @@ export default {
                 });
             });
             return amount;
-        },
-        toPage(page,params){
-            this.$router.replace({name:page,params:params});
         },
         PostOrderEvent(){
             let alertFuc = (msg) => {
@@ -167,19 +161,6 @@ export default {
 
 
 <style lang="less" scoped>
-.youhuiwarp {
-    background: #fff;
-    
-    .paypassword {
-        padding: 1rem;
-        display: flex;
-        .tlt {
-            font-size: 1.3rem;
-            line-height: 3.3rem;
-            padding-right: 2rem;
-        }
-    }
-}
 
 .remark {
     background: #fff;
@@ -198,26 +179,8 @@ export default {
     }
 }
 
-.paytype {
-    background: #fff;
-    padding: 1rem;
-    font-size: 1.3rem;
-    text-align: center;
-    .total {
-        color: #666;
-        padding-top: 1rem;
-        span {
-            color: #c03;
-        }
-        p {
-            font-size:1rem;
-        }
-    }
-    p {
-        padding-top: 0.5rem;
-        font-size: 1rem;
-    }
+
     
-}
+
 </style>
 

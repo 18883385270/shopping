@@ -1,8 +1,18 @@
 <template>
-	<transition :name="transitionName">
-		<router-view  class="child-view"></router-view>
+	<div>
+		<!-- <transition enter-active-class="animated slideInLeft" leave-active-class="animated slideOutLeft">
+			<router-view  class="child-view"></router-view>
+		</transition> -->
+		
+		<keep-alive>
+				<router-view v-if="$route.meta.keepAlive" class="child-view"></router-view>
+		</keep-alive>
+
+		<router-view v-if="!$route.meta.keepAlive" class="child-view"></router-view>
+
+
 		<loading v-show="this.$store.state.global.ajax_loading"></loading>
-	</transition>
+	</div>
 </template>
 
 <script>

@@ -1,19 +1,20 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-        "id": "cordova-plugin-inappbrowser.inappbrowser",
-        "pluginId": "cordova-plugin-inappbrowser",
+        "file": "plugins/cordova-plugin-alipay-v2/www/alipay.js",
+        "id": "cordova-plugin-alipay-v2.alipay",
+        "pluginId": "cordova-plugin-alipay-v2",
         "clobbers": [
-            "cordova.InAppBrowser.open",
-            "window.open"
+            "cordova.plugins.alipay"
         ]
     },
     {
-        "file": "plugins/cordova-plugin-inappbrowser/src/browser/InAppBrowserProxy.js",
-        "id": "cordova-plugin-inappbrowser.InAppBrowserProxy",
-        "pluginId": "cordova-plugin-inappbrowser",
-        "runs": true
+        "file": "plugins/cordova-plugin-appversion/www/app-version.js",
+        "id": "cordova-plugin-appversion.RareloopAppVersion",
+        "pluginId": "cordova-plugin-appversion",
+        "clobbers": [
+            "AppVersion"
+        ]
     },
     {
         "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
@@ -43,20 +44,6 @@ module.exports = [
         "file": "plugins/cordova-plugin-camera/src/browser/CameraProxy.js",
         "id": "cordova-plugin-camera.CameraProxy",
         "pluginId": "cordova-plugin-camera",
-        "runs": true
-    },
-    {
-        "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-        "id": "cordova-plugin-splashscreen.SplashScreen",
-        "pluginId": "cordova-plugin-splashscreen",
-        "clobbers": [
-            "navigator.splashscreen"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-splashscreen/src/browser/SplashScreenProxy.js",
-        "id": "cordova-plugin-splashscreen.SplashScreenProxy",
-        "pluginId": "cordova-plugin-splashscreen",
         "runs": true
     },
     {
@@ -239,6 +226,14 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/cordova-plugin-file-opener2/www/plugins.FileOpener2.js",
+        "id": "cordova-plugin-file-opener2.FileOpener2",
+        "pluginId": "cordova-plugin-file-opener2",
+        "clobbers": [
+            "cordova.plugins.fileOpener2"
+        ]
+    },
+    {
         "file": "plugins/cordova-plugin-file-transfer/www/FileTransferError.js",
         "id": "cordova-plugin-file-transfer.FileTransferError",
         "pluginId": "cordova-plugin-file-transfer",
@@ -263,20 +258,19 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-file-opener2/www/plugins.FileOpener2.js",
-        "id": "cordova-plugin-file-opener2.FileOpener2",
-        "pluginId": "cordova-plugin-file-opener2",
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "pluginId": "cordova-plugin-inappbrowser",
         "clobbers": [
-            "cordova.plugins.fileOpener2"
+            "cordova.InAppBrowser.open",
+            "window.open"
         ]
     },
     {
-        "file": "plugins/cordova-plugin-appversion/www/app-version.js",
-        "id": "cordova-plugin-appversion.RareloopAppVersion",
-        "pluginId": "cordova-plugin-appversion",
-        "clobbers": [
-            "AppVersion"
-        ]
+        "file": "plugins/cordova-plugin-inappbrowser/src/browser/InAppBrowserProxy.js",
+        "id": "cordova-plugin-inappbrowser.InAppBrowserProxy",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "runs": true
     },
     {
         "file": "plugins/cordova-plugin-qrscanner/www/www.min.js",
@@ -293,6 +287,20 @@ module.exports = [
         "runs": true
     },
     {
+        "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+        "id": "cordova-plugin-splashscreen.SplashScreen",
+        "pluginId": "cordova-plugin-splashscreen",
+        "clobbers": [
+            "navigator.splashscreen"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-splashscreen/src/browser/SplashScreenProxy.js",
+        "id": "cordova-plugin-splashscreen.SplashScreenProxy",
+        "pluginId": "cordova-plugin-splashscreen",
+        "runs": true
+    },
+    {
         "file": "plugins/cordova-plugin-wechat/www/wechat.js",
         "id": "cordova-plugin-wechat.Wechat",
         "pluginId": "cordova-plugin-wechat",
@@ -301,30 +309,47 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-alipay-v2/www/alipay.js",
-        "id": "cordova-plugin-alipay-v2.alipay",
-        "pluginId": "cordova-plugin-alipay-v2",
+        "file": "plugins/cordova-plugin-media/www/MediaError.js",
+        "id": "cordova-plugin-media.MediaError",
+        "pluginId": "cordova-plugin-media",
         "clobbers": [
-            "cordova.plugins.alipay"
+            "window.MediaError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-media/www/Media.js",
+        "id": "cordova-plugin-media.Media",
+        "pluginId": "cordova-plugin-media",
+        "clobbers": [
+            "window.Media"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-media/www/browser/Media.js",
+        "id": "cordova-plugin-media.BrowserMedia",
+        "pluginId": "cordova-plugin-media",
+        "clobbers": [
+            "window.Media"
         ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-inappbrowser": "1.7.1",
+    "cordova-plugin-alipay-v2": "0.0.3",
+    "cordova-plugin-appversion": "1.0.0",
     "cordova-plugin-compat": "1.1.0",
     "cordova-plugin-camera": "2.4.1",
-    "cordova-plugin-geolocation": "2.4.3",
-    "cordova-plugin-splashscreen": "4.0.3",
-    "cordova-plugin-whitelist": "1.3.2",
     "cordova-plugin-file": "4.3.3",
-    "cordova-plugin-file-transfer": "1.6.3",
     "cordova-plugin-file-opener2": "2.0.19",
-    "cordova-plugin-appversion": "1.0.0",
+    "cordova-plugin-file-transfer": "1.6.3",
+    "cordova-plugin-geolocation": "2.4.3",
+    "cordova-plugin-inappbrowser": "1.7.1",
     "cordova-plugin-qrscanner": "2.5.0",
+    "cordova-plugin-splashscreen": "4.0.3",
     "cordova-plugin-wechat": "2.0.0",
-    "cordova-plugin-alipay-v2": "0.0.3"
+    "cordova-plugin-whitelist": "1.3.2",
+    "cordova-plugin-media": "3.0.1"
 }
 // BOTTOM OF METADATA
 });

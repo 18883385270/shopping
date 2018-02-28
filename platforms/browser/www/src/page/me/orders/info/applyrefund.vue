@@ -67,7 +67,7 @@ export default {
             api.ApplyRefundApi(params).then(
                 res => {
                     if (res.data.Code == 200) {
-                        this.$router.replace({name:'orders'})
+                        this.goSuccessPage('orders','申请成功，等待商家处理')
                     } else {
                         console.log(res.data.Message);
                     }
@@ -76,6 +76,17 @@ export default {
                     console.log('网络错误');
                 }
             )
+        },
+        goSuccessPage(returnPage,message)
+        {
+          //转到成功页面
+          var tipInfo={
+              Type:'Tip',
+              NextPage:returnPage,
+              Message:message
+          }
+          sessionStorage.TipInfo = JSON.stringify(tipInfo)
+          this.$router.replace({name:'success'})
         }
     }
 }

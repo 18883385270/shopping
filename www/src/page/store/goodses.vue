@@ -1,9 +1,9 @@
 <template>
   <div class="goodsboxwp">
-      <div class="item" v-for="(Goods, index) in Goodses" @click="goGoodsPage(Goods)" :class="{'item2': index % 2 !== 0}">
+      <div class="item" v-for="Goods in Goodses" :key="Goods.Id" @click="goGoodsPage(Goods)">
         <div class="top">
           <span class="benevolence">
-                {{Goods.Benevolence |currency('',2)}} 善心</span>
+                {{Goods.Benevolence |currency('',2)}} 福豆</span>
           <img v-lazy="Goods.Pics[0]" />
         </div>
         <div class="bottom">
@@ -21,8 +21,7 @@ export default {
   props:['Goodses'],
   methods: {
     goGoodsPage(goods) {
-      sessionStorage.GoodsId = goods.Id
-      this.$router.push({ name: 'goodsinfo' });
+      this.$router.push({ name: 'goodsinfo',params:{id:goods.Id} });
     }
   }
 }
@@ -30,72 +29,66 @@ export default {
 
 <style lang="less" scoped>
 .goodsboxwp {
-    display:flex;
-    flex-wrap:wrap;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:space-between;
+    background:#eee;
     .item {
-      width: 50%;
-      border-bottom:1px solid #eee;
-      background: #fff;
-      .top {
-        padding: 0.8rem;
-        position:relative;
-        img {
-          width: 100%;
-        }
-        .benevolence {
-            position: absolute;
-            right:0.8rem;
-            bottom:1.1rem;
-            font-size: 0.8rem;
-            background: #ff601e;
-            color: #fff;
-            line-height: 1rem;
-            padding: 0.2rem 0.6rem;
-            border-radius: 2px;
-          }
-      }
-      .bottom {
-        width: 100%;
-        display: block;
-        padding: 0.5rem;
-        box-sizing: border-box;
-        font-size: 1.3rem;
-        .title {
-          width: 100%;
-          display: block;
-          color: #333;
-          line-height: 2rem;
-          padding: 0.6rem 0;
-        }
-        .desc {
-          width: 100%;
-          font-size: 1rem;
-          color: #666;
-        }
-        .pricewp {
-          width: 100%;
-          
-          .price{
-            font-size: 1.3rem;
-            color: #ff601e;
-            line-height: 2rem;
-            .sellout{
-              float:right;
-              font-size:1rem;
-              color:#999;
+        width: 49.5%;
+        margin-top:5px;
+        background: #fff;
+        .top {
+            padding: 0.8rem;
+            position: relative;
+            
+            img {
+                width: 100%;
             }
-          }
+            .benevolence {
+                position: absolute;
+                right: 0.8rem;
+                bottom: 1.1rem;
+                font-size: 0.8rem;
+                background: #ff601e;
+                color: #fff;
+                line-height: 1rem;
+                padding: 0.2rem 0.6rem;
+                border-radius: 2px;
+            }
         }
-      }
-    }
-    .item2 {
-      width:50%;
-      .top{
-        border-left:1px solid #eee;
-      }
-      .bottom{
-        border-left:1px solid #eee;
-      }
+        .bottom {
+            width: 100%;
+            display: block;
+            padding: 0.5rem;
+            box-sizing: border-box;
+            font-size: 1.2rem;
+            .title {
+                width: 100%;
+                display: block;
+                color: #333;
+                line-height: 2rem;
+                padding: 0.6rem 0;
+            }
+            .desc {
+                width: 100%;
+                font-size: 1rem;
+                color: #666;
+            }
+            .pricewp {
+                width: 100%;
+
+                .price {
+                    font-size: 1.3rem;
+                    color: #ff601e;
+                    line-height: 2rem;
+                    .sellout {
+                        float: right;
+                        font-size: 1rem;
+                        color: #999;
+                    }
+                }
+            }
+        }
     }
   }
 </style>

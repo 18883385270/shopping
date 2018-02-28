@@ -1,7 +1,7 @@
 <template>
   <div>
     <mi-header title="申请开店"></mi-header>
-    <div class="pd1">店铺基本信息</div>
+    <div class="pd bg-xlightgray">店铺基本信息</div>
     <div class="tablerow">
       <div class="tlt">店铺名称</div>
       <div class="cnt">
@@ -21,7 +21,7 @@
       </div>
     </div>
     
-    <div class="pd1">主体信息（有营业执照请填写执照信息，否则填写店主身份证信息）</div>
+    <div class="pd bg-xlightgray">主体信息（有营业执照请填写执照信息，否则填写店主身份证信息）</div>
     <div class="tablerow">
       <div class="tlt">主体名称</div>
       <div class="cnt">
@@ -46,7 +46,7 @@
       <p>
         <label>
           <input type="checkbox" v-model="isaccept"> 我已阅读并同意</label>
-        <span @click="goPage('/bindex/storeowner/open/protocol')">《店铺入驻协议》</span>
+        <span @click="goPage('storeprotocol')">《店铺入驻协议》</span>
       </p>
       <button class="button success" v-bind="{disabled:!isaccept}" @click="applystore">提交申请</button>
     </div>
@@ -83,12 +83,6 @@ export default {
       subjectpic:''
     }
   },
-  mounted(){
-    //检查用户身份，如果不是传递使者进入到开通传递大使页面
-    if(this.$store.state.global.userinfo.Role!='店主'){
-      this.$router.replace({path:'/bindex/ambassador'});
-    }
-  },
   methods: {
     OnFileChangeHandle(file){
             var ossfilename=util.uploadToOss(file,'subject');
@@ -101,7 +95,7 @@ export default {
       this.region = String;
     },
     goPage(page) {
-      this.$router.push({ path: page });
+      this.$router.push({ name: page });
     },
     applystore(){
       //提交申请
@@ -153,11 +147,14 @@ export default {
           if (res.data.Code == 200) {
             console.log('申请成功');
             //转到成功页面
-            this.$router.replace({
-                name:'success',
-                params:{
-                    type:'tip',
-                    message:'申请成功，等待审核'}})
+            var tipInfo={
+                Type:'Tip',
+                NextPage:'bindex',
+                Message:'申请成功，等待审核'
+            }
+            sessionStorage.TipInfo = JSON.stringify(tipInfo)
+            this.$router.replace({name:'success'})
+            
           } else {
             console.log(res.data.Message);
           }

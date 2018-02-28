@@ -3,7 +3,7 @@
     <mi-header title="更改名字" rightext="保存" @rightNavBarClicked="save"></mi-header>
     <div class="namewp">
       <input type="text" v-model="NickName">
-      <p>好的名字可以让你的朋友更容易记住你</p>
+      <p class="pd-top">好的名字可以让你的朋友更容易记住你</p>
     </div>
     <mi-toast ref="toast" max-lenght="20"></mi-toast>
   </div>
@@ -88,9 +88,7 @@ export default {
       outline: none;
     }
   }
-  p {
-    padding: 1rem 0;
-  }
+  
 }
 </style>
 

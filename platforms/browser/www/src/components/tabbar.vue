@@ -1,6 +1,3 @@
-/*
-* 底部导航栏
-*/
 <template>
   <div class="tabbar">
     <div class="tabbar_item" :class="{active: tabbarIndex == 0}" @click="tabbarEvent(0)">
@@ -15,12 +12,13 @@
       </svg>
       <p>分类</p>
     </div>
-    <div class="tabbar_item" :class="{active: tabbarIndex == 2}" @click="tabbarEvent(2)">
-      <svg>
-        <use xlink:href="#benevolenceindex"></use>
-      </svg>
-      <p>善心指数</p>
+    <div  class="tabbar_item" :class="{active: tabbarIndex == 2}" @click="tabbarEvent(2)">
+        <svg>
+          <use xlink:href="#v"></use>
+        </svg>
+        <p>会员</p>
     </div>
+    
     <div class="tabbar_item" :class="{active: tabbarIndex == 3}" @click="tabbarEvent(3)">
       <i class="bedge" v-if="this.$store.state.global.userinfo.CartGoodsCount">{{this.$store.state.global.userinfo.CartGoodsCount}}</i>
       <svg>
@@ -49,20 +47,20 @@ export default {
       this.tabbarIndex = num;
 
       if (num == 0) {
-        this.$router.replace({ path: '/' });
+        this.$router.replace({ name: 'home' });
       }
 
       if (num == 1) {
-        this.$router.replace({ path: '/section' });
+        this.$router.replace({ name: 'section' });
       }
       if (num == 2) {
-        this.$router.replace({ path: '/bindex' });
+        this.$router.replace({ name: 'myrole' });
       }
       if (num == 3) {
-        this.$router.replace({ path: '/cart' });
+        this.$router.replace({ name: 'cart' });
       }
       if (num == 4) {
-        this.$router.replace({ path: '/me' });
+        this.$router.replace({ name: 'me' });
       }
     }
   }
@@ -79,7 +77,7 @@ export default {
   border-top: 1px solid #ddd;
   background: #fff;
   .tabbar_item {
-    width: 100%;
+    width:20%;
     height: 100%;
     color: #888;
     font-size: 0.9rem;
@@ -93,7 +91,7 @@ export default {
       padding: 0 0.3rem;
       border-radius: 1rem;
       font-style: normal;
-    margin-top: 0.2rem;
+      margin-top: 0.2rem;
       line-height: 1.1rem;
     }
     svg {

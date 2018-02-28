@@ -2820,8 +2820,8 @@ export default {
                                 { "name": '连州市' }
                             ]
                         },
-                        { "name": '东莞市', "subdata": [] },
-                        { "name": '中山市', "subdata": [] },
+                        { "name": '东莞市', "subdata": [{ "name": '全市' }] },
+                        { "name": '中山市', "subdata": [{ "name": '全市' }] },
                         {
                             "name": '潮州市', "subdata": [
                                 { "name": '湘桥区' },
@@ -3032,7 +3032,6 @@ export default {
                             "name": '三亚市', "subdata": [
                                 { "name": '五指山市' },
                                 { "name": '琼海市' },
-                                { "name": '儋州市' },
                                 { "name": '文昌市' },
                                 { "name": '万宁市' },
                                 { "name": '东方市' },
@@ -3049,6 +3048,23 @@ export default {
                                 { "name": '西沙群岛' },
                                 { "name": '南沙群岛' },
                                 { "name": '中沙群岛的岛礁及其海域' }
+                            ]
+                        },
+                        {
+                            "name": '三沙市', "subdata": [
+                                { "name": '全市' }
+                            ]
+                        },
+                        {
+                            "name": '儋州市', "subdata": [
+                                { "name": '全市' }
+                            ]
+                        },
+                        {
+                            "name": '洋浦经济开发区', "subdata": [
+                                { "name": '干冲区' },
+                                { "name": '新英湾区' },
+                                { "name": '三都区' }
                             ]
                         }
                     ]
@@ -3965,7 +3981,7 @@ export default {
                                 { "name": '榆中县' }
                             ]
                         },
-                        { "name": '嘉峪关市', "subdata": [] },
+                        { "name": '嘉峪关市', "subdata": [{ "name": '全市' }] },
                         {
                             "name": '金昌市', "subdata": [
                                 { "name": '金川区' },

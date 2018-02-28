@@ -2,7 +2,7 @@
   <div>
     <mi-header title="我的地址" rightext="添加" @rightNavBarClicked="addAddress"></mi-header>
     <div class="addressls" v-if="expressAddresses.length">
-      <div class="addwarp" v-for="(expressAddress,index) in expressAddresses">
+      <div class="addwarp" v-for="(expressAddress,index) in expressAddresses" :key="expressAddress.Id">
         <div class="cnt">
           <p>{{expressAddress.Region}} {{expressAddress.Address}}</p>
           <p>{{expressAddress.Name}} {{expressAddress.Mobile|mobilehide}}</p>
@@ -14,12 +14,12 @@
         </div>
       </div>
     </div>
-    <div class="emptybox" v-if="!expressAddresses.length">
-      <svg>
-        <use xlink:href="#empty"></use>
-      </svg>
-      <p> 您还没有地址，快添加一个吧？</p>
-    </div>
+    <div class="pd-topbtn-xlg text-center" v-if="!expressAddresses.length">
+            <svg class="icon-xxxlg">
+                <use xlink:href="#address"></use>
+            </svg>
+            <p class="pd-top-lg text-md text-gray"> 您未添加收货地址</p>
+        </div>
    
   </div>
 </template>
@@ -41,29 +41,27 @@ export default {
     //请求用户收件地址数据
     let params={};
     api.GetUserExpressAddressesApi(params).then(
-                res => {
-                    if (res.data.Code == 200) {
-                        this.expressAddresses=res.data.ExpressAddresses;
-                        console.log(this.expressAddresses);
-                    } else {
-                        console.log("返回错误码："+res.data.Code);
-                    }
-                },
-                err => {
-                    console.log('网络错误');
-                }
-            )
+        res => {
+            if (res.data.Code == 200) {
+                this.expressAddresses=res.data.ExpressAddresses;
+                console.log(this.expressAddresses);
+            } else {
+                console.log("返回错误码："+res.data.Code);
+            }
+        },
+        err => {
+            console.log('网络错误');
+        }
+    )
   },
   methods:{
     addAddress(){
-      console.log('addaddress');
-      this.$router.push({path:'/me/profile/expressaddress/add'});
+      this.$router.push({name:'addexpressaddress'});
     },
     del(index){
       let params={
-        expressAddressId:this.expressAddresses[index].Id
+        Id:this.expressAddresses[index].Id
       }
-      console.log(this.expressAddresses[index].Id);
       api.DeleteExpressAddressApi(params).then(
         res=>{
           if(res.data.Code==200){
@@ -89,7 +87,7 @@ export default {
   .addwarp {
     display: flex;
     font-size: 1.2rem;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #eee;
     .cnt {
       width: 80%;
       padding: 1rem 0;

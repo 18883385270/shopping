@@ -12,9 +12,17 @@ const router = new Router({
   routes
 });
 router.beforeEach((to, from, next) => {
+  const toDepth = to.path.split('/').length
+  const fromDepth = from.path.split('/').length
+  //to.meta.keepAlive= toDepth < fromDepth ? true : false
+  if(toDepth==fromDepth){
+    to.meta.keepAlive=false;
+  }
   //未登录 允许访问页面
   if (!window.localStorage.getItem('token') 
     && to.name !== 'home' 
+    && to.name !== 'goodsblockinfo' 
+    && to.name !== 'search' 
     && to.name !== 'register' 
     && to.name !== 'reg' 
     && to.name !== 'login'
@@ -28,6 +36,7 @@ router.beforeEach((to, from, next) => {
     
     && to.name !== 'scannerpage'
     && to.name !== 'scannerresult'
+    && to.name !== 'browser'
 
     && to.name !=='jumppage'
     && to.name !=='announcementinfo'
@@ -39,18 +48,9 @@ router.beforeEach((to, from, next) => {
     && to.name !== 'store'
 
     && to.name !== 'bindex'
-    && to.name !== 'consumer'
-    && to.name !== 'passer'
-    && to.name !== 'ambassador'
     && to.name !== 'regionpartner'
-    && to.name !== 'storeowner'
 
-    && to.name !== 'foundation'
-    && to.name !== 'classroom'
     && to.name !== 'offlinestore'
-
-    && to.name !== 'grantee'
-    && to.name !== 'granteeinfo'
     
   ) {
     next({ path: '/login' });
@@ -62,6 +62,7 @@ router.beforeEach((to, from, next) => {
       next();
     }
   }
+  
 });
 
 router.afterEach(transition => {

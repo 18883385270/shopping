@@ -1,18 +1,18 @@
 <template>
-    <div class="tltcntbox">
-        <div class="head">
-            <div class="title" @click="goPage('/me/collect')">我的收藏</div>
-            <div class="more"></div>
+    <div class="bg-white">
+        <div class="flexwarp bd-btn pd-topbtn">
+            <div class="wd-50p"><p class="text-md pd-lf">我的收藏</p></div>
+            <div class="wd-50p text-right"><p class="text-gray pd-rt">即将上线</p></div>
         </div>
-        <div class="body">
-            <div>
-                <b class="number">0 </b>商品</div>
-            <div>
-                <b class="number">0 </b>店铺</div>
-            <div>
-                <b class="number"> </b></div>
-            <div>
-                <b class="number"> </b>
+        <div class="flexwarp pd-topbtn text-lightgray">
+            <div class="wd-25p text-center">
+                <p class="text-md">0 </p>商品</div>
+            <div class="wd-25p text-center">
+                <p class="text-md">0 </p>店铺</div>
+            <div class="wd-25p text-center">
+                <p> </p></div>
+            <div class="wd-25p text-center">
+                <p> </p>
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
 export default {
     methods:{
         goPage(page){
-            this.$router.push({path:page});
+            this.$router.push({name:page});
         }
     }
 }

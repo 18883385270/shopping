@@ -1,23 +1,22 @@
 <template>
   <div>
       <mi-header title="线下转账记录"></mi-header>
-      <div class="emptybox" v-if="!RechargeApplys.length">
-            <svg>
-                <use xlink:href="#emptyline"></use>
+      
+        <div class="pd-topbtn-xlg text-center" v-if="!RechargeApplys.length">
+            <svg class="icon-xxxlg">
+                <use xlink:href="#norecord"></use>
             </svg>
-            <p> 没有记录</p>
+            <p class="pd-top-lg text-md text-gray"> 没有记录</p>
         </div>
       <div class="transferls">
-            <ul>
-                <li v-for="RechargeApply in RechargeApplys">
-                    <p class="tlt">
-                        <span class="time">{{RechargeApply.CreatedOn}}</span>{{RechargeApply.Status}}</p>
-                    <p class="cnt">
-                        <span class="amount">
+                <div class="pd bd-btn text-md" v-for="(RechargeApply,index) in RechargeApplys" :key="index">
+                    <p class="pd-btn bd-btn">
+                        <span class="pull-right text-lightgray">{{RechargeApply.CreatedOn}}</span>{{RechargeApply.Status}}</p>
+                    <p class="text-gray">
+                        <span class="pull-right text-danger text-lg">
                             <span>+</span>
                             {{RechargeApply.Amount}}</span>{{RechargeApply.Remark}}({{RechargeApply.BankName}}尾号{{RechargeApply.BankNumber|endword(4)}})</p>
-                </li>
-            </ul>
+                </div>
         </div>
   </div>
 </template>
@@ -36,56 +35,31 @@ export default {
         }
     },
     mounted(){
-        let params = {};
-        api.RechargeApplyLogsApi(params).then(
-            res => {
-                if (res.data.Code == 200) {
-                    this.RechargeApplys=res.data.RechargeApplys;
-                } else {
-                    console.log(res.data.Message);
-                }
-            },
-            err => {
-                console.log('网络错误');
-            }
-        )
+        this.fatchData();
     },
     methods:{
-        
+        fatchData(){
+            let params = {};
+            api.RechargeApplyLogsApi(params).then(
+                res => {
+                    if (res.data.Code == 200) {
+                        this.RechargeApplys=res.data.RechargeApplys;
+                    } else {
+                        console.log(res.data.Message);
+                    }
+                },
+                err => {
+                    console.log('网络错误');
+                }
+            )
+        }
     }
 }
 </script>
 
 <style lang="less" scoped>
-.transferls {
-        li {
-            background: #fff;
-            list-style: none;
-            padding: 1rem;
-            border-bottom: 1px solid #eee;
-            font-size: 1.3rem;
 
-            .tlt {
-                padding-bottom: 0.3rem;
-                font-size: 1.3rem;
-                .time {
-                    float: right;
-                    font-size: 1rem;
-                    color: #999;
-                }
-            }
-            .cnt {
-                font-size: 1.2rem;
-                color: #999;
-            }
 
-            .amount {
-                float: right;
-                font-size: 1.4rem;
-                color: #333;
-            }
-        }
-    }
 </style>
 
 

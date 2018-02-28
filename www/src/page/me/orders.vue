@@ -1,18 +1,18 @@
 <template>
-    <div class="tltcntbox">
-        <div class="head">
-            <div class="title">我的订单</div>
-            <div class="more" @click="toMyOrderPage(0)">全部订单</div>
+    <div class="bg-white">
+        <div class="flexwarp bd-btn pd-topbtn" @click="toMyOrderPage(0)">
+            <div class="wd-50p"><p class="text-md pd-lf">我的订单</p></div>
+            <div class="wd-50p text-right"><p class="text-gray pd-rt">全部订单</p></div>
         </div>
-        <div class="body">
-            <div @click="toMyOrderPage(1)">
-                <svg><use xlink:href="#bankcardline"></use></svg>待发货</div>
-            <div @click="toMyOrderPage(2)">
-                <svg><use xlink:href="#getgoodsline"></use></svg>待收货</div>
-            <div @click="toMyOrderPage(3)">
-                <svg><use xlink:href="#commentline"></use></svg>待评价</div>
-            <div @click="toMyOrderPage(4)">
-                <svg><use xlink:href="#serviceline"></use></svg>退换/售后</div>
+        <div class="flexwarp pd-topbtn-lg">
+            <div class="wd-25p text-center" @click="toMyOrderPage(1)">
+                <svg class=" icon-lg icon-gray"><use xlink:href="#fahuoline"></use></svg> <p class="pd-top-sm">待发货</p></div>
+            <div class="wd-25p text-center" @click="toMyOrderPage(2)">
+                <svg class=" icon-lg icon-gray"><use xlink:href="#getgoodsline"></use></svg> <p class="pd-top-sm">待收货</p></div>
+            <div class="wd-25p text-center" @click="toMyOrderPage(3)">
+                <svg class=" icon-lg icon-gray"><use xlink:href="#commentline"></use></svg> <p class="pd-top-sm">待评价</p></div>
+            <div class="wd-25p text-center" @click="toMyOrderPage(4)">
+                <svg class=" icon-lg icon-gray"><use xlink:href="#serviceline"></use></svg> <p class="pd-top-sm">退换/售后</p></div>
         </div>
     </div>
 </template>
@@ -22,17 +22,17 @@ export default {
     methods: {
         toMyOrderPage(index){
             sessionStorage.MyOrderStatusIndex=index
-            this.$router.push({path:'/orders'});
+            this.$router.push({name:'orders'});
         },
-        toPage(page) {
-            this.$router.push({ path: page });
-        }
     }
 }
 </script>
 
 <style lang="less" scoped>
+.body{
+    display:flex;
 
+}
 </style>
 
 

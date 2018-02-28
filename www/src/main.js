@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Cordova from './Cordova.js'
-// import ElementUI from 'element-ui'
-// import 'element-ui/lib/theme-default/index.css'
-// Vue.use(ElementUI)
+
+import animate from './utils/animate.css'
 
 import Vuex from 'vuex'
 Vue.use(Vuex)
+Vue.use(animate)
 
 //引入vue2 filter
 import Vue2Filters from 'vue2-filters'

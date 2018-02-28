@@ -2,8 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import Cordova from './Cordova.js'
 
+import animate from './utils/animate.css'
+
 import Vuex from 'vuex'
 Vue.use(Vuex)
+Vue.use(animate)
 
 //引入vue2 filter
 import Vue2Filters from 'vue2-filters'

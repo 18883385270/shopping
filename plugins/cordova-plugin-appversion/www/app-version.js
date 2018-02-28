@@ -49,7 +49,7 @@ var RareloopAppVersion = function () {
             channel.onCordovaAppVersionReady.fire();
         },function(e) {
             _this.available = false;
-            utils.alert("[ERROR] Error initializing Version Plugin: " + e);
+            //utils.alert("[ERROR] Error initializing Version Plugin: " + e);
         });
     });
 };

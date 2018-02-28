@@ -1,26 +1,20 @@
 <template>
-    <div class="tltcntbox">
-        <div class="head">
-            <div class="title">我的钱包</div>
-            <div class="more" @click="goPage('/wallet')">全部资产</div>
-        </div>
-        <div class="body">
-            <div @click="goPage('/wallet/cash')">
-                <b class="number text-red">{{this.$store.state.global.walletinfo.Cash|currency('',2)}}
-                    <i>元</i>
-                </b>余额</div>
-            <div @click="goPage('/wallet/benevolence')">
-                <b class="number text-red">{{this.$store.state.global.walletinfo.Benevolence|currency('',4)}}
-                    <i>个</i>
-                </b>善心</div>
-            <div @click="goPage('/wallet/incentive')">
-                <b class="number text-red">{{this.$store.state.global.walletinfo.YesterdayEarnings|currency('',2)}}
-                    <i>元</i>
-                </b>上次收益</div>
-            <div @click="toCashTransferPage(4)">
-                <b class="number text-red">{{this.$store.state.global.walletinfo.Earnings|currency('',2)}}
-                    <i>元</i>
-                </b>累计收益</div>
+    <div class="bg-white bd-top">
+        <div class="flexwarp text-center pd-topbtn">
+            <div class="wd-25p" @click="goPage('cash')">
+                <p class="text-red text-md pd-btn-sm">{{this.$store.state.global.walletinfo.Cash|currency('',2)}}
+                </p>余额</div>
+            <div class="wd-25p" @click="goPage('benevolence')">
+                <p class="text-red text-md pd-btn-sm">{{this.$store.state.global.walletinfo.Benevolence|currency('',4)}}
+                </p>福豆</div>
+            <div class="wd-25p" @click="goPage('shopcash')">
+                <p class="text-red text-md pd-btn-sm">{{this.$store.state.global.walletinfo.ShopCash|currency('',2)}}
+                </p>购物券</div>
+            <div class="wd-25p" @click="goPage('wallet')">
+                    <svg class="icon">
+                        <use xlink:href="#fahuoline"></use>
+                    </svg>
+                <p>我的钱包</p></div>
         </div>
     </div>
 </template>
@@ -29,7 +23,7 @@
 export default {
     methods:{
         goPage(page){
-            this.$router.push({path:page});
+            this.$router.push({name:page});
         },
         toCashTransferPage(index){
             sessionStorage.MyCashTransferIndex=index

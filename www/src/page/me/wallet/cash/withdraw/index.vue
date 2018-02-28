@@ -1,11 +1,11 @@
 <template>
   <div class="withdrawpage">
-    <mi-header title="提现申请" rightext="记录" @rightNavBarClicked="goPage('/wallet/cash/withdraw/log')"></mi-header>
+    <mi-header title="提现申请" rightext="记录" @rightNavBarClicked="goPage('withdrawlog')"></mi-header>
     <div class="divider"></div>
     <div class="tocardpicker" @click="showbankcardpicker">
       <div class="cardinfo" v-if="BankCard">
         <p class="tlt">{{BankCard.BankName |truncate}}（尾号{{BankCard.Number|endword(4)}}）</p>
-        <p>提现0手续费率，工作日内24小时内到账</p>
+        <p>提现费率2%，不足5元的收5元，工作日24小时到账</p>
       </div>
       <div class="cardinfo" v-if="!BankCard">
         <p class="nocard">请选择银行卡</p>
@@ -26,11 +26,11 @@
     </div>
     <div class="divider"></div>
     <div>
-      <div class="pd1">
+      <div class="pd-md">
         <button class="button primary" @click="apply">提现</button>
       
-        <p class="marg-top1">单笔提现金额不得低于100元，单日不超过2万元，单周不超过10万</p>
-        <p>提现需要公司会计审核，提现审核前因余额变动，造成余额不足可能导致提现失败</p>
+        <p class="marg-top-md text-gray">单笔提现金额不得低于100元，切是100的整倍数</p>
+        <p class="text-gray">提现请核实到账银行账号的准确性，否则可能会导致提现失败</p>
       </div>
     </div>
     <bankcardpicker ref="bankcardpicker" @bankcardPickerEvent="bankcardPickerHandle"></bankcardpicker>
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     goPage(page){
-      this.$router.push({path:page})
+      this.$router.push({name:page})
     },
     withdrawall(){//全部提现按钮
       this.Amount=this.$store.state.global.walletinfo.Cash;
@@ -85,7 +85,11 @@ export default {
       }
       if(this.Amount<100 || this.Amount % 100>0)
       {
-        alertFuc('单笔提现金额不得低于100，100的倍数')
+        alertFuc('现金额不得低于100，且是100的整倍数')
+	      return;
+      }
+      if(this.Amount>50000){
+        alertFuc('单笔提现金额不得高于5万')
 	      return;
       }
       		
@@ -99,13 +103,13 @@ export default {
             var tipInfo={
               Type:'Tip',
               Message:'提现申请已经提交，等待审核',
-              NextPage:'/wallet/cash',
+              NextPage:'cash',
               Remark:'公司一般审核日期为3个工作日内'
             }
             sessionStorage.TipInfo=JSON.stringify(tipInfo)
             this.$router.replace({name:'success'});
           } else {
-            console.log(res.data.Message);
+            alertFuc(res.data.Message);
           }
         },
         err => {
